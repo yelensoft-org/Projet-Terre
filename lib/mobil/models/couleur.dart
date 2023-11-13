@@ -17,4 +17,5 @@ class Couleurs {
     },
   );
   static Color gri = const Color(0xFFD9D9D9);
+  static Color blanc = const Color(0xFFFFFFFF);
 }

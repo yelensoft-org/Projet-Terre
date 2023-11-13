@@ -2,10 +2,11 @@
 
 library clean_dialog;
 
-// import 'dart:ffi';
-
-import 'package:Art_Eshop/mobil/services/api_service.dart';
+import 'package:art_eshop/desktop/pages/admin_connexion.dart';
+import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/services/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 /// A Clean and minimalist Flutter Dialog
 /***
@@ -374,15 +375,100 @@ class Popup {
         });
   }
 
-  void dialogLang(BuildContext context) {
+  void profilAdministrateur(BuildContext context) {
     showDialog(
         context: context,
         builder: (context) {
-          return Container(
-            child: AlertDialog(
-              title: Row(),
-              content: Container(),
-
+          return Align(
+            alignment: Alignment.centerRight,
+            child: Dialog(
+              elevation: 0,
+              alignment: Alignment.bottomRight,
+              child: Container(
+                height: 500,
+                width: 300,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Couleurs.blanc,
+                ),
+                child: Column(
+                  children: [
+                    Stack(children: [
+                      Container(
+                        height: 100,
+                        color: Couleurs.orange,
+                      ),
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            Text(
+                              "Profile",
+                              style: TextStyle(
+                                  color: Couleurs.blanc,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const CircleAvatar(
+                              radius: 50,
+                              backgroundImage: AssetImage(
+                                "assets/images/profil.png",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 40, right: 20),
+                        width: 300,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [SvgPicture.asset('assets/icons/edit.svg')],
+                        ),
+                      )
+                    ]),
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      height: 20,
+                      child: const Center(child: Text("Ousmato Toure")),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      height: 20,
+                      child:
+                          const Center(child: Text("ousmatotoure98@gmail.com")),
+                    ),
+                    const SizedBox(
+                      height: 150,
+                    ),
+                    Container(
+                      height: 1,
+                      color: Couleurs.gri,
+                    ),
+                    Container(
+                      child: Row(
+                        children: [
+                          // SvgPicture.asset('assets/icons/deconnexion.svg'),
+                          TextButton(
+                              onPressed: (() {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Connexion()));
+                              }),
+                              child: const Text("Deconnexion"))
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           );
         });

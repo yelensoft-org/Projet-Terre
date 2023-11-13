@@ -1,13 +1,15 @@
-import 'package:Art_Eshop/mobil/models/couleur.dart';
-import 'package:Art_Eshop/mobil/models/dalog.dart';
-import 'package:Art_Eshop/mobil/pages/inscription.dart';
-import 'package:Art_Eshop/mobil/services/api_service.dart';
-import 'package:Art_Eshop/mobil/services/entete.dart';
+
+// ignore_for_file: library_private_types_in_public_api, unused_element, camel_case_types
+
+import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/models/dalog.dart';
+import 'package:art_eshop/mobil/pages/artisan_inscription.dart';
+import 'package:art_eshop/mobil/pages/inscription.dart';
+import 'package:art_eshop/mobil/services/api_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
 class login extends StatefulWidget {
@@ -41,9 +43,9 @@ class _loginState extends State<login> {
       if (user == null) {
         debugPrint('User is currently signed out!');
       } else {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
+        // Navigator.of(context).push(
+        //   MaterialPageRoute(builder: (context) => ),
+        // );
         debugPrint('User is signed in!');
       }
     });
@@ -79,12 +81,11 @@ class _loginState extends State<login> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Center(
-                      child: Image.asset('assets/images/logo_Art_blanc.png')),
+                      child: Image.asset('assets/images/blanc.png')),
                 ],
               ),
             ),
             Expanded(
-              // height: 300,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -248,7 +249,7 @@ class _loginState extends State<login> {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const Inscription()),
+                                              const ArtisanInscription()),
                                     );
                                     // Get.to(ForgetPassword());
                                   },

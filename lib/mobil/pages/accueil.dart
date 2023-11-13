@@ -1,7 +1,9 @@
-import 'package:Art_Eshop/mobil/models/couleur.dart';
-import 'package:Art_Eshop/mobil/models/dalog.dart';
+import 'package:art_eshop/mobil/models/Categories_Entity.dart';
+import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/models/dalog.dart';
+import 'package:art_eshop/mobil/pages/listProduit.dart';
+import 'package:art_eshop/mobil/services/categorie_service.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Accueil extends StatefulWidget {
@@ -12,6 +14,26 @@ class Accueil extends StatefulWidget {
 }
 
 class _ProduitsState extends State<Accueil> {
+  CategorieService service = CategorieService();
+  List<Categories> categories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Appeler une méthode pour récupérer les catégories
+    _fetchCategories();
+  }
+
+  Future<void> _fetchCategories() async {
+    await service.getAllCategories().then((value) {
+      setState(() {
+        categories = value;
+      });
+    }).catchError((err) {
+      print('Erreur lors de la récupération des catégories : $err');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +55,7 @@ class _ProduitsState extends State<Accueil> {
             children: [
               InkWell(
                   onTap: () {
-                    Popup().dialogLang(context);
+                    // Popup().dialogLang(context);
                   },
                   child: SvgPicture.asset('assets/icons/google_translate.svg')),
               const Text(
@@ -78,73 +100,52 @@ class _ProduitsState extends State<Accueil> {
                 ),
               ),
             ]),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const SizedBox(
-                width: 20,
-              ),
-              Container(
-                width: 100,
-                height: 40,
-                decoration: BoxDecoration(
-                  // color: Colors.amber,
-                  border: Border.all(width: 1, color: Couleurs.orange),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              Container(
-                width: 100,
-                height: 40,
-                decoration: BoxDecoration(
-                  // color: Colors.amber,
-                  border: Border.all(width: 1, color: Couleurs.orange),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              Container(
-                width: 100,
-                height: 40,
-                decoration: BoxDecoration(
-                  // color: Colors.amber,
-                  border: Border.all(width: 1, color: Couleurs.orange),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              Container(
-                width: 100,
-                height: 40,
-                decoration: BoxDecoration(
-                  // color: Colors.amber,
-                  border: Border.all(width: 1, color: Couleurs.orange),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              Container(
-                width: 100,
-                height: 40,
-                decoration: BoxDecoration(
-                  // color: Colors.amber,
-                  border: Border.all(width: 1, color: Couleurs.orange),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ],
+        Expanded(
+          flex: 1,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: categories.length,
+              padding: const EdgeInsets.all(10),
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context, index) {
+                final category = categories[index];
+                return InkWell(
+                    highlightColor: Couleurs.orange.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: () {},
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.only(left: 10),
+                      width: 120,
+                      // height: 50,
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Couleurs.orange),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text(
+                        category.nom,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ));
+              }),
+        ),
+        // const SizedBox(
+        //   height: 20,
+        // ),
+        const Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: Text(
+            "Articles recement ajouter",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
         ),
-        const SizedBox(
-          height: 20,
-        ),
         Expanded(
+          flex: 6,
           child: GridView.builder(
+            padding: const EdgeInsets.all(8),
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 200.0,
               crossAxisSpacing: 10.0,
@@ -153,42 +154,61 @@ class _ProduitsState extends State<Accueil> {
             shrinkWrap: true,
             itemCount: 10,
             itemBuilder: (context, index) {
-              return Card(
-                // color: Couleurs.orange,
-                elevation: 3,
+              return InkWell(
+                highlightColor: Couleurs.orange,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ListProduit(),
+                    ),
+                  );
+                },
+                child: Card(
+                  // color: Couleurs.orange,
+                  elevation: 8,
+                  shadowColor: Colors.black,
 
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    side: BorderSide(color: Couleurs.orange, width: 1)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      flex: 3,
-
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        // decoration: BoxDecoration(
-                        //   border: Border.all(width: 1, color: Couleurs.orange),
-                        //   borderRadius:
-                        //       const BorderRadius.all(Radius.circular(10)),
-                        // ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(color: Couleurs.orange, width: 1)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        flex: 3,
                         child: Image.asset("assets/images/plover.png"),
                       ),
-                      // Image.asset("assets/images/plover.png"),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        // height: 40,
-                        decoration: BoxDecoration(
-                            color: Couleurs.orange,
-                            borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10))),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          padding: const EdgeInsets.only(left: 5, top: 5),
+                          decoration: BoxDecoration(
+                              color: Couleurs.orange,
+                              borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10))),
+                          child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.,
+                            children: [
+                              Text(
+                                "Nom : 1234567890t",
+                                style: TextStyle(
+                                    color: Couleurs.blanc,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                              Text(
+                                "Categorie : 1234567890",
+                                style: TextStyle(
+                                    color: Couleurs.blanc,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },

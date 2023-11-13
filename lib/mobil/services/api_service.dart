@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types, prefer_collection_literals
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -154,7 +156,7 @@ class ServiceLoger {
       throw Exception('Une erreur s\'est produite : $error');
     }
   }
-
+// ::::::::::::::::::::::::::::mot de passe oublier 
   Future<String> verifyUserEmail(String email) async {
     try {
       // Créez l'URI pour la vérification de l'utilisateur avec les paramètres dans l'URL (GET)
@@ -168,7 +170,7 @@ class ServiceLoger {
       if (response.statusCode == 200) {
         debugPrint("${response.statusCode}");
         debugPrint(response.body);
-        var resut = response.body;
+        // var resut = response.body;
         // Succès : Utilisateur existe et informations correctes
         return response.body;
       } else if (response.statusCode == 401) {
@@ -247,3 +249,4 @@ Future<UserCredential> signInWithGoogle() async {
     throw Exception('L\'utilisateur a annulé la connexion Google');
   }
 }
+
