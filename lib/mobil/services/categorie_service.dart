@@ -7,18 +7,18 @@ import 'package:http/http.dart' as http;
 class CategorieService {
   // :::::::::::::::::::::::::methode pour ajouter une category:::::::::::::::;
   Future<http.Response> add(
-    String nom,
+    Categories categories,
   ) async {
     try {
       // Créez l'URI
-      var uri = Uri.parse("http://10.0.2.2:8080/categorie/add");
+      var uri = Uri.parse("http://localhost:8080/categories/add");
 
       // En-têtes
       Map<String, String> headers = {"Content-Type": "application/json"};
 
       // Corps de la requête
       Map data = {
-        'nom': nom,
+        'nom': categories.nom,
       };
 
       // Convertit les données en JSON
@@ -31,14 +31,12 @@ class CategorieService {
 
       // Vérifie le code de statut de la réponse
       if (response.statusCode == 200) {
-        // Succès : Utilisateur créé avec succès
-        // Stockez les données de l'utilisateur dans SharedPreferences
-
+       
         return response;
       } else {
         // Échec : Gestion d'erreur en cas de code de statut non attendu
         throw Exception(
-            'Erreur lors de la création de l\'utilisateur. Code de statut : ${response.statusCode}');
+            'Erreur lors de la création de l\'utilisateur. Code de statut : ${response.body}');
       }
     } catch (error) {
       // Gestion des erreurs générales (par exemple, perte de connexion)

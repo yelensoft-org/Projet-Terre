@@ -1,5 +1,7 @@
+import 'package:art_eshop/desktop/pages/detail_produit.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/pages/accueil.dart';
+import 'package:art_eshop/mobil/pages/produit_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -32,7 +34,7 @@ class _ListProduitState extends State<ListProduit> {
               children: [
                 InkWell(
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pop(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const Accueil(),
@@ -96,9 +98,14 @@ class _ListProduitState extends State<ListProduit> {
               return InkWell(
                 highlightColor: Couleurs.orange.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(10),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ProduitDetail()));
+                },
                 child: Container(
-                  padding:const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   margin: const EdgeInsets.all(5),
                   height: 120,
                   width: MediaQuery.of(context).size.width,

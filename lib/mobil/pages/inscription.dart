@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/services/api_service.dart';
 import 'package:art_eshop/mobil/services/image_picture.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
@@ -31,7 +30,7 @@ class _InscriptionState extends State<Inscription> {
   final TextEditingController _paysController = TextEditingController();
   Service service = Service();
 
-  final _formkey = GlobalKey<FormState>();
+  final _formkeyInscription = GlobalKey<FormState>();
 
   @override
   void initState() {

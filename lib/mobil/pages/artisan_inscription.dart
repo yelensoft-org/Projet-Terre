@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/models/regions.dart';
 import 'package:art_eshop/mobil/pages/login.dart';
 import 'package:art_eshop/mobil/services/artisan_service.dart';
 import 'package:art_eshop/mobil/services/image_picture.dart';
@@ -16,7 +17,7 @@ class ArtisanInscription extends StatefulWidget {
 }
 
 class _ArtisanInscriptionState extends State<ArtisanInscription> {
-  final _formkey = GlobalKey<FormState>();
+  final _formkeyArtisan = GlobalKey<FormState>();
 
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
@@ -29,6 +30,9 @@ class _ArtisanInscriptionState extends State<ArtisanInscription> {
   final TextEditingController _desController = TextEditingController();
 
   ArtisantService service = ArtisantService();
+  String sexe = "Homme";
+   Region regionMali = Region();
+  String selectedRegion = "Bamako";
 
   File? selectedImage;
   @override
@@ -93,7 +97,7 @@ class _ArtisanInscriptionState extends State<ArtisanInscription> {
           Expanded(
               child: SingleChildScrollView(
             child: Form(
-              key: _formkey,
+              key: _formkeyArtisan,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -189,50 +193,51 @@ class _ArtisanInscriptionState extends State<ArtisanInscription> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            height: 40,
-                            width: 170,
-                            // margin: const EdgeInsets.all(10.0),
-                            child: TextFormField(
-                              controller: _regionController,
-                              decoration: const InputDecoration(
-                                suffixIcon: Icon(Icons.check),
-                                // labelText: "Region *",
-                                hintText: "Votre region",
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(9.0))),
-                                contentPadding: EdgeInsets.all(8.0),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Ce champs est Obligatoir";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
+                              height: 40,
+                              width: 170,
+                              // margin: const EdgeInsets.all(10.0),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  focusColor: Couleurs.orange,
+                                  borderRadius: BorderRadius.circular(5),
+                                  value:
+                                      selectedRegion, // Utilisez une variable pour stocker la région sélectionnée
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedRegion =
+                                          value!; // Mettez à jour la région sélectionnée
+                                    });
+                                  },
+                                  items: regionMali.regions.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              )),
                           Container(
                             height: 40,
                             width: 170,
                             // margin: const EdgeInsets.all(10.0),
-                            child: TextFormField(
-                              controller: _sexeController,
-                              decoration: const InputDecoration(
-                                suffixIcon: Icon(Icons.check),
-                                // labelText: "Region *",
-                                hintText: "Sexe",
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(9.0))),
-                                contentPadding: EdgeInsets.all(8.0),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Ce champs est Obligatoir";
-                                }
-                                return null;
-                              },
-                            ),
+                            child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                    // style: TextStyle(color: Couleurs.orange),
+                                    focusColor: Couleurs.orange,
+                                    borderRadius: BorderRadius.circular(5),
+                                    value: sexe,
+                                    onChanged: (value) {
+                                      sexe = value!;
+                                      setState(() {});
+                                    },
+                                    items: ['Homme', 'Femme']
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                      return DropdownMenuItem(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList())),
                           ),
                         ],
                       ),
@@ -283,13 +288,12 @@ class _ArtisanInscriptionState extends State<ArtisanInscription> {
                     Container(
                       margin: const EdgeInsets.all(10.0),
                       child: TextFormField(
-
                         controller: _desController,
                         maxLines: 4,
                         maxLength: 100,
                         decoration: const InputDecoration(
                           labelText: "Description*",
-                          hintText:"Description de votre Entreprise",
+                          hintText: "Description de votre Entreprise",
                           border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(9.0))),
@@ -309,20 +313,21 @@ class _ArtisanInscriptionState extends State<ArtisanInscription> {
                       highlightColor: Couleurs.gri,
                       borderRadius: BorderRadius.circular(10),
                       onTap: () async {
-                        if (_formkey.currentState!.validate()) {
+                        if (_formkeyArtisan.currentState!.validate()) {
                           Artisan artisan = Artisan(
                               nom: _nomController.text,
                               prenom: _prenomController.text,
                               email: _emailController.text,
                               password: _passwordController.text,
-                              region: _regionController.text,
+                              region: selectedRegion,
                               telephone: _teleController.text,
                               entreprise: _entrepriseController.text,
-                              sexe: _sexeController.text,
+                              sexe: sexe,
                               description: _desController.text);
                           try {
                             // Appel de la méthode saveUser et attendre la réponse
-                            final response = await service.enregistrerArtisan(artisan,selectedImage!);
+                            final response = await service.enregistrerArtisan(
+                                artisan, selectedImage!);
 
                             // Vérification du code de statut HTTP de la réponse
                             if (response.statusCode == 200) {

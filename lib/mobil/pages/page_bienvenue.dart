@@ -1,5 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/pages/login.dart';
 import 'package:flutter/material.dart';
 
 class PageBienvenue extends StatefulWidget {
@@ -47,7 +48,10 @@ class _PageBienvenueState extends State<PageBienvenue> {
             ),
             InkWell(
               highlightColor: Couleurs.gri,
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const login()));
+              },
               child: Container(
                 width: 300,
                 height: 45,
@@ -78,7 +82,10 @@ class _PageBienvenueState extends State<PageBienvenue> {
               height: 20,
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const login()));
+              },
               child: Container(
                 width: 300,
                 height: 45,

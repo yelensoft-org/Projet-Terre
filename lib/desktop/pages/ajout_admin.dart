@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:art_eshop/desktop/model/admin_Entity.dart';
 import 'package:art_eshop/desktop/pages/admin_connexion.dart';
-import 'package:art_eshop/desktop/pages/list_artisans.dart';
 import 'package:art_eshop/desktop/service/admin_service.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/desktop/pages/picker_image.dart';

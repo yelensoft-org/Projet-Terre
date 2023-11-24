@@ -1,13 +1,23 @@
+// ignore_for_file: unused_element
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
+import 'package:art_eshop/mobil/models/Utilisateur_Entity.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ArtisantService extends ChangeNotifier {
   Artisan artisan = Artisan();
+  bool isArtisan = false;
   int indexPage = 0;
+
+  set artisanProv(bool value) {
+    isArtisan = value;
+    notifyListeners();
+  }
 
   Future<http.Response> enregistrerArtisan(
       Artisan artisan, File imageFile) async {
@@ -37,6 +47,8 @@ class ArtisantService extends ChangeNotifier {
           streamedResponse); // Convertit le flux en une réponse
 
       if (response.statusCode == 200) {
+        
+
         // L'enregistrement a réussi
         print('Artisan enregistré avec succès');
       } else {
@@ -107,9 +119,67 @@ class ArtisantService extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  // :::::::::::::::::::::::::::::;active un artisan
+
+  Future<Artisan> activeOuDesactive(int idArtisans) async {
+    try {
+      // Créez l'URI
+      var uri = Uri.parse("http://localhost:8080/artisan/active/$idArtisans");
+
+      // En-têtes
+      Map<String, String> headers = {"Content-Type": "application/json"};
+
+      // Envoie la requête POST
+      var response = await http.put(uri, headers: headers, body: null);
+      debugPrint("je suis");
+      debugPrint(response.body);
+
+      // Vérifie le code de statut de la réponse
+      if (response.statusCode == 200) {
+        return Artisan.fromMap(jsonDecode(response.body));
+      } else {
+        // Échec : Gestion d'erreur en cas de code de statut non attendu
+        throw Exception(
+            'Erreur lors de la création de l\'utilisateur. Code de statut : ${response.body}');
+      }
+    } catch (error) {
+      // Gestion des erreurs générales (par exemple, perte de connexion)
+      throw Exception('Une erreur s\'est produite : $error');
+    }
+  }
+
+  // :::::::::::::::::::::::::verifier artisan connection
+  Future<Object> verifieConnexion(String email, String password) async {
+    try {
+      // Créez l'URI pour la vérification de l'utilisateur avec les paramètres dans l'URL (GET)
+      var uri = Uri.parse(
+          "http://10.0.2.2:8080/connexion/verifier?email=$email&password=$password");
+      debugPrint("$uri");
+      // Envoie la requête GET
+      var response = await http.get(uri);
+
+      // Vérifie le code de statut de la réponse
+      if (response.statusCode == 200) {
+        debugPrint("${response.statusCode}");
+       
+
+        // Succès : Utilisateur existe et informations correctes
+        var object = json.decode(response.body);
+        return object;
+      } else {
+        // Autres cas de code de statut (gestion d'erreur)
+        throw Exception(
+            'Erreur lors de la vérification de l\'utilisateur. Code de statut : ${response.body}');
+      }
+    } catch (error) {
+      // Gestion des erreurs générales (par exemple, perte de connexion)
+      throw Exception('Une erreur s\'est produite : $error');
+    }
+  }
 }
 
-class MyHomePageProvider extends ChangeNotifier {
+class ArtisanProvider extends ChangeNotifier {
   MyData? data;
   List<Artisan> artisans = [];
 
@@ -117,32 +187,15 @@ class MyHomePageProvider extends ChangeNotifier {
     const apiUrl =
         ('http://localhost:8080/artisan/list'); // Remplacez par l'URL réelle de votre API
 
-    // try {
-    //   // Effectuer une requête GET vers l'API
-
-    // } catch (error) {
-    //   // Gérer les exceptions survenues pendant la requête
-    //   print('Erreur : $error');
-    // }
     final response = await http.get(Uri.parse(apiUrl));
 
     // Vérifier si la requête a réussi (code d'état 200)
     if (response.statusCode == 200) {
-      // Décoder la réponse JSON
-      // var mJson = json.decode(response.body);
-      // print(mJson);
       List<dynamic> result = jsonDecode(response.body);
       print(result);
 
-      // Convertir le JSON en votre modèle de données
-      //data = MyData.fromJson(mJson);
-      // Convertir chaque élément de la liste JSON en un objet Artisan
-      //artisans = List<Artisan>.from());
+      artisans = result.map((json) => Artisan.fromMap(json)).toList();
 
-      artisans = result.map((json) => Artisan.fromJson(json)).toList();
-
-      // Avertir les auditeurs
-      //notifyListeners();
       print(artisans.toString());
       return artisans;
     } else {

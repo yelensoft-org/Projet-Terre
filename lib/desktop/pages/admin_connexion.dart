@@ -1,5 +1,4 @@
 import 'package:art_eshop/desktop/pages/ajout_admin.dart';
-import 'package:art_eshop/desktop/pages/list_artisans.dart';
 import 'package:art_eshop/desktop/service/admin_service.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:flutter/material.dart';
@@ -212,11 +211,11 @@ class _ConnexionState extends State<Connexion> {
                                     if (admin["idAdmin"] != null &&
                                         admin.containsKey("idAdmin")) {
                                       // ignore: use_build_context_synchronously
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const AdminListArtisan()));
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) =>
+                                      //             const AdminListArtisan()));
                                     }
                                   }).catchError((onError) {
                                     setState(() {

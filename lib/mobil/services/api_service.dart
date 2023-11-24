@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:art_eshop/mobil/models/Utilisateur_Entity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -126,12 +127,11 @@ class Service {
 // :::::::::::::::::::::::::::login:::::::::::::
 
 class ServiceLoger {
-  Future<Map<String, dynamic>> verifyUser(
-      String email, String motDePasse) async {
+  Future<Utilisateur> verifyUser(String email, String password) async {
     try {
       // Créez l'URI pour la vérification de l'utilisateur avec les paramètres dans l'URL (GET)
       var uri = Uri.parse(
-          "http://10.0.2.2:8080/utilisateur/connexion?email=$email&mot_de_passe=$motDePasse");
+          "http://10.0.2.2:8080/utilisateur/connexion?email=$email&password=$password");
       debugPrint("$uri");
       // Envoie la requête GET
       var response = await http.post(uri);
@@ -142,10 +142,6 @@ class ServiceLoger {
         debugPrint(response.body);
         // Succès : Utilisateur existe et informations correctes
         return json.decode(response.body);
-      } else if (response.statusCode == 401) {
-        debugPrint(" existe et informations correctes");
-        // Échec : Utilisateur existe, mais informations incorrectes
-        return Map();
       } else {
         // Autres cas de code de statut (gestion d'erreur)
         throw Exception(
@@ -156,7 +152,8 @@ class ServiceLoger {
       throw Exception('Une erreur s\'est produite : $error');
     }
   }
-// ::::::::::::::::::::::::::::mot de passe oublier 
+
+// ::::::::::::::::::::::::::::mot de passe oublier
   Future<String> verifyUserEmail(String email) async {
     try {
       // Créez l'URI pour la vérification de l'utilisateur avec les paramètres dans l'URL (GET)
@@ -189,44 +186,6 @@ class ServiceLoger {
   }
 }
 
-Future<user> localStorage() async {
-  final prefs = await SharedPreferences.getInstance();
-  var nomPrenom = prefs.getString('nomPrenom');
-  var pseudo = prefs.getString('pseudo');
-  var email = prefs.getString('email');
-  var motDePasse = prefs.getString('motDePasse');
-  var confirmPasseword = prefs.getString('confirmPasseword');
-
-  user utilisateur = user(
-    id: 0,
-    nomPrenom: nomPrenom ?? '',
-    pseudo: pseudo ?? '',
-    email: email ?? '',
-    motDePasse: motDePasse ?? '',
-    confirmPasseword: confirmPasseword ?? '',
-  );
-
-  if (nomPrenom != null &&
-      pseudo != null &&
-      email != null &&
-      motDePasse != null &&
-      confirmPasseword != null) {
-    // Les données ont été correctement stockées
-    debugPrint('Données stockées avec succès :');
-    debugPrint('Nom et Prénom : $nomPrenom');
-    debugPrint('Pseudo : $pseudo');
-    debugPrint('Email : $email');
-    debugPrint('Mot de passe : $motDePasse');
-    debugPrint('Confirmation du mot de passe : $confirmPasseword');
-    // return utilisateur;
-  } else {
-    // Les données de l'utilisateur n'ont pas encore été stockées ou il y a une erreur.
-    debugPrint(
-        'Les données n\'ont pas été correctement stockées ou sont manquantes.');
-  }
-  return utilisateur;
-}
-
 // methode authentification google:::::::::::::::::::::::::::::
 Future<UserCredential> signInWithGoogle() async {
   // Trigger the authentication flow
@@ -249,4 +208,3 @@ Future<UserCredential> signInWithGoogle() async {
     throw Exception('L\'utilisateur a annulé la connexion Google');
   }
 }
-

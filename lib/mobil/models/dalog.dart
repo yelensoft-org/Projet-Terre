@@ -1,196 +1,26 @@
 // ignore_for_file: use_build_context_synchronously
 
-library clean_dialog;
-
 import 'package:art_eshop/desktop/pages/admin_connexion.dart';
+import 'package:art_eshop/desktop/pages/admin_list_categorie.dart';
+import 'package:art_eshop/mobil/models/Categories_Entity.dart';
+import 'package:art_eshop/mobil/models/Taille_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/pages/accueil.dart';
 import 'package:art_eshop/mobil/services/api_service.dart';
+import 'package:art_eshop/mobil/services/categorie_service.dart';
+import 'package:art_eshop/mobil/services/notification_service.dart';
+import 'package:art_eshop/mobil/services/taille_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-/// A Clean and minimalist Flutter Dialog
-/***
- * CleanDialog(
-    title: 'Error',
-    content: 'We were not able to update your information.',
-    backgroundColor: const Color(0XFFbe3a2c),
-    titleTextStyle: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
-    contentTextStyle: const TextStyle(fontSize: 16, color: Colors.white),
-    actions: [
-        CleanDialogActionButtons(
-            actionTitle: 'Cancel',
-            onPressed: () => Navigator.pop(context),
-        ),
-        CleanDialogActionButtons(
-            actionTitle: 'Try again',
-            textColor: const Color(0XFF27ae61),
-            onPressed: () {},
-        ),
-    ],
-    ),
- */
-///
-class CleanDialog extends StatelessWidget {
-  const CleanDialog({
-    super.key,
-    required this.backgroundColor,
-    required this.actions,
-    required this.title,
-    required this.content,
-    this.titleTextStyle,
-    this.contentTextStyle,
-    this.titleTextAlign,
-    this.contentTextAlign,
-  });
-
-  /// Color to be displayed in the background of the Dialog
-  final Color backgroundColor;
-
-  /// The String to be displayed as title for the Dialog
-  final String title;
-
-  /// The dialog's text content
-  final String content;
-
-  /// The list of Buttons that will be displayed in the Dialog
-  final List<CleanDialogActionButtons> actions;
-
-  /// The title text alignement default value is TextAlign.Center
-  final TextAlign? titleTextAlign;
-
-  /// The content text alignement default value is TextAlign.Center
-  final TextAlign? contentTextAlign;
-
-  /// The content text style default value is TextStyle(fontWeight: FontWeight.bold, fontSize: 23)
-  final TextStyle? titleTextStyle;
-
-  /// The content text style default value is TextStyle(fontSize: 16)
-  final TextStyle? contentTextStyle;
-
-  /// Used to transfer backgroundColor to buttons textColor.
-  List<CleanDialogActionButtons> _buildStyledActionButtons() => actions
-      .map((e) => e.copyWith(textColor: e.textColor ?? backgroundColor))
-      .toList();
-
-  @override
-  Widget build(BuildContext context) {
-    final List<CleanDialogActionButtons> actions = _buildStyledActionButtons();
-
-    return Dialog(
-      elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              color: backgroundColor,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        title,
-                        textAlign: titleTextAlign ?? TextAlign.center,
-                        style: titleTextStyle ??
-                            const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 23),
-                      ),
-                    ),
-                    Text(
-                      content,
-                      textAlign: contentTextAlign ?? TextAlign.center,
-                      style: contentTextStyle ?? const TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) => actions.elementAt(index),
-              separatorBuilder: (context, _) => Divider(
-                color: backgroundColor.withOpacity(.5),
-                height: 1,
-              ),
-              itemCount: actions.length,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CleanDialogActionButtons extends StatelessWidget {
-  const CleanDialogActionButtons(
-      {super.key,
-      required this.actionTitle,
-      required this.onPressed,
-      this.textColor});
-
-  /// The String text that will be displayed for the action.
-  final String actionTitle;
-
-  /// The action that will be executed once the button tapped.
-  final VoidCallback onPressed;
-
-  /// Optional Color that will override the default parent `backgoundColor`.
-  final Color? textColor;
-
-  CleanDialogActionButtons copyWith({
-    String? actionTitle,
-    VoidCallback? onPressed,
-    Color? textColor,
-  }) =>
-      CleanDialogActionButtons(
-        actionTitle: actionTitle ?? this.actionTitle,
-        onPressed: onPressed ?? this.onPressed,
-        textColor: textColor ?? this.textColor,
-      );
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: textColor?.withOpacity(.1),
-      highlightColor: textColor?.withOpacity(.2),
-      onTap: onPressed,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Text(
-          actionTitle,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: textColor ?? Colors.blue, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-}
-// :::::::::::::::::::::::::::::::::::::::::;
-
-// class PopupController extends StatefulWidget {
-//   const PopupController({super.key});
-
-//   @override
-//   State<PopupController> createState() => _PopupControllerState();
-// }
-
-// class _PopupControllerState extends State<PopupController> {
-//   @override
-
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
 class Popup {
   final TextEditingController _emailController2 = TextEditingController();
   final TextEditingController _emailController3 = TextEditingController();
+  final TextEditingController _nomController = TextEditingController();
+  final TextEditingController _regionController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+
   ServiceLoger service = ServiceLoger();
   final _formkey = GlobalKey<FormState>();
 
@@ -473,4 +303,518 @@ class Popup {
           );
         });
   }
+
+  // :::::::::::::::::::::::::::::::::::;ajouter cultur
+  void adminAjouteCulture(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Align(
+            child: Dialog(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Couleurs.blanc,
+                    borderRadius: BorderRadius.circular(8)),
+                padding: const EdgeInsets.all(10),
+                width: 400,
+                height: 600,
+                child: Form(
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          height: 300,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border:
+                                  Border.all(width: 1, color: Couleurs.gri)),
+                          // child: Image.network("src"),
+                        ),
+                      ),
+                      // Container(child: Container())
+                      Container(
+                        // height: 300,
+                        child: Column(
+                          children: [
+                            Container(
+                              // height: 30,
+                              margin: const EdgeInsets.all(10.0),
+                              child: TextFormField(
+                                controller: _nomController,
+                                decoration: const InputDecoration(
+                                  labelText: "Date *",
+                                  hintText: "Entree la date",
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(9.0))),
+                                  contentPadding: EdgeInsets.all(8.0),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Ce champs est Obligatoir";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        // height: 30,
+                        margin: const EdgeInsets.all(10.0),
+                        child: TextFormField(
+                          controller: _regionController,
+                          decoration: const InputDecoration(
+                            labelText: "Region *",
+                            hintText: "Entree la region",
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(9.0))),
+                            contentPadding: EdgeInsets.all(8.0),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Ce champs est Obligatoir";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(10.0),
+                        child: TextFormField(
+                          controller: _dateController,
+                          decoration: const InputDecoration(
+                            labelText: "Nom *",
+                            hintText: "Entree  Nom de la culture",
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(9.0))),
+                            contentPadding: EdgeInsets.all(8.0),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Ce champs est Obligatoir";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          width: MediaQuery.of(context).size.width,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              color: Couleurs.orange,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Center(
+                              child: Text(
+                            "Enregistrer",
+                            style: TextStyle(color: Couleurs.blanc),
+                          )),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  // :::::::::::::::::::::::::::::::::::deconnection
+  void deconnexion(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Container(
+            decoration: BoxDecoration(
+                color: Couleurs.blanc, borderRadius: BorderRadius.circular(4)),
+            height: 190,
+            width: 250,
+            child: Column(children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: Couleurs.orange,
+                    borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(4),
+                        topLeft: Radius.circular(4))),
+                height: 50,
+                child: Center(
+                    child: Text(
+                  "Deconnexion",
+                  style: TextStyle(
+                      color: Couleurs.blanc,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                )),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: const EdgeInsets.all(10),
+                child: const Text(
+                    "Voulez vous vraiment vous déconnecter de cette Application"),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {},
+                        child: Container(
+                          width: 100,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              color: Couleurs.orange,
+                              borderRadius: BorderRadius.circular(4)),
+                          child: Center(
+                              child: Text(
+                            "Oui",
+                            style: TextStyle(color: Couleurs.blanc),
+                          )),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: Container(
+                          width: 100,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 1,
+                                color: Couleurs.orange,
+                              ),
+                              borderRadius: BorderRadius.circular(4)),
+                          child: Center(
+                              child: Text(
+                            "Non",
+                            style: TextStyle(color: Couleurs.orange),
+                          )),
+                        ),
+                      )
+                    ]),
+              )
+            ]),
+          ),
+        );
+      },
+    );
+  }
+
+  // :::::::::::::::::::::;success
+  void success(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.of(context).pop(true);
+          });
+          return Dialog(
+            insetAnimationDuration: const Duration(seconds: 3),
+            child: Container(
+                padding: const EdgeInsets.only(top: 20),
+                height: 190,
+                width: 250,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Activer avec Success",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SvgPicture.asset(
+                      "icons/succes.svg",
+                      height: 100,
+                    ),
+                  ],
+                )),
+          );
+        });
+  }
+
+// :::::::::::::::::;;poppup de succes mobil
+  void successMobil(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.of(context).pop(false);
+          });
+          return Dialog(
+            insetAnimationDuration: const Duration(seconds: 3),
+            child: Container(
+                padding: const EdgeInsets.only(top: 20),
+                height: 220,
+                width: 250,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Activer avec Success",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SvgPicture.asset(
+                      "assets/icons/succes.svg",
+                      height: 100,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Accueil()));
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 10),
+                            width: 50,
+                            height: 30,
+                            decoration: BoxDecoration(
+                                color: Couleurs.orange,
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Center(
+                              child: Text(
+                                "OK",
+                                style: TextStyle(
+                                    color: Couleurs.blanc,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                )),
+          );
+        });
+  }
+
+  final TextEditingController _categorieController = TextEditingController();
+
+  CategorieService serviceCategorie = CategorieService();
+
+  void ajouterCategories(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Form(
+              key: _formkey,
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Couleurs.blanc),
+                height: 200,
+                width: 300,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin:
+                          const EdgeInsets.only(top: 15, left: 10, right: 10),
+                      child: TextFormField(
+                        controller: _categorieController,
+                        decoration: InputDecoration(
+                          focusColor: Couleurs.orange,
+                          labelText: "Categorie *",
+                          hintText: "Entree le nom d'une Categorie",
+                          border: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(9.0))),
+                          contentPadding: const EdgeInsets.all(8.0),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Ce champs est Obligatoir";
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        if (_formkey.currentState!.validate()) {
+                          Categories categories = Categories(
+                            nom: _categorieController.text,
+                          );
+                          try {
+                            // Appel de la méthode saveUser et attendre la réponse
+                            final response =
+                                await serviceCategorie.add(categories);
+
+                            // Vérification du code de statut HTTP de la réponse
+                            if (response.statusCode == 200) {
+                              debugPrint("response: ");
+                              Navigator.pop(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ListCategories(),
+                                ),
+                              );
+
+                              FocusScope.of(context).requestFocus(FocusNode());
+                            } else {
+                              // Échec : Gérer l'erreur ici, par exemple afficher un toast/modal d'erreur
+                            }
+                          } catch (error) {
+                            // Gérer les erreurs générales ici, par exemple afficher un toast/modal d'erreur
+                          }
+                        }
+                        // popup.ajouterCategories(context);
+                      },
+                      child: Container(
+                          width: 300,
+                          height: 30,
+                          margin: const EdgeInsets.only(
+                              top: 15, left: 10, right: 10),
+                          decoration: BoxDecoration(
+                              color: Couleurs.orange,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Center(
+                              child: Text(
+                            "Engregistrer",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Couleurs.blanc),
+                          ))),
+                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  // :::::::::::::::::::::;ajouter taille
+  final TextEditingController _tailleController = TextEditingController();
+
+  TailleService serviceTaille = TailleService();
+
+  void ajouterTaille(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Form(
+              key: _formkey,
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Couleurs.blanc),
+                height: 200,
+                width: 300,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin:
+                          const EdgeInsets.only(top: 15, left: 10, right: 10),
+                      child: TextFormField(
+                        controller: _tailleController,
+                        decoration: InputDecoration(
+                          focusColor: Couleurs.orange,
+                          labelText: "Taille *",
+                          hintText: "Choisir une taille",
+                          border: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(9.0))),
+                          contentPadding: const EdgeInsets.all(8.0),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Ce champs est Obligatoir";
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        if (_formkey.currentState!.validate()) {
+                          TailleProduit taille = TailleProduit(
+                            libelle: _tailleController.text,
+                          );
+                          try {
+                            // Appel de la méthode saveUser et attendre la réponse
+                            final response = await serviceTaille.add(taille);
+
+                            // Vérification du code de statut HTTP de la réponse
+                            // ignore: duplicate_ignore
+                            if (response.statusCode == 200) {
+                              debugPrint("response: ");
+                              Navigator.pop(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ListTile(),
+                                ),
+                              );
+
+                              FocusScope.of(context).requestFocus(FocusNode());
+                            } else {
+                              // Échec : Gérer l'erreur ici, par exemple afficher un toast/modal d'erreur
+                            }
+                          } catch (error) {
+                            // Gérer les erreurs générales ici, par exemple afficher un toast/modal d'erreur
+                          }
+                        }
+                        // popup.ajouterCategories(context);
+                      },
+                      child: Container(
+                          width: 300,
+                          height: 30,
+                          margin: const EdgeInsets.only(
+                              top: 15, left: 10, right: 10),
+                          decoration: BoxDecoration(
+                              color: Couleurs.orange,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Center(
+                              child: Text(
+                            "Engregistrer",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Couleurs.blanc),
+                          ))),
+                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  // ::::::::::::::::::::::::::::::::::::::::::::;
 }
+
+// :::::::::::::::::::::::::::::ajouter cultures:::::::::::::::::::::;

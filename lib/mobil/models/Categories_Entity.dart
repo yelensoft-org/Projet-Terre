@@ -1,17 +1,54 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
 
 class Categories {
-  final int id;
-  final String nom;
+  int? idCategorie;
+  String? nom;
 
-  const Categories({
-    required this.id,
-    required this.nom,
+  Categories({
+    this.idCategorie,
+    this.nom,
   });
 
-  factory Categories.fromJson(Map<String, dynamic> json) {
+  Categories copyWith({
+    int? idCategorie,
+    String? nom,
+  }) {
     return Categories(
-      id: json['idCategorie'],
-      nom: json['nom'],
+      idCategorie: idCategorie ?? this.idCategorie,
+      nom: nom ?? this.nom,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'idCategorie': idCategorie,
+      'nom': nom,
+    };
+  }
+
+  factory Categories.fromMap(Map<String, dynamic> map) {
+    return Categories(
+      idCategorie: map['idCategorie'],
+      nom: map['nom'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Categories.fromJson(String source) =>
+      Categories.fromMap(json.decode(source));
+
+  @override
+  String toString() => 'Categories(idCategorie: $idCategorie, nom: $nom)';
+
+  @override
+  bool operator ==(covariant Categories other) {
+    if (identical(this, other)) return true;
+
+    return other.idCategorie == idCategorie && other.nom == nom;
+  }
+
+  @override
+  int get hashCode => idCategorie.hashCode ^ nom.hashCode;
 }

@@ -1,8 +1,11 @@
+import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
 import 'package:art_eshop/mobil/models/Categories_Entity.dart';
+import 'package:art_eshop/mobil/models/Utilisateur_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/models/dalog.dart';
 import 'package:art_eshop/mobil/pages/listProduit.dart';
 import 'package:art_eshop/mobil/services/categorie_service.dart';
+import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -15,6 +18,10 @@ class Accueil extends StatefulWidget {
 
 class _ProduitsState extends State<Accueil> {
   CategorieService service = CategorieService();
+  ArtisanSharedPreference preference = ArtisanSharedPreference();
+  Artisan artisan = Artisan();
+  Utilisateur utilisateur = Utilisateur();
+  bool? isArtisan;
   List<Categories> categories = [];
 
   @override
@@ -22,6 +29,24 @@ class _ProduitsState extends State<Accueil> {
     super.initState();
     // Appeler une méthode pour récupérer les catégories
     _fetchCategories();
+    preference.getArtisanFromSharedPreference().then((value) async {
+      if (value != null) {
+        print(value);
+        print("artisan");
+        artisan = value;
+        isArtisan = true;
+      } else {
+        await preference.getUserFromSharedPreference().then((value) {
+          print(value);
+          print("user");
+          utilisateur = value!;
+          isArtisan = false;
+        });
+      }
+      setState(() {});
+    }).catchError((err) {
+      print('Erreur  : $err');
+    });
   }
 
   Future<void> _fetchCategories() async {
@@ -44,33 +69,49 @@ class _ProduitsState extends State<Accueil> {
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Container(
-          height: 70,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              color: Couleurs.orange,
-              borderRadius:
-                  const BorderRadius.only(bottomLeft: Radius.circular(40))),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              InkWell(
-                  onTap: () {
-                    // Popup().dialogLang(context);
-                  },
-                  child: SvgPicture.asset('assets/icons/google_translate.svg')),
-              const Text(
-                "Ousmato Toure",
-                style: TextStyle(
-                    fontSize: 17,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-              const CircleAvatar(
-                backgroundImage: AssetImage("assets/images/profil.png"),
-              )
-            ],
-          ),
+          child:  Container(
+                  height: 70,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: Couleurs.orange,
+                      borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(40))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      InkWell(
+                          onTap: () {
+                            // Popup().dialogLang(context);
+                          },
+                          child: SvgPicture.asset(
+                              'assets/icons/google_translate.svg')),
+                      Center(
+                        child: isArtisan==null ? CircularProgressIndicator(
+                          backgroundColor: Couleurs.orange,
+                        ) : isArtisan!
+              ? Text(
+                          "${artisan.nom}  ${artisan.prenom}",
+                          style: const TextStyle(
+                              fontSize: 17,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ):Text(
+                          "${utilisateur.nom}  ${utilisateur.prenom}",
+                          style: const TextStyle(
+                              fontSize: 17,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const CircleAvatar(
+                        backgroundImage: AssetImage("assets/images/profil.png"),
+                      )
+                    ],
+                  ),
+                ),
+       
         ),
+        // :::::::::::::::::::::
         Container(
           margin: const EdgeInsets.all(20),
           width: MediaQuery.of(context).size.width,
@@ -122,7 +163,7 @@ class _ProduitsState extends State<Accueil> {
                           border: Border.all(width: 1, color: Couleurs.orange),
                           borderRadius: BorderRadius.circular(20)),
                       child: Text(
-                        category.nom,
+                        category.nom!,
                         textAlign: TextAlign.center,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),

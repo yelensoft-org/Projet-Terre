@@ -1,3 +1,4 @@
+import 'package:art_eshop/desktop/controller/artisan_controller.dart';
 import 'package:art_eshop/desktop/pages/ajout_admin.dart';
 import 'package:art_eshop/desktop/pages/detail_artisan.dart';
 import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
@@ -14,12 +15,13 @@ class ListArtisan extends StatefulWidget {
 }
 
 class _ListArtisanState extends State<ListArtisan> {
-  MyHomePageProvider service = MyHomePageProvider();
+  ArtisanProvider service = ArtisanProvider();
   final bool _isShow = false;
   final bool _isShow2 = false;
 
   @override
   Widget build(BuildContext context) {
+    final artisanController = context.watch<ArtisanController>();
     return Scaffold(
       body: Column(
         children: [
@@ -90,7 +92,7 @@ class _ListArtisanState extends State<ListArtisan> {
             ),
           ),
           FutureBuilder<List<Artisan>>(
-            future: MyHomePageProvider().getData(),
+            future: artisanController.mesArtisans,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
@@ -99,7 +101,7 @@ class _ListArtisanState extends State<ListArtisan> {
               if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
-
+              print('je snaphot data ${snapshot.data}');
               return Expanded(
                 flex: 6,
                 child: ListView.builder(
@@ -201,7 +203,7 @@ class _ListArtisanState extends State<ListArtisan> {
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold))),
                       ],
-                      source: _DataSource(context, snapshot.data!),
+                      source: _DataSource(snapshot.data!),
                     );
                   },
                 ),
@@ -215,13 +217,11 @@ class _ListArtisanState extends State<ListArtisan> {
 }
 
 class _DataSource extends DataTableSource {
-  _DataSource(this.context, List<Artisan> artisanList) {
-    //List<Artisan> artisans = artisanList;
+  _DataSource(List<Artisan> artisanList) {
+    // List<Artisan> artisans = artisanList;
     _rows = artisanList;
   }
 
-  final BuildContext context;
-  // List<_Row> _rows;
   List<Artisan> _rows = <Artisan>[];
   int _selectedCount = 0;
 
@@ -243,27 +243,37 @@ class _DataSource extends DataTableSource {
       },
       cells: [
         DataCell(
-          CircleAvatar(
-            backgroundColor: Couleurs.gri,
-            child: Image.network(
-              "http://127.0.0.1/${row.photo!}",
-              scale: 100, // Vous pouvez ajuster l'échelle selon vos besoins
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent? loadingProgress) {
-                if (loadingProgress == null) {
-                  return child;
-                } else {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: Couleurs.orange,
-                    ),
-                  );
-                }
-              },
-              errorBuilder:
-                  (BuildContext context, Object error, StackTrace? stackTrace) {
-                return const Icon(Icons.error, color: Colors.red);
-              },
+          SizedBox(
+            height: 200,
+            width: 200,
+            child: CircleAvatar(
+              radius: 200,
+              backgroundColor: Couleurs.gri,
+              child: ClipOval(
+                child: Image.network(
+                  "http://127.0.0.1/${row.photo!}",
+                  fit: BoxFit.cover,
+                  height: 200,
+                  width: 200,
+                  // scale: 1, // Vous pouvez ajuster l'échelle selon vos besoins
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: Couleurs.orange,
+                        ),
+                      );
+                    }
+                  },
+                  errorBuilder: (BuildContext context, Object error,
+                      StackTrace? stackTrace) {
+                    return const Icon(Icons.error, color: Colors.red);
+                  },
+                ),
+              ),
             ),
           ),
         ),
@@ -276,17 +286,16 @@ class _DataSource extends DataTableSource {
                 color: Colors.green,
               )
             : const Icon(Icons.cancel, color: Colors.red)),
-        DataCell(IconButton(
-          icon: const Icon(Icons.remove_red_eye),
-          onPressed: () {
-            Provider.of<ArtisantService>(context, listen: false).changeIndex(2,row);
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //       builder: (context) => DetailArtisan(artisan: row),
-            //     ));
-          },
-        )),
+        DataCell(Builder(builder: (context) {
+          return IconButton(
+            icon: const Icon(Icons.remove_red_eye),
+            onPressed: () {
+              print('maudit row ${row}');
+              context.read<ArtisanController>().currentArtisan = row;
+              context.read<ArtisanController>().gotoDetails();
+            },
+          );
+        })),
       ],
     );
   }

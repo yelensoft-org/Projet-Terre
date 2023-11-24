@@ -1,16 +1,27 @@
-
 // ignore_for_file: library_private_types_in_public_api, unused_element, camel_case_types
 
+import 'dart:convert';
+
+import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
+import 'package:art_eshop/mobil/models/Utilisateur_Entity.dart';
+import 'package:art_eshop/mobil/models/controller_mobil/bottom_navigation_bar.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/models/dalog.dart';
+import 'package:art_eshop/mobil/models/spinner_page.dart';
+import 'package:art_eshop/mobil/pages/accueil.dart';
 import 'package:art_eshop/mobil/pages/artisan_inscription.dart';
+import 'package:art_eshop/mobil/pages/information_profil_artisan.dart';
+import 'package:art_eshop/mobil/pages/information_profil_utilisateur.dart';
 import 'package:art_eshop/mobil/pages/inscription.dart';
 import 'package:art_eshop/mobil/services/api_service.dart';
+import 'package:art_eshop/mobil/services/artisan_service.dart';
+import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreference.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
@@ -20,7 +31,7 @@ class login extends StatefulWidget {
 }
 
 //  final credential = GoogleAuthProvider.credential(idToken: idToken);
-final _formkey = GlobalKey<FormState>();
+final _formkeyLogin = GlobalKey<FormState>();
 
 class _loginState extends State<login> {
   final TextEditingController _emailController = TextEditingController();
@@ -28,7 +39,10 @@ class _loginState extends State<login> {
   final TextEditingController _passController = TextEditingController();
   ServiceLoger service = ServiceLoger();
   Popup popups = Popup();
-  // late Future<user> _futureUser;
+  ArtisantService serviceartisan = ArtisantService();
+  Artisan artisanClass = Artisan();
+  Utilisateur utilisateurClass = Utilisateur();
+  ArtisanSharedPreference serviceShaders = ArtisanSharedPreference();
 
   @override
   void initState() {
@@ -80,8 +94,7 @@ class _loginState extends State<login> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Center(
-                      child: Image.asset('assets/images/blanc.png')),
+                  Center(child: Image.asset('assets/images/blanc.png')),
                 ],
               ),
             ),
@@ -94,6 +107,7 @@ class _loginState extends State<login> {
                     Container(
                       padding: const EdgeInsets.all(20),
                       child: Form(
+                        key: _formkeyLogin,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -198,19 +212,51 @@ class _loginState extends State<login> {
                                 decoration: const BoxDecoration(),
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    // if(value){}
-                                    Map<String, dynamic> user =
-                                        await service.verifyUser(
-                                            _emailController.text,
-                                            _passController.text);
-                                    if (user["idUtilisateur"] != null &&
-                                        user.containsKey("idUtilisateur")) {
-                                      // ignore: use_build_context_synchronously
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (context) =>
-                                      //             const NavBar()));
+                                    if (_formkeyLogin.currentState!
+                                        .validate()) {
+                                      String email = _emailController.text;
+                                      String password = _passController.text;
+                                      await serviceartisan
+                                          .verifieConnexion(email, password)
+                                          .then((value) {
+                                        Map<String, dynamic> map =
+                                            value as Map<String, dynamic>;
+                                        if (map['entreprise'] != null) {
+                                          print("----------------------${map}");
+                                          serviceShaders
+                                              .addArtisanToSharedPreference(
+                                                  Artisan.fromMap(map))
+                                              .then((value) {
+                                            print("je suis artisabn");
+                                            print(Artisan.fromMap(map));
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const BottomNavigationExample()));
+                                            print("i'm artisant");
+                                          });
+                                        } else {
+                                          print(value);
+                                          serviceShaders
+                                              .addUtilisateurToSharedPreference(
+                                                  Utilisateur.fromMap(map))
+                                              .then((value) {
+                                            print(Utilisateur.fromMap(map));
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const BottomNavigationExample()));
+
+                                            print("i'm user");
+                                          });
+                                        }
+                                        print(
+                                            'je suis type${value.runtimeType}');
+                                      }).catchError((onError) {
+                                        print(onError);
+                                      });
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(
