@@ -1,9 +1,10 @@
 // Création d'une classe dédiée à la construction du DropdownButtonFormField
-import 'package:art_eshop/mobil/models/Categories_Entity.dart';
+// import 'package:art_eshop/mobil/models/Categories_Entity.dart';
 import 'package:art_eshop/mobil/models/Taille_Entity.dart';
-import 'package:art_eshop/mobil/services/artisan_service.dart';
-import 'package:art_eshop/mobil/services/taille_service.dart';
 import 'package:flutter/material.dart';
+// import 'package:art_eshop/mobil/services/artisan_service.dart';
+// import 'package:art_eshop/mobil/services/taille_service.dart';
+// import 'package:flutter/material.dart';
 
 // import 'package:multi_dropdown/enum/app_enums.dart';
 // import 'package:multi_dropdown/models/chip_config.dart';
@@ -16,108 +17,105 @@ import 'package:multi_dropdown/widgets/single_selected_item.dart';
 
 class TailleDropdown extends StatelessWidget {
   final List<TailleProduit> tailles;
-  final List<TailleProduit>? selectedTailles;
-  final ValueChanged<List<TailleProduit>?> onChanged;
-  final String? labelText;
-  final String? hintText;
+   String? labelText;
+   String? hintText;
 
-  const TailleDropdown({
-    super.key,
-    required this.tailles,
-    required this.selectedTailles,
-    required this.onChanged,
+   TailleDropdown({
+    Key? key,
+   required this.tailles,
     this.labelText,
     this.hintText,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<List<TailleProduit>>(
-      decoration: InputDecoration(
-        labelText: labelText ?? 'Taille*',
-        hintText: hintText ?? 'Choisissez une Taille',
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(9.0)),
+    return DropdownButtonHideUnderline(
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: labelText ?? 'Taille*',
+          hintText: hintText ?? 'Choisissez une Taille',
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(9.0)),
+          ),
+          contentPadding: const EdgeInsets.all(8.0),
         ),
-        contentPadding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: tailles.map((TailleProduit tailleProduit) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                tailleProduit.libelle ?? '',
+                style: TextStyle(fontSize: 16.0),
+              ),
+            );
+          }).toList(),
+        ),
       ),
-      value: selectedTailles,
-      onChanged: onChanged,
-      items: tailles.map((TailleProduit tailleProduit) {
-        return DropdownMenuItem<List<TailleProduit>>(
-          value: [...?selectedTailles, tailleProduit],
-          child: Text(tailleProduit.libelle),
-        );
-      }).toList(),
-      validator: (value) {
-        if (value == null) {
-          return 'Veuillez choisir une catégorie';
-        }
-        return null;
-      },
     );
   }
 }
 
-void main() {
-  runApp(const MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+// void main() {
+//   runApp(const MyApp());
+// }
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.dark,
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const MyHomePage(),
-    );
-  }
-}
+// class MyApp extends StatelessWidget {
+//   const MyApp({Key? key}) : super(key: key);
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Flutter Demo',
+//       debugShowCheckedModeBanner: false,
+//       themeMode: ThemeMode.dark,
+//       theme: ThemeData(
+//         primarySwatch: Colors.green,
+//       ),
+//       home: const MyHomePage(),
+//     );
+//   }
+// }
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
+// class MyHomePage extends StatefulWidget {
+//   const MyHomePage({Key? key}) : super(key: key);
 
-  static const _headerStyle = TextStyle(
-    fontSize: 12,
-    color: Colors.blue,
-  );
-}
+//   @override
+//   State<MyHomePage> createState() => _MyHomePageState();
 
-class _MyHomePageState extends State<MyHomePage> {
-  final MultiSelectController _controller = MultiSelectController();
+//   static const _headerStyle = TextStyle(
+//     fontSize: 12,
+//     color: Colors.blue,
+//   );
+// }
 
-  final List<TailleProduit> _selectedOptions = [];
-  late Future<List<TailleProduit>> tailleProduit;
-  // List<TailleProduit>? _selectedTailles;
-  ArtisantService artisantService = ArtisantService();
+// class _MyHomePageState extends State<MyHomePage> {
+//   final MultiSelectController _controller = MultiSelectController();
 
-  @override
-  void initState() {
-    super.initState();
-    tailleProduit = TailleService().getAllTailleProduit();
-  }
+//   final List<TailleProduit> _selectedOptions = [];
+//   late Future<List<TailleProduit>> tailleProduit;
+//   // List<TailleProduit>? _selectedTailles;
+//   ArtisantService artisantService = ArtisantService();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.grey.shade300,
-        body: SafeArea(
-            child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+//   @override
+//   void initState() {
+//     super.initState();
+//     tailleProduit = TailleService().getAllTailleProduit();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//         backgroundColor: Colors.grey.shade300,
+//         body: SafeArea(
+//             child: Padding(
+//                 padding: const EdgeInsets.all(8),
+//                 child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
                       
-                    ]))));
-  }
-}
+//                     ]))));
+//   }
+// }

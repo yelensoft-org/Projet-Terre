@@ -44,62 +44,98 @@ class SideBarController extends ChangeNotifier {
   }
 
   initNavigationRail() {
-    navigationRail = NavigationRail(
-      minExtendedWidth: 150,
-      backgroundColor: Couleurs.orange,
-      extended: isExtended,
-      leading: const CircleAvatar(
-        radius: 48,
-        // backgroundImage: Image.asset(''),
+    navigationRail = Container(
+      color: Couleurs.blanc,
+      child: NavigationRail(
+        minExtendedWidth: 150,
+        // labelType: ,
+        backgroundColor: Couleurs.orange,
+        extended: isExtended,
+        // selectedIconTheme: IconThemeData(color: Colors.amber),
+        leading: Column(
+          children: [
+            Text(
+              "ArtEshop",
+              style: TextStyle(
+                  color: Couleurs.blanc,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold),
+            ),
+            CircleAvatar(
+              radius: 50,
+              child: SvgPicture.asset(
+                "assets/icons/log.svg",
+                height: 200,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            )
+          ],
+        ),
+        onDestinationSelected: changePage,
+        destinations: [
+          NavigationRailDestination(
+            icon: const Icon(
+              Icons.dashboard,
+              color: Colors.black,
+            ),
+            label: Text(
+              "Dashboard",
+              style: TextStyle(color: Couleurs.blanc),
+            ),
+          ),
+          NavigationRailDestination(
+            icon: SvgPicture.asset(
+              'assets/icons/product.svg',
+              color: Colors.black,
+            ),
+            label: Text(
+              "Produits",
+              style: TextStyle(color: Couleurs.blanc),
+            ),
+          ),
+          NavigationRailDestination(
+            icon:
+                SvgPicture.asset('assets/icons/artis.svg', color: Colors.black),
+            label: Text(
+              "Artisans",
+              style: TextStyle(color: Couleurs.blanc),
+            ),
+          ),
+          NavigationRailDestination(
+            icon:
+                SvgPicture.asset('assets/icons/cult.svg', color: Colors.black),
+            label: Text(
+              "Cultures",
+              style: TextStyle(color: Couleurs.blanc),
+            ),
+          ),
+          NavigationRailDestination(
+            icon: SvgPicture.asset(
+              'assets/icons/categories.svg',
+              height: 30,
+              // color: Couleurs.blanc,
+            ),
+            label: Text(
+              "Categories",
+              style: TextStyle(color: Couleurs.blanc),
+            ),
+          ),
+          NavigationRailDestination(
+            icon: SvgPicture.asset(
+              'assets/icons/type.svg',
+              // color: Couleurs.blanc,
+              height: 30,
+            ),
+            label: Text(
+              "Tailles",
+              style: TextStyle(color: Couleurs.blanc),
+            ),
+          ),
+        ],
+        selectedIndex: index,
       ),
-      onDestinationSelected: changePage,
-      destinations: [
-        NavigationRailDestination(
-          icon: const Icon(Icons.dashboard),
-          label: Text(
-            "Dashboard",
-            style: TextStyle(color: Couleurs.blanc),
-          ),
-        ),
-        NavigationRailDestination(
-          icon: SvgPicture.asset('icons/product.svg'),
-          label: Text(
-            "Produits",
-            style: TextStyle(color: Couleurs.blanc),
-          ),
-        ),
-        NavigationRailDestination(
-          icon: SvgPicture.asset('icons/artis.svg'),
-          label: Text(
-            "Artisans",
-            style: TextStyle(color: Couleurs.blanc),
-          ),
-        ),
-        NavigationRailDestination(
-          icon: SvgPicture.asset('icons/cult.svg'),
-          label: Text(
-            "Cultures",
-            style: TextStyle(color: Couleurs.blanc),
-          ),
-        ),
-        
-        NavigationRailDestination(
-          icon: SvgPicture.asset('icons/operation.svg'),
-          label: Text(
-            "Categories",
-            style: TextStyle(color: Couleurs.blanc),
-          ),
-        ),
-
-        NavigationRailDestination(
-          icon: SvgPicture.asset('icons/operation.svg'),
-          label: Text(
-            "Tailles",
-            style: TextStyle(color: Couleurs.blanc),
-          ),
-        ),
-      ],
-      selectedIndex: index,
     );
   }
 }

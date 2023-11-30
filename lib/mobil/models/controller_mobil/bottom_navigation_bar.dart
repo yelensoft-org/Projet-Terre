@@ -1,10 +1,13 @@
+import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
 import 'package:art_eshop/mobil/models/controller_mobil/profil_controller.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/pages/accueil.dart';
+import 'package:art_eshop/mobil/pages/artisan_notification.dart';
 import 'package:art_eshop/mobil/pages/panier.dart';
 import 'package:art_eshop/mobil/pages/profil_artisan.dart';
 import 'package:art_eshop/mobil/pages/profil_utilisateur.dart';
 import 'package:art_eshop/mobil/pages/utilisateur_culture.dart';
+import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -18,16 +21,32 @@ class BottomNavigationExample extends StatefulWidget {
 }
 
 class _BottomNavigationExampleState extends State {
+  ArtisanSharedPreference artisanSharedPreference = ArtisanSharedPreference();
   int _selectedTab = 0;
+  Artisan artisan = Artisan();
+  bool selected = false;
+//  final artisans = artisanSharedPreference.currentArtisan;
 
-  List pages = [
-    const Accueil(),
-    const UtilisateurCulture(),
-    const Panier(),
-    const ProfilController(),
-  ];
+  List<Widget> pages = [];
 
-  _changeTab(int index) {
+  void getListPages() {
+    pages = [
+      const Accueil(),
+      const UtilisateurCulture(),
+      selected ? const Panier() : const ArtisanNotification(),
+      const ProfilController(),
+      const ArtisanNotification(),
+    ];
+  }
+
+  _changeTab(int index) async {
+    Artisan? retrievedArtisan =
+        await artisanSharedPreference.getArtisanFromSharedPreference();
+    if (retrievedArtisan != null) {
+      selected == false;
+    } else {
+      selected = true;
+    }
     setState(() {
       _selectedTab = index;
     });
@@ -35,6 +54,7 @@ class _BottomNavigationExampleState extends State {
 
   @override
   Widget build(BuildContext context) {
+    getListPages();
     return Scaffold(
       body: pages[_selectedTab],
       bottomNavigationBar: BottomNavigationBar(
@@ -51,8 +71,12 @@ class _BottomNavigationExampleState extends State {
                 color: Couleurs.gri,
               ),
               label: "Culture"),
-          const BottomNavigationBarItem(
-              icon: Icon(Icons.grid_3x3_outlined), label: "Panier"),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.grid_3x3_outlined),
+            label: _selectedTab == 2
+                ? (artisan != null ? "Notification" : "Panier")
+                : "",
+          ),
           const BottomNavigationBarItem(
               icon: Icon(Icons.person), label: "Profil"),
         ],

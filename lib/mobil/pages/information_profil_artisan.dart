@@ -1,3 +1,4 @@
+import 'package:art_eshop/key.dart';
 import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/pages/page_bienvenue.dart';
@@ -16,7 +17,8 @@ class InformationProfilArtisan extends StatefulWidget {
 }
 
 class _InformationProfilArtisanState extends State<InformationProfilArtisan> {
-  final _formkey = GlobalKey<FormState>();
+  // final _formkey = GlobalKey<FormState>();
+  final formkey = GlobalKeyManager.keyProfilArtisan;
 
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
@@ -40,10 +42,10 @@ class _InformationProfilArtisanState extends State<InformationProfilArtisan> {
         print("maudis artisan");
         artisan = value!;
       } else {
-        artisanSharedPreference.supprimerArtisanToSharedPreference().then((value){
-          if(value == "Success"){
-
-          }
+        artisanSharedPreference
+            .supprimerArtisanToSharedPreference()
+            .then((value) {
+          if (value == "Success") {}
         });
         print("object is not found");
       }
@@ -127,7 +129,7 @@ class _InformationProfilArtisanState extends State<InformationProfilArtisan> {
             Expanded(
               child: SingleChildScrollView(
                 child: Form(
-                  key: _formkey,
+                  key: formkey,
                   child: Column(children: [
                     const SizedBox(
                       height: 10,
@@ -218,9 +220,9 @@ class _InformationProfilArtisanState extends State<InformationProfilArtisan> {
                         width: MediaQuery.of(context).size.width,
                         child: TextFormField(
                           // initialValue: artisan.entreprise,
-                           controller: _entrepriseController,
+                          controller: _entrepriseController,
                           readOnly: isTextEditing,
-                          decoration:  InputDecoration(
+                          decoration: InputDecoration(
                             hintText: "${artisan.entreprise}",
                             border: InputBorder.none,
                           ),

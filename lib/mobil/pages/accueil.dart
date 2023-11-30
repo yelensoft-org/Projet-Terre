@@ -1,13 +1,17 @@
+import 'package:art_eshop/desktop/controller/produit_controller.dart';
 import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
 import 'package:art_eshop/mobil/models/Categories_Entity.dart';
+import 'package:art_eshop/mobil/models/Produit_Entity.dart';
 import 'package:art_eshop/mobil/models/Utilisateur_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/models/dalog.dart';
 import 'package:art_eshop/mobil/pages/listProduit.dart';
 import 'package:art_eshop/mobil/services/categorie_service.dart';
+import 'package:art_eshop/mobil/services/produit_service.dart';
 import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class Accueil extends StatefulWidget {
   const Accueil({super.key});
@@ -23,12 +27,15 @@ class _ProduitsState extends State<Accueil> {
   Utilisateur utilisateur = Utilisateur();
   bool? isArtisan;
   List<Categories> categories = [];
+  ProduitProvider produitProvider = ProduitProvider();
+  List<Produit> products = [];
 
   @override
   void initState() {
     super.initState();
     // Appeler une méthode pour récupérer les catégories
     _fetchCategories();
+    fetchlistProduitPublier();
     preference.getArtisanFromSharedPreference().then((value) async {
       if (value != null) {
         print(value);
@@ -49,6 +56,18 @@ class _ProduitsState extends State<Accueil> {
     });
   }
 
+  Future<void> fetchlistProduitPublier() async {
+    await produitProvider.getAllProduitPublier().then((value) {
+      // if (value != null) {}
+      print('-----list produit mobile--${value}');
+      setState(() {
+        products = value;
+      });
+    }).catchError((err) {
+      print('Erreur lors de la récupération des produitpublier : $err');
+    });
+  }
+
   Future<void> _fetchCategories() async {
     await service.getAllCategories().then((value) {
       setState(() {
@@ -61,6 +80,7 @@ class _ProduitsState extends State<Accueil> {
 
   @override
   Widget build(BuildContext context) {
+    final produitController = context.watch<ProduitController>();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -69,47 +89,49 @@ class _ProduitsState extends State<Accueil> {
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         Container(
-          child:  Container(
-                  height: 70,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      color: Couleurs.orange,
-                      borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(40))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      InkWell(
-                          onTap: () {
-                            // Popup().dialogLang(context);
-                          },
-                          child: SvgPicture.asset(
-                              'assets/icons/google_translate.svg')),
-                      Center(
-                        child: isArtisan==null ? CircularProgressIndicator(
+          child: Container(
+            height: 70,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                color: Couleurs.orange,
+                borderRadius:
+                    const BorderRadius.only(bottomLeft: Radius.circular(40))),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                InkWell(
+                    onTap: () {
+                      // Popup().dialogLang(context);
+                    },
+                    child:
+                        SvgPicture.asset('assets/icons/google_translate.svg')),
+                Center(
+                  child: isArtisan == null
+                      ? CircularProgressIndicator(
                           backgroundColor: Couleurs.orange,
-                        ) : isArtisan!
-              ? Text(
-                          "${artisan.nom}  ${artisan.prenom}",
-                          style: const TextStyle(
-                              fontSize: 17,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ):Text(
-                          "${utilisateur.nom}  ${utilisateur.prenom}",
-                          style: const TextStyle(
-                              fontSize: 17,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      const CircleAvatar(
-                        backgroundImage: AssetImage("assets/images/profil.png"),
-                      )
-                    ],
-                  ),
+                        )
+                      : isArtisan!
+                          ? Text(
+                              "${artisan.nom}  ${artisan.prenom}",
+                              style: const TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          : Text(
+                              "${utilisateur.nom}  ${utilisateur.prenom}",
+                              style: const TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
                 ),
-       
+                const CircleAvatar(
+                  backgroundImage: AssetImage("assets/images/profil.png"),
+                )
+              ],
+            ),
+          ),
         ),
         // :::::::::::::::::::::
         Container(
@@ -193,17 +215,25 @@ class _ProduitsState extends State<Accueil> {
               mainAxisSpacing: 20.0,
             ),
             shrinkWrap: true,
-            itemCount: 10,
+            itemCount: products.length,
             itemBuilder: (context, index) {
+              final produit = products[index];
               return InkWell(
                 highlightColor: Couleurs.orange,
                 onTap: () {
-                  Navigator.push(
+                  produitProvider
+                      .listProduitSimilaire(
+                          produit.categories!.idCategorie!, produit.nom!)
+                      .then((value) {
+                    produitController.mesProduisMobile = value;
+                    Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const ListProduit(),
                     ),
                   );
+                  });
+                  
                 },
                 child: Card(
                   // color: Couleurs.orange,
@@ -218,7 +248,9 @@ class _ProduitsState extends State<Accueil> {
                     children: [
                       Expanded(
                         flex: 3,
-                        child: Image.asset("assets/images/plover.png"),
+                        child: Image.network(
+                          "http://10.0.2.2/${produit.photo}",
+                        ),
                       ),
                       Expanded(
                         flex: 1,
@@ -233,13 +265,13 @@ class _ProduitsState extends State<Accueil> {
                             // mainAxisAlignment: MainAxisAlignment.,
                             children: [
                               Text(
-                                "Nom : 1234567890t",
+                                "Nom : ${produit.nom}",
                                 style: TextStyle(
                                     color: Couleurs.blanc,
                                     overflow: TextOverflow.ellipsis),
                               ),
                               Text(
-                                "Categorie : 1234567890",
+                                "Categorie : ${produit.categories!.nom}",
                                 style: TextStyle(
                                     color: Couleurs.blanc,
                                     overflow: TextOverflow.ellipsis),

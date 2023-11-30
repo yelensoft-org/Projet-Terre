@@ -1,8 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-class Utilisateur {
+import 'package:art_eshop/mobil/models/panier_Entirty.dart';
 
+class Utilisateur {
   int? idUser;
   String? nom;
   String? prenom;
@@ -10,15 +11,18 @@ class Utilisateur {
   String? password;
   String? pays;
   String? adresse;
+  Panier? panier;
   Utilisateur({
     this.idUser,
-   this.nom,
-   this.prenom,
-   this.email,
-   this.password,
-   this.pays,
-   this.adresse,
+    this.nom,
+    this.prenom,
+    this.email,
+    this.password,
+    this.pays,
+    this.adresse,
+    this.panier,
   });
+  
 
   Utilisateur copyWith({
     int? idUser,
@@ -28,15 +32,17 @@ class Utilisateur {
     String? password,
     String? pays,
     String? adresse,
+    Panier? panier,
   }) {
     return Utilisateur(
-      idUser: idUser,
+      idUser: idUser ?? this.idUser,
       nom: nom ?? this.nom,
       prenom: prenom ?? this.prenom,
       email: email ?? this.email,
       password: password ?? this.password,
       pays: pays ?? this.pays,
       adresse: adresse ?? this.adresse,
+      panier: panier ?? this.panier,
     );
   }
 
@@ -49,28 +55,30 @@ class Utilisateur {
       'password': password,
       'pays': pays,
       'adresse': adresse,
+      'panier': panier?.toMap(),
     };
   }
 
   factory Utilisateur.fromMap(Map<String, dynamic> map) {
     return Utilisateur(
       idUser: map['idUser'],
-      nom: map['nom'] as String,
-      prenom: map['prenom'] as String,
-      email: map['email'] as String,
-      password: map['password'] as String,
-      pays: map['pays'] as String,
-      adresse: map['adresse'] as String,
+      nom: map['nom'],
+      prenom: map['prenom'],
+      email: map['email'],
+      password: map['password'],
+      pays: map['pays'],
+      adresse: map['adresse'],
+      panier: Panier.fromMap(map['panier']),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Utilisateur.fromJson(String source) => Utilisateur.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Utilisateur.fromJson(String source) => Utilisateur.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'Utilisateur(idUser: $idUser, nom: $nom, prenom: $prenom, email: $email, password: $password, pays: $pays, adresse: $adresse)';
+    return 'Utilisateur(idUser: $idUser, nom: $nom, prenom: $prenom, email: $email, password: $password, pays: $pays, adresse: $adresse, panier: $panier)';
   }
 
   @override
@@ -84,7 +92,8 @@ class Utilisateur {
       other.email == email &&
       other.password == password &&
       other.pays == pays &&
-      other.adresse == adresse;
+      other.adresse == adresse &&
+      other.panier == panier;
   }
 
   @override
@@ -95,6 +104,7 @@ class Utilisateur {
       email.hashCode ^
       password.hashCode ^
       pays.hashCode ^
-      adresse.hashCode;
+      adresse.hashCode ^
+      panier.hashCode;
   }
 }

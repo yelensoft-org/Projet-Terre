@@ -45,9 +45,7 @@ import 'mobil/pages/utilisateur_culture.dart';
 // }
 
 void main() {
-  if (!kIsWeb) {
-    runApp(const MyAppMobile());
-  } else {
+  if (kIsWeb ||defaultTargetPlatform == TargetPlatform.windows) {
     runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -56,6 +54,13 @@ void main() {
       ],
       child: const MyAppDesktop(),
     ));
+  } else {
+    runApp(MultiProvider(providers:  [
+        ChangeNotifierProvider(
+          create: (context) => ProduitController(),
+        )],
+        child: const MyAppMobile(),
+        ));
   }
 }
 

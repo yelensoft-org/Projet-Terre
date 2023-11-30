@@ -290,7 +290,6 @@ class _DataSource extends DataTableSource {
           return IconButton(
             icon: const Icon(Icons.remove_red_eye),
             onPressed: () {
-              print('maudit row ${row}');
               context.read<ArtisanController>().currentArtisan = row;
               context.read<ArtisanController>().gotoDetails();
             },

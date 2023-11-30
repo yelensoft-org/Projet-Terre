@@ -1,6 +1,8 @@
 import 'package:art_eshop/desktop/controller/produit_controller.dart';
 import 'package:art_eshop/mobil/models/Produit_Entity.dart';
+import 'package:art_eshop/mobil/models/Taille_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/models/couleur_Entity.dart';
 import 'package:art_eshop/mobil/services/produit_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +68,8 @@ class _AdminListProduitState extends State<AdminListProduit> {
                       children: [
                         const Text('Catetegorie'),
                         IconButton(
-                            onPressed: () {}, icon: const  Icon(Icons.select_all))
+                            onPressed: () {},
+                            icon: const Icon(Icons.select_all))
                       ],
                     ))
               ],
@@ -89,7 +92,29 @@ class _AdminListProduitState extends State<AdminListProduit> {
                     borderRadius: BorderRadius.circular(10),
                     highlightColor: Couleurs.orange,
                     onTap: () {
-                      produitController.gotoDetails();
+                      produitProvider
+                          .fetchProduitInformation(produit.idProduit!,)
+                          .then((value) {
+                        context.read<ProduitController>().currentProduit =
+                            Produit.fromMap(value['produits']);
+                        List<dynamic> list = value['tailles'];
+                        List<TailleProduit> tailleProdu =
+                            list.map((e) => TailleProduit.fromMap(e)).toList();
+                        context
+                            .read<ProduitController>()
+                            .currentTailleProduits = tailleProdu;
+                        print(tailleProdu);
+                        List<dynamic> listcoul = value['produitsCouleur'];
+                        print('------list----${listcoul}');
+                        List<CouleursProduit> listcouleurs = listcoul
+                            .map((e) => CouleursProduit.fromMap(e))
+                            .toList();
+                        context
+                            .read<ProduitController>()
+                            .currentCouleursProduits = listcouleurs;
+                        print('--------la list fro;Map----${listcouleurs}');
+                        produitController.gotoDetails();
+                      });
                     },
                     child: Container(
                       // height: 400,
@@ -109,7 +134,9 @@ class _AdminListProduitState extends State<AdminListProduit> {
                                   border:
                                       Border.all(color: Couleurs.gri, width: 1),
                                   borderRadius: BorderRadius.circular(8)),
-                              child: Image.network("http://127.0.0.1/${produit.photo}",),
+                              child: Image.network(
+                                "http://127.0.0.1/${produit.photo}",
+                              ),
                             ),
                           ),
                           Expanded(
@@ -120,14 +147,15 @@ class _AdminListProduitState extends State<AdminListProduit> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                   Text("${produit.nom}"),
+                                  Text("${produit.nom}"),
                                   Text(
                                     "${produit.prix}",
                                     style: TextStyle(color: Couleurs.orange),
                                   ),
-                                   Text("${produit.quantite}"),
-                                    Text("${produit.artisans!.nom}"),
-                                   Text("${produit.categories!.nom}"),
+                                  Text("${produit.quantite}"),
+                                  Text(
+                                      "${produit.artisans!.nom}  ${produit.artisans!.prenom}"),
+                                  Text("${produit.categories!.nom}"),
                                 ],
                               ),
                             ),

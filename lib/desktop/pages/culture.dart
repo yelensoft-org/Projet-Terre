@@ -27,17 +27,27 @@ class _CultureState extends State<Culture> {
             "Liste de Produits",
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
-          Spacer(),
+          const Spacer(),
           // const SizedBox(
           //   width: 100,
           // ),
           InkWell(
             onTap: () {},
             child: Container(
+              height: 30,
+              padding: const EdgeInsets.only(left: 15, right: 15),
               decoration: BoxDecoration(
+                  color: Couleurs.orange,
                   border: Border.all(width: 1, color: Couleurs.orange),
                   borderRadius: BorderRadius.circular(5)),
-              child: const Text('Ajouter'),
+              child: Center(
+                  child: Text(
+                'Ajouter',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Couleurs.blanc,
+                    fontSize: 15),
+              )),
             ),
           )
         ]),
@@ -51,12 +61,12 @@ class _CultureState extends State<Culture> {
             highlightColor: Couleurs.orange.withOpacity(0.5),
             borderRadius: BorderRadius.circular(10),
             onTap: () {
-             cultureController .gotoDetails();
+              cultureController.gotoDetails();
             },
             child: Container(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(10),
               // margin: const EdgeInsets.all(5),
-              height: 120,
+              height: 100,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: Couleurs.blanc,
@@ -66,12 +76,12 @@ class _CultureState extends State<Culture> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Flexible(
-                    flex: 8,
+                    flex: 3,
                     child: Row(
                       // mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Container(
-                          height: 100,
+                          height: 80,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(width: 1, color: Couleurs.gri),
@@ -84,14 +94,22 @@ class _CultureState extends State<Culture> {
                         const SizedBox(
                           width: 100,
                         ),
-                        const Text(
-                          "Culture Dogons",
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
-                        )
                       ],
                     ),
                   ),
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Culture Dogons",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      Text("Region"),
+                      Text("Date:")
+                    ],
+                  )
                 ],
               ),
             ),

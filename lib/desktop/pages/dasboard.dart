@@ -1,6 +1,10 @@
+import 'package:art_eshop/mobil/models/commande_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/models/notification_Entity.dart';
+import 'package:art_eshop/mobil/services/artisan_service.dart';
 import 'package:art_eshop/mobil/services/notification_service.dart';
+import 'package:art_eshop/mobil/services/produit_service.dart';
+import 'package:art_eshop/mobil/services/utilisateur_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -15,11 +19,20 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     fetchNotification();
+    fetchNombreArtisan();
+    fetchNombreUtilisateur();
     super.initState();
   }
 
   NotificationService notificationService = NotificationService();
   List<NotificationClass> notifications = [];
+  int nombreArtisan = 0;
+  Commande commande = Commande();
+  ArtisanProvider service = ArtisanProvider();
+  UtilisateurService utilisateurService = UtilisateurService();
+  ProduitProvider produitProvider = ProduitProvider();
+  int nombreUser = 0;
+  bool isPresent = false;
 
   Future<void> fetchNotification() async {
     await notificationService.listNotification().then((value) {
@@ -28,9 +41,46 @@ class _DashboardState extends State<Dashboard> {
         notifications = value;
       });
     }).catchError((err) {
-      print('Erreur lors de la récupération des notification : ${err.toString()}');
+      print(
+          'Erreur lors de la récupération des notification : ${err.toString()}');
     });
   }
+
+  Future<void> fetchNombreArtisan() async {
+    await service.fetchArtisans().then((value) {
+      print(value);
+      setState(() {
+        nombreArtisan = value;
+      });
+    }).catchError((err) {
+      print(
+          'Erreur lors de la récupération des nombre artisan : ${err.toString()}');
+    });
+  }
+
+  Future<void> fetchNombreUtilisateur() async {
+    await utilisateurService.fetchUtilisateur().then((value) {
+      print(value);
+      setState(() {
+        nombreUser = value;
+      });
+    }).catchError((err) {
+      print(
+          'Erreur lors de la récupération des nombre user : ${err.toString()}');
+    });
+  }
+
+  // Future<void> fetchcommande() async {
+  //   await produitProvider.ajouterCommande().then((value) {
+  //     print(value);
+  //     setState(() {
+  //       commande = value;
+  //     });
+  //   }).catchError((err) {
+  //     print(
+  //         'Erreur lors de la récupération des nombre user : ${err.toString()}');
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +140,7 @@ class _DashboardState extends State<Dashboard> {
                                                         .spaceAround,
                                                 children: [
                                                   SvgPicture.asset(
-                                                      'icons/art.svg'),
+                                                      'assets/icons/art.svg'),
                                                   const Text(
                                                     "Artisans",
                                                     style: TextStyle(
@@ -103,10 +153,10 @@ class _DashboardState extends State<Dashboard> {
                                             height: 10,
                                           ),
                                           Container(
-                                            child: const Center(
+                                            child: Center(
                                                 child: Text(
-                                              "100",
-                                              style: TextStyle(
+                                              " $nombreArtisan",
+                                              style: const TextStyle(
                                                   fontSize: 40,
                                                   fontWeight: FontWeight.bold),
                                             )),
@@ -154,7 +204,7 @@ class _DashboardState extends State<Dashboard> {
                                                         .spaceAround,
                                                 children: [
                                                   SvgPicture.asset(
-                                                      'icons/art.svg'),
+                                                      'assets/icons/art.svg'),
                                                   const Text(
                                                     "Utilisateurs",
                                                     style: TextStyle(
@@ -167,10 +217,10 @@ class _DashboardState extends State<Dashboard> {
                                             height: 8,
                                           ),
                                           Container(
-                                            child: const Center(
+                                            child: Center(
                                                 child: Text(
-                                              "100",
-                                              style: TextStyle(
+                                              "$nombreUser",
+                                              style: const TextStyle(
                                                   fontSize: 40,
                                                   fontWeight: FontWeight.bold),
                                             )),
@@ -275,7 +325,7 @@ class _DashboardState extends State<Dashboard> {
                                                   shape: BoxShape.circle,
                                                   color: Couleurs.orange),
                                               child: SvgPicture.asset(
-                                                  'icons/cult.svg')),
+                                                  'assets/icons/cult.svg')),
                                           const Text(
                                             "Cultures",
                                             style: TextStyle(
@@ -331,78 +381,100 @@ class _DashboardState extends State<Dashboard> {
                       borderRadius: BorderRadius.circular(10)),
                   child: Container(
                     width: MediaQuery.of(context).size.width / 2,
-                    margin: EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
                     child: Column(children: [
-                      Expanded(
-                          child: ListView.builder(
-                        itemCount: notifications.length,
-                        padding: const EdgeInsets.all(10),
-                        itemBuilder: (BuildContext context, index) {
-                          final notification = notifications[index];
-                          return InkWell(
-                              highlightColor: Couleurs.orange.withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(5),
-                              child: Column(
-                                children: [
-                                  Center(
-                                      child: Container(
-                                    decoration: BoxDecoration(
-                                        // border: Border.all(width: 1),
-                                        // color: const Color.fromARGB(255, 46, 38, 38),
-                                        borderRadius: BorderRadius.circular(5)),
-                                    // width: 200,
+                      Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10)),
+                            color: Couleurs.orange),
+                        child: Center(
+                            child: Text(
+                          "Notifications",
+                          style: TextStyle(
+                              color: Couleurs.blanc,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        )),
+                      ),
+                      isPresent == null
+                          ? Expanded(
+                              child: ListView.builder(
+                              itemCount: notifications.length,
+                              padding: const EdgeInsets.all(10),
+                              itemBuilder: (BuildContext context, index) {
+                                final notification = notifications[index];
 
-                                    child: Text(
-                                      "${notification.date}",
-                                      style: TextStyle(),
-                                    ),
-                                  )),
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    margin: const EdgeInsets.all(5),
-                                    // height: 20,
-                                    // width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Couleurs.blanc,
-                                      border: Border.all(
-                                          width: 1, color: Couleurs.gri),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
+                                return InkWell(
+                                    highlightColor:
+                                        Couleurs.orange.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(5),
                                     child: Column(
                                       children: [
-                                        Text(
-                                          "${notification.description}",
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                              padding:
-                                                  EdgeInsets.only(right: 10),
-                                              child: Text(
-                                                "11h:20",
-                                                style: TextStyle(
-                                                    color: Couleurs.orange),
+                                        Center(
+                                            child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                          child: Text(
+                                            "${notification.date}",
+                                          ),
+                                        )),
+                                        Container(
+                                          padding: const EdgeInsets.all(8),
+                                          margin: const EdgeInsets.all(5),
+                                          // height: 20,
+                                          // width: 100,
+                                          decoration: BoxDecoration(
+                                            color: Couleurs.blanc,
+                                            border: Border.all(
+                                                width: 1, color: Couleurs.gri),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                "${notification.description}",
                                               ),
-                                            ),
-                                          ],
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Container(
+                                                    padding: EdgeInsets.only(
+                                                        right: 10),
+                                                    child: Text(
+                                                      "11h:20",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Couleurs.orange),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          child: Row(
+                                            children: [],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
                                         )
                                       ],
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Row(
-                                      children: [],
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  )
-                                ],
-                              ));
-                        },
-                      ))
+                                    ));
+                              },
+                            ))
+                          : Container(
+                              height: 500,
+                              child: const Center(
+                                  child: Text("Auccune Notification")),
+                            )
                     ]),
                   ),
                 )),

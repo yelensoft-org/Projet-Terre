@@ -56,12 +56,45 @@ class CategorieService {
       // Vérification du code de statut de la réponse
       if (response.statusCode == 200) {
         // Si le code de statut est 200 (OK), on décode la réponse JSON
-        List<dynamic> categoriesJson = json.decode(response.body);
+        List<dynamic> categoriesJson = jsonDecode(response.body);
         debugPrint(response.body);
 
         // On transforme les données JSON en une liste d'objets Categories
         List<Categories> categories = categoriesJson
-            .map((categoryJson) => Categories.fromJson(categoryJson))
+            .map((categoryJson) => Categories.fromMap(categoryJson))
+            .toList();
+
+        // On renvoie la liste des catégories récupérées
+        print('-----category mobil---${categories}');
+        return categories;
+      } else {
+        // Si le code de statut est différent de 200, on lance une exception
+        throw Exception(
+            'Erreur lors de la récupération des catégories. Code de statut : ${response.statusCode}');
+      }
+    } catch (error) {
+      // Capture et gestion des erreurs potentielles, y compris les erreurs réseau
+      throw Exception(
+          'Une erreur s\'est produite lors de la récupération des catégories : $error');
+    }
+  }
+  Future<List<Categories>> getAllCategoriesadmin() async {
+    try {
+      // Définition de l'URI pour la requête HTTP GET
+      var uri = Uri.parse("http://localhost:8080/categories/list");
+
+      // Envoi de la requête HTTP GET et attente de la réponse
+      var response = await http.get(uri);
+
+      // Vérification du code de statut de la réponse
+      if (response.statusCode == 200) {
+        // Si le code de statut est 200 (OK), on décode la réponse JSON
+        List<dynamic> categoriesJson = jsonDecode(response.body);
+        debugPrint(response.body);
+
+        // On transforme les données JSON en une liste d'objets Categories
+        List<Categories> categories = categoriesJson
+            .map((categoryJson) => Categories.fromMap(categoryJson))
             .toList();
 
         // On renvoie la liste des catégories récupérées

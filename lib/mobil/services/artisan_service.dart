@@ -47,8 +47,6 @@ class ArtisantService extends ChangeNotifier {
           streamedResponse); // Convertit le flux en une réponse
 
       if (response.statusCode == 200) {
-        
-
         // L'enregistrement a réussi
         print('Artisan enregistré avec succès');
       } else {
@@ -162,10 +160,9 @@ class ArtisantService extends ChangeNotifier {
       // Vérifie le code de statut de la réponse
       if (response.statusCode == 200) {
         debugPrint("${response.statusCode}");
-       
 
         // Succès : Utilisateur existe et informations correctes
-        var object = json.decode(response.body);
+        var object = jsonDecode(response.body);
         return object;
       } else {
         // Autres cas de code de statut (gestion d'erreur)
@@ -201,6 +198,25 @@ class ArtisanProvider extends ChangeNotifier {
     } else {
       // Si la requête n'a pas réussi, afficher le code d'erreur et le message
       throw Exception('error');
+    }
+  }
+
+  // ::::::::::::::::::::::::::nombre artisan
+  Future<int> fetchArtisans() async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'http://localhost:8080/artisan/nombre'), // Remplacez par votre URL correcte
+      );
+
+      if (response.statusCode == 200) {
+        print(' le nombre ; ${response.body}');
+        return int.parse(response.body);
+      } else {
+        throw Exception('Échec de la requête');
+      }
+    } catch (error) {
+      throw Exception('error : $error');
     }
   }
 }

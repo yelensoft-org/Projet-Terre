@@ -5,8 +5,12 @@ import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
 import 'package:art_eshop/mobil/models/Categories_Entity.dart';
 import 'package:art_eshop/mobil/models/Produit_Entity.dart';
 import 'package:art_eshop/mobil/models/Taille_Entity.dart';
+import 'package:art_eshop/mobil/models/Utilisateur_Entity.dart';
+import 'package:art_eshop/mobil/models/commande_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur_Entity.dart';
-import 'package:flutter/material.dart';
+import 'package:art_eshop/mobil/models/panier_Entirty.dart';
+import 'package:flutter/foundation.dart';
+// import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ProduitService {
@@ -76,68 +80,38 @@ class ProduitService {
       rethrow;
     }
   }
-
-  // ::::::::::::::::::::::::::::::methode get
-
-  // Future<List<Produit>> fetchProductData() async {
-  //   List<Produit> produits = [];
-  //   try {
-  //     final response =
-  //         await http.get(Uri.parse('http://localhost:8080/typeProduits/list'));
-
-  //     if (response.statusCode == 200) {
-  //       // Si la requête est un succès, vous pouvez traiter les données ici
-  //       Produit jsonData = jsonDecode(response.body);
-  //       // Faire quelque chose avec les données récupérées
-  //       print(jsonData);
-  //       List<Produit> productList = jsonData.map((productData) {
-  //         return Produit.fromJson(productData);
-  //       }).toList();
-  //       return productList;
-  //     } else {
-  //       // Gérer les erreurs de réponse HTTP
-  //       print(
-  //           'Erreur lors de la récupération des données. Statut de réponse : ${response.body}');
-  //       return [];
-  //     }
-  //   } catch (e) {
-  //     // Gérer les exceptions
-  //     print('Erreur lors de la récupération des données : $e');
-  //     rethrow;
-  //   }
-  // }
 }
 
-class ProduitProvider {
+class ProduitProvider extends ChangeNotifier {
   MyDataProduit? data;
   List<Produit> produits = [];
 
   Future<List<Produit>> getDataProduits() async {
+    String url;
+    if (kIsWeb || defaultTargetPlatform == TargetPlatform.windows) {
+      url = 'http://localhost:8080/typeProduits/list';
+    } else {
+      url = 'http://10.0.2.2:8080/typeProduits/list';
+    }
     try {
-      const apiUrl =
-          ('http://localhost:8080/typeProduits/list'); // Remplacez par l'URL réelle de votre API
+      // const apiUrl =
+      //     ('http://localhost:8080/typeProduits/list'); // Remplacez par l'URL réelle de votre API
 
-      final response = await http.get(Uri.parse(apiUrl));
+      final response = await http.get(Uri.parse(url));
 
       // Vérifier si la requête a réussi (code d'état 200)
       if (response.statusCode == 200) {
         List<dynamic> result = jsonDecode(response.body);
-        //print('----result----${result}');
 
-        //produits = result.map((json) => Produit.fromMap(json)).toList();
         List<Produit> produits = [];
-        List<Categories> categories = [];
-        List<Artisan> artisans = [];
 
         for (var p in result) {
           print("=============/${p['produits']}");
 
           produits.add(Produit.fromMap(p['produits']));
-          //print("====================");
-          // artisans.add(Artisan.fromMap(p["artisans"]));
         }
 
-        //print('------produit to list ${produits.toString()}');
+        notifyListeners();
         return produits;
       } else {
         // Si la requête n'a pas réussi, afficher le code d'erreur et le message
@@ -145,8 +119,194 @@ class ProduitProvider {
         throw Exception('error${response.body}');
       }
     } catch (e) {
-      
       rethrow;
+    }
+  }
+  // ::::::::::::::;;produitComplet
+
+  Future<Map<String, dynamic>> fetchProduitInformation(int idProduit) async {
+    String url;
+    if (kIsWeb || defaultTargetPlatform == TargetPlatform.windows) {
+      url = 'http://localhost:8080/produit/produitList/$idProduit';
+    } else {
+      url = 'http://10.0.2.2:8080/produit/produitList/$idProduit';
+    }
+    // final url = Uri.parse(
+    //     'http://localhost:8080/produit/produitList/$idProduit'); // Remplacez par votre URL
+
+    try {
+      final response = await http.post(Uri.parse(url)
+          // Ici, vous pouvez ajouter des en-têtes ou un corps de requête si nécessaire
+          );
+
+      if (response.statusCode == 200) {
+        print("-------complet ${response.body}");
+        // Si la requête est réussie, décoder la réponse JSON
+        return json.decode(response.body);
+      } else {
+        // Si la requête a échoué, vous pouvez gérer l'erreur ici
+        throw Exception('Échec de la requête : ${response.body}');
+      }
+    } catch (e) {
+      // En cas d'erreur lors de la connexion, capturez l'exception ici
+      throw Exception('Échec de la connexion : $e');
+    }
+  }
+
+  // :::::::::::::::::::::::::::::::::::::::::::::;;;;;
+  Future<Commande> ajouterCommande(Commande commande) async {
+    try {
+      final url = Uri.parse('http://10.0.2.2:8080/produit/ajouteCommande');
+
+      final reponse = await http.post(url,
+          headers: <String, String>{"Content-Type": "application/json"},
+          body: jsonEncode(commande.toMap()));
+
+      if (reponse.statusCode == 200) {
+        // L'enregistrement a réussi
+        print('Commande ajoutée avec succès');
+      } 
+
+      return jsonDecode(reponse.body);
+    } catch (e) {
+      // Gérer les exceptions
+      print('Erreur lors de l\'ajout de la commande : $e');
+      rethrow;
+    }
+  }
+
+// ::::::::::methode pour publier un produit
+  Future<Produit> pubilerProduit(int idProduit) async {
+    Produit produit = Produit();
+    final url = Uri.parse(
+        'http://localhost:8080/produit/publier/$idProduit'); // Remplacez par votre URL
+
+    try {
+      final response = await http.post(
+        url,
+        // Ici, vous pouvez ajouter des en-têtes ou un corps de requête si nécessaire
+      );
+
+      if (response.statusCode == 200) {
+        print("-------complet ${response.body}");
+        // Si la requête est réussie, décoder la réponse JSON
+        produit = Produit.fromMap(jsonDecode(response.body));
+        return produit;
+      } else {
+        // Si la requête a échoué, vous pouvez gérer l'erreur ici
+        throw Exception('Échec de la requête : ${response.body}');
+      }
+    } catch (e) {
+      // En cas d'erreur lors de la connexion, capturez l'exception ici
+      print(e);
+      throw Exception('Échec de la connexion : $e');
+    }
+  }
+
+// ::::::::::methode pour rejeter un produit
+  Future<String> rejeterProduit(int idProduit) async {
+    String produit = "";
+    final url = Uri.parse(
+        'http://localhost:8080/produit/rejeter/$idProduit'); // Remplacez par votre URL
+
+    try {
+      final response = await http.delete(
+        url,
+        // Ici, vous pouvez ajouter des en-têtes ou un corps de requête si nécessaire
+      );
+
+      if (response.statusCode == 200) {
+        print("-------complet ${response.body}");
+        // Si la requête est réussie, décoder la réponse JSON
+        // produit = Produit.fromMap(jsonDecode(response.body));
+        return "success";
+      } else {
+        // Si la requête a échoué, vous pouvez gérer l'erreur ici
+        print(response.body);
+        throw Exception('Échec de la requête : ${response.body}');
+      }
+    } catch (e) {
+      // En cas d'erreur lors de la connexion, capturez l'exception ici
+      print(e.toString());
+      throw Exception('Échec de la connexion : $e');
+    }
+  }
+
+  // ::::::::::::::::::::::::::liste produit publier vers mobile
+  Future<List<Produit>> getAllProduitPublier() async {
+    try {
+      // Définition de l'URI pour la requête HTTP GET
+      var uri =
+          Uri.parse("http://10.0.2.2:8080/produit/listproduitProduitPublier");
+
+      // Envoi de la requête HTTP GET et attente de la réponse
+      var response = await http.get(uri);
+
+      // Vérification du code de statut de la réponse
+      if (response.statusCode == 200) {
+        // Si le code de statut est 200 (OK), on décode la réponse JSON
+        List<dynamic> produitJson = jsonDecode(response.body);
+        debugPrint(response.body);
+
+        // On transforme les données JSON en une liste d'objets Categories
+        List<Produit> produit = produitJson
+            .map((produitJson) => Produit.fromMap(produitJson))
+            .toList();
+
+        // On renvoie la liste des catégories récupérées
+        print('-----produit mobil---${produit}');
+        notifyListeners();
+        return produit;
+      } else {
+        // Si le code de statut est différent de 200, on lance une exception
+        throw Exception(
+            'Erreur lors de la récupération des publication. Code de statut : ${response.statusCode}');
+      }
+    } catch (error) {
+      // Capture et gestion des erreurs potentielles, y compris les erreurs réseau
+      throw Exception(
+          'Une erreur s\'est produite lors de la récupération des publications : $error');
+    }
+  }
+
+  // ::::::::::::::::::::::::::recuperer la list de produit similaires
+  Future<List<Produit>> listProduitSimilaire(
+      int idCategorie, String nomProduit) async {
+    // List<Produit> listProduitSimil;
+    String url;
+    if (kIsWeb || defaultTargetPlatform == TargetPlatform.windows) {
+      url =
+          'http://localhost:8080/produit/produitSimilaire/$idCategorie/$nomProduit';
+    } else {
+      url =
+          'http://10.0.2.2:8080/produit/produitSimilaire/$idCategorie/$nomProduit';
+    }
+
+    try {
+      final response = await http.get(Uri.parse(url)
+          // Ici, vous pouvez ajouter des en-têtes ou un corps de requête si nécessaire
+          );
+
+      if (response.statusCode == 200) {
+        print("-------complet ${response.body}");
+        List<dynamic> listProduitJson = jsonDecode(response.body);
+        debugPrint(response.body);
+
+        List<Produit> produits = listProduitJson
+            .map((listProduitJson) => Produit.fromMap(listProduitJson))
+            .toList();
+        // notifyListeners();
+        return produits;
+      } else {
+        // Si la requête a échoué, vous pouvez gérer l'erreur ici
+
+        print(response.body);
+        throw Exception('Échec de la requête : ${response.body}');
+      }
+    } catch (e) {
+      // En cas d'erreur lors de la connexion, capturez l'exception ici
+      print(e.toString());
+      throw Exception('Échec de la recuperation : $e');
     }
   }
 }

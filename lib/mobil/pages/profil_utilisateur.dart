@@ -20,7 +20,7 @@ class _UtilisateurProfilState extends State<UtilisateurProfil> {
   int selectedIndex = 0;
   late Artisan artisan;
 
-  late Utilisateur utilisateur;
+  Utilisateur utilisateur = Utilisateur();
   ArtisanSharedPreference artisanSharedPreference = ArtisanSharedPreference();
 
   @override

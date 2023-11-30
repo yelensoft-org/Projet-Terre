@@ -109,7 +109,7 @@ class Produit {
 
   String toJson() => json.encode(toMap());
 
-  factory Produit.fromJson(String source) => Produit.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Produit.fromJson(String source) => Produit.fromMap(json.decode(source) );
 
   @override
   String toString() {

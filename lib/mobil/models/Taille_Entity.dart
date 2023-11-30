@@ -4,11 +4,11 @@ import 'dart:convert';
 // ignore_for_file: file_names
 
 class TailleProduit {
-  final int? idTaille;
-  final String libelle;
+   int? idTaille;
+   String? libelle;
   TailleProduit({
     this.idTaille,
-    required this.libelle,
+    this.libelle,
   });
 
   
@@ -32,14 +32,14 @@ class TailleProduit {
 
   factory TailleProduit.fromMap(Map<String, dynamic> map) {
     return TailleProduit(
-      idTaille: map['idTaille'] != null ? map['idTaille'] as int : null,
-      libelle: map['libelle'] as String,
+      idTaille: map['idTaille'],
+      libelle: map['libelle'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory TailleProduit.fromJson(String source) => TailleProduit.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory TailleProduit.fromJson(String source) => TailleProduit.fromMap(json.decode(source));
 
   @override
   String toString() => 'TailleProduit(idTaille: $idTaille, libelle: $libelle)';

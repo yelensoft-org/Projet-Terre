@@ -1,6 +1,9 @@
+import 'package:art_eshop/key.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/pages/page_bienvenue.dart';
 import 'package:art_eshop/mobil/pages/profil_artisan.dart';
 import 'package:art_eshop/mobil/pages/profil_utilisateur.dart';
+import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreference.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -15,7 +18,9 @@ class InformationProfilUtilisateur extends StatefulWidget {
 
 class _InformationProfilUtilisateurState
     extends State<InformationProfilUtilisateur> {
-  final _formkeyInformationUser = GlobalKey<FormState>();
+  ArtisanSharedPreference artisanSharedPreference = ArtisanSharedPreference();
+  // final _formkeyInformationUser = GlobalKey<FormState>();
+  final formkey = GlobalKeyManager.formkeyInformationUser;
 
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
@@ -30,7 +35,7 @@ class _InformationProfilUtilisateurState
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Navigator.push(
+            Navigator.pop(
                 context,
                 MaterialPageRoute(
                     builder: (context) => const UtilisateurProfil()));
@@ -99,7 +104,7 @@ class _InformationProfilUtilisateurState
             Expanded(
               child: SingleChildScrollView(
                 child: Form(
-                  key: _formkeyInformationUser,
+                  key: formkey,
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -202,7 +207,22 @@ class _InformationProfilUtilisateurState
                               Transform.rotate(
                                 angle: 3.1,
                                 child: IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      artisanSharedPreference
+                                          .supprimerUserFromSharedPreferences()
+                                          .then((value) {
+                                        print(value);
+                                        if (value == "succeeded") {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const PageBienvenue()));
+                                        } else {
+                                          return null;
+                                        }
+                                      });
+                                    },
                                     icon: const FaIcon(
                                       FontAwesomeIcons.rightFromBracket,
                                       color: Color.fromARGB(255, 0, 0, 0),

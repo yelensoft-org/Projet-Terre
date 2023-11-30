@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:art_eshop/key.dart';
 import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
 import 'package:art_eshop/mobil/models/Categories_Entity.dart';
 import 'package:art_eshop/mobil/models/Produit_Entity.dart';
@@ -31,20 +32,16 @@ class AjouterProduit extends StatefulWidget {
 }
 
 class _AjouterProduitState extends State<AjouterProduit> {
-  final _formkeyProduit = GlobalKey<FormState>();
+  // final _formkeyProduit = GlobalKey<FormState>();
+  final formkey = GlobalKeyManager.formkeyProduit;
 
   final TextEditingController _nomController = TextEditingController();
-  // final TextEditingController _categoriController = TextEditingController();
-  final TextEditingController _tailleController = TextEditingController();
   final TextEditingController _prixController = TextEditingController();
   final TextEditingController _quantiteController = TextEditingController();
 
   final TextEditingController _descriptionController = TextEditingController();
 
   final TextEditingController _cultureController = TextEditingController();
-  // final TextEditingController _coulor1Controller = TextEditingController();
-  // final TextEditingController _coulor2Controller = TextEditingController();
-  // final TextEditingController _coulor3Controller = TextEditingController();
   bool isSelected = false;
   bool isSelected1 = false;
   bool isSelected2 = false;
@@ -131,7 +128,7 @@ class _AjouterProduitState extends State<AjouterProduit> {
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Form(
-                key: _formkeyProduit,
+                key: formkey,
                 child: Column(
                   children: [
                     InkWell(
@@ -437,19 +434,18 @@ class _AjouterProduitState extends State<AjouterProduit> {
                       highlightColor: Couleurs.gri,
                       borderRadius: BorderRadius.circular(10),
                       onTap: () async {
-                        if (_formkeyProduit.currentState!.validate()) {
+                        if (formkey.currentState!.validate()) {
                           List<CouleursProduit> couleursSelectionnees =
                               couleurmain();
                           print(
                               '------------------------------${tailleProduits}');
                           Produit produit = Produit(
-                            nom: _nomController.text,
-                            //  idCategorie: _selectedCategory!.idCategorie!,
-                            prix: double.parse(_prixController.text),
-                            quantite: double.parse(_quantiteController.text),
-                            description: _descriptionController.text,
-                            culture: _cultureController.text
-                          );
+                              nom: _nomController.text,
+                              //  idCategorie: _selectedCategory!.idCategorie!,
+                              prix: double.parse(_prixController.text),
+                              quantite: double.parse(_quantiteController.text),
+                              description: _descriptionController.text,
+                              culture: _cultureController.text);
                           try {
                             final response = await produitService.ajoutProduit(
                               produit,
@@ -457,18 +453,18 @@ class _AjouterProduitState extends State<AjouterProduit> {
                               tailleProduits,
                               couleursSelectionnees,
                               artisan,
-                               _selectedCategory!,
+                              _selectedCategory!,
                             );
                             if (response.statusCode == 200) {
                               debugPrint("response: ");
                               print(response.body);
                               // ignore: use_build_context_synchronously
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => const login(),
-                              //   ),
-                              // );
+                              Navigator.pop(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ArtisanProfil(),
+                                ),
+                              );
 
                               // ignore: use_build_context_synchronously
                               FocusScope.of(context).requestFocus(FocusNode());

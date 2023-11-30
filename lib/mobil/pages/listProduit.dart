@@ -1,9 +1,15 @@
+import 'package:art_eshop/desktop/controller/produit_controller.dart';
 import 'package:art_eshop/desktop/pages/detail_produit.dart';
+import 'package:art_eshop/mobil/models/Produit_Entity.dart';
+import 'package:art_eshop/mobil/models/Taille_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/models/couleur_Entity.dart';
 import 'package:art_eshop/mobil/pages/accueil.dart';
 import 'package:art_eshop/mobil/pages/produit_detail.dart';
+import 'package:art_eshop/mobil/services/produit_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class ListProduit extends StatefulWidget {
   const ListProduit({super.key});
@@ -13,8 +19,10 @@ class ListProduit extends StatefulWidget {
 }
 
 class _ListProduitState extends State<ListProduit> {
+  ProduitProvider produitProvider = ProduitProvider();
   @override
   Widget build(BuildContext context) {
+    final produitController = context.watch<ProduitController>();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -92,18 +100,40 @@ class _ListProduitState extends State<ListProduit> {
           ),
           Expanded(
               child: ListView.builder(
-            itemCount: 5,
+            itemCount: produitController.mesProduisMobile.length,
             padding: const EdgeInsets.all(10),
             itemBuilder: (BuildContext context, index) {
+              final produit = produitController.mesProduisMobile[index];
               return InkWell(
                 highlightColor: Couleurs.orange.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(10),
                 onTap: () {
-                  Navigator.push(
+                  produitProvider
+                      .fetchProduitInformation(produit.idProduit!,)
+                      .then((value) {
+                    context.read<ProduitController>().currentProduit =
+                        Produit.fromMap(value['produits']);
+                    List<dynamic> list = value['tailles'];
+                    List<TailleProduit> tailleProdu =
+                        list.map((e) => TailleProduit.fromMap(e)).toList();
+                    context.read<ProduitController>().currentTailleProduits =
+                        tailleProdu;
+                    print(tailleProdu);
+                    List<dynamic> listcoul = value['produitsCouleur'];
+                    print('------list-couleurMobil---${listcoul}');
+                    List<CouleursProduit> listcouleurs = listcoul
+                        .map((e) => CouleursProduit.fromMap(e))
+                        .toList();
+                    context.read<ProduitController>().currentCouleursProduits =
+                        listcouleurs;
+                    print('--------la list fro;Map----${listcouleurs}');
+                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const ProduitDetail()));
-                },
+                
+                  });
+                 },
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   margin: const EdgeInsets.all(5),
@@ -137,29 +167,31 @@ class _ListProduitState extends State<ListProduit> {
                                 borderRadius: BorderRadius.circular(6),
                               ),
 
-                              child: Image.asset("assets/images/plover.png"),
+                              child: Image.network(
+                                  'http://10.0.2.2/${produit.photo}'),
                             ),
                             const SizedBox(
                               width: 15,
                             ),
-                            const Column(
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Nom",
-                                  style: TextStyle(
+                                  "${produit.nom}",
+                                  style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
-                                Text("Taille"),
-                                SizedBox(
+                                Text("${produit.categories!.nom}"),
+                                const SizedBox(
                                   height: 10,
                                 ),
-                                Text("Prix",
-                                    style: TextStyle(
+                                Text("${produit.prix}",
+                                    style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold)),
                               ],

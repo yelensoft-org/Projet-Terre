@@ -2,15 +2,14 @@
 
 import 'dart:io';
 
+import 'package:art_eshop/key.dart';
+import 'package:art_eshop/mobil/models/Utilisateur_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
-import 'package:art_eshop/mobil/services/api_service.dart';
+import 'package:art_eshop/mobil/pages/login.dart';
 import 'package:art_eshop/mobil/services/image_picture.dart';
+import 'package:art_eshop/mobil/services/utilisateur_service.dart';
 
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:http/src/response.dart';
 
 // :::::::::::::::::::::::::::::::::::::  statfulwidget class :::::::::
 class Inscription extends StatefulWidget {
@@ -21,16 +20,15 @@ class Inscription extends StatefulWidget {
 }
 
 class _InscriptionState extends State<Inscription> {
-  // final TextEditingController _confirmpasswordController =
-  //     TextEditingController();
+  final formkey = GlobalKeyManager.formkeyInscription;
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _paysController = TextEditingController();
-  Service service = Service();
+  UtilisateurService utilisateurService = UtilisateurService();
 
-  final _formkeyInscription = GlobalKey<FormState>();
+  // final _formkeyInscription = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -106,6 +104,7 @@ class _InscriptionState extends State<Inscription> {
               Expanded(
                   child: SingleChildScrollView(
                 child: Form(
+                  key: formkey,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
@@ -216,8 +215,34 @@ class _InscriptionState extends State<Inscription> {
                           highlightColor: Couleurs.gri,
                           borderRadius: BorderRadius.circular(10),
                           onTap: () async {
-                           
-
+                            if (formkey.currentState!.validate()) {
+                              Utilisateur utilisateur = Utilisateur(
+                                  nom: _nomController.text,
+                                  prenom: _prenomController.text,
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                  pays: _paysController.text);
+                              try {
+                                // Appel de la méthode saveUser et attendre la réponse
+                                await utilisateurService
+                                    .saveUser(utilisateur)
+                                    .then((value) {
+                                  if (value == utilisateur) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const login(),
+                                      ),
+                                    );
+                                  } else {
+                                    return;
+                                  }
+                                });
+                              } catch (error) {
+                                throw Exception("error, $error");
+                                // Gérer les erreurs générales ici, par exemple afficher un toast/modal d'erreur
+                              }
+                            }
                           },
                           child: Container(
                             width: MediaQuery.of(context).size.width,

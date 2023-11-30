@@ -135,7 +135,9 @@ class _DetailArtisanState extends State<DetailArtisan> {
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                               width: 1, color: Couleurs.gri)),
-                                              child: Image.network("http://127.0.0.1/${value.currentArtisan.photo!}",),
+                                      child: Image.network(
+                                        "http://127.0.0.1/${value.currentArtisan.photo!}",
+                                      ),
                                     ),
                                     const SizedBox(
                                       height: 10,
@@ -320,13 +322,16 @@ class _DetailArtisanState extends State<DetailArtisan> {
                                       onTap: () async {
                                         Artisan artisan = value.currentArtisan;
                                         print('mooodia ${artisan}');
-                                        value.currentArtisan.active =
-                                            !value.currentArtisan.active!;
+                                        
 
                                         await artisantService
-                                            .activeOuDesactive(artisan.idArtisans!)
-                                            .then((value) {
-                                          setState(() {});
+                                            .activeOuDesactive(
+                                                artisan.idArtisans!)
+                                            .then((values) {
+                                          setState(() {
+                                            value.currentArtisan.active =
+                                            !value.currentArtisan.active!;
+                                          });
                                           print('asdfghjkvbnm,');
                                         });
                                       },

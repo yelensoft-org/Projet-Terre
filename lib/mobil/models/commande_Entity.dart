@@ -4,7 +4,10 @@
 import 'dart:convert';
 
 import 'package:art_eshop/mobil/models/Produit_Entity.dart';
+import 'package:art_eshop/mobil/models/Taille_Entity.dart';
+import 'package:art_eshop/mobil/models/Utilisateur_Entity.dart';
 import 'package:art_eshop/mobil/models/achat_Entity.dart';
+import 'package:art_eshop/mobil/models/couleur_Entity.dart';
 import 'package:art_eshop/mobil/models/panier_Entirty.dart';
 
 class Commande {
@@ -12,28 +15,37 @@ class Commande {
   double? quantite;
   Produit? produits;
   Panier? panier;
-  Achat? achat;
+  TailleProduit? tailleProduit;
+  CouleursProduit? couleursProduit;
+  Utilisateur? utilisateur;
   Commande({
     this.idCommande,
     this.quantite,
     this.produits,
     this.panier,
-    this.achat,
+    this.tailleProduit,
+    this.couleursProduit,
+    this.utilisateur,
   });
+  
 
   Commande copyWith({
     int? idCommande,
     double? quantite,
     Produit? produits,
     Panier? panier,
-    Achat? achat,
+    TailleProduit? tailleProduit,
+    CouleursProduit? couleursProduit,
+    Utilisateur? utilisateur,
   }) {
     return Commande(
       idCommande: idCommande ?? this.idCommande,
       quantite: quantite ?? this.quantite,
       produits: produits ?? this.produits,
       panier: panier ?? this.panier,
-      achat: achat ?? this.achat,
+      tailleProduit: tailleProduit ?? this.tailleProduit,
+      couleursProduit: couleursProduit ?? this.couleursProduit,
+      utilisateur: utilisateur ?? this.utilisateur,
     );
   }
 
@@ -43,27 +55,31 @@ class Commande {
       'quantite': quantite,
       'produits': produits?.toMap(),
       'panier': panier?.toMap(),
-      'achat': achat?.toMap(),
+      'tailleProduit': tailleProduit?.toMap(),
+      'couleursProduit': couleursProduit?.toMap(),
+      'utilisateur': utilisateur?.toMap(),
     };
   }
 
   factory Commande.fromMap(Map<String, dynamic> map) {
     return Commande(
-      idCommande: map['idCommande'] != null ? map['idCommande'] as int : null,
-      quantite: map['quantite'] != null ? map['quantite'] as double : null,
-      produits: map['produits'] != null ? Produit.fromMap(map['produits'] as Map<String,dynamic>) : null,
-      panier: map['panier'] != null ? Panier.fromMap(map['panier'] as Map<String,dynamic>) : null,
-      achat: map['achat'] != null ? Achat.fromMap(map['achat'] as Map<String,dynamic>) : null,
+      idCommande: map['idCommande'] ,
+      quantite: map['quantite'],
+      produits: map['produits'],
+      panier: map['panier'],
+      tailleProduit: map['tailleProduit'],
+      couleursProduit: map['couleursProduit'],
+      utilisateur: map['utilisateur'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Commande.fromJson(String source) => Commande.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Commande.fromJson(String source) => Commande.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'Commande(idCommande: $idCommande, quantite: $quantite, produits: $produits, panier: $panier, achat: $achat)';
+    return 'Commande(idCommande: $idCommande, quantite: $quantite, produits: $produits, panier: $panier, tailleProduit: $tailleProduit, couleursProduit: $couleursProduit, utilisateur: $utilisateur)';
   }
 
   @override
@@ -75,7 +91,9 @@ class Commande {
       other.quantite == quantite &&
       other.produits == produits &&
       other.panier == panier &&
-      other.achat == achat;
+      other.tailleProduit == tailleProduit &&
+      other.couleursProduit == couleursProduit &&
+      other.utilisateur == utilisateur;
   }
 
   @override
@@ -84,6 +102,8 @@ class Commande {
       quantite.hashCode ^
       produits.hashCode ^
       panier.hashCode ^
-      achat.hashCode;
+      tailleProduit.hashCode ^
+      couleursProduit.hashCode ^
+      utilisateur.hashCode;
   }
   }

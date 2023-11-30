@@ -39,17 +39,17 @@ class NotificationClass {
   factory NotificationClass.fromMap(Map<String, dynamic> map) {
     return NotificationClass(
       idNotification: map['idNotification'] ,
-      description: map['description'] as String,
-      date: map['date'] as String,
-      commandes: map['commandes'] != null ? Commande.fromMap(map['commandes']) : null,
-      produits: map['produits'] != null ? Produit.fromMap(map['produits'] as Map<String,dynamic>) : null,
-      artisans: map['artisans'] != null ? Artisan.fromMap(map['artisans'] as Map<String,dynamic>) : null,
+      description: map['description'] ,
+      date: map['date'],
+      commandes: map['commandes'],
+      produits: map['produits'],
+      artisans: map['artisans'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory NotificationClass.fromJson(String source) => NotificationClass.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory NotificationClass.fromJson(String source) => NotificationClass.fromMap(json.decode(source));
 
   @override
   String toString() {

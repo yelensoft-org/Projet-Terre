@@ -13,7 +13,6 @@ import 'package:art_eshop/mobil/pages/artisan_inscription.dart';
 import 'package:art_eshop/mobil/pages/information_profil_artisan.dart';
 import 'package:art_eshop/mobil/pages/information_profil_utilisateur.dart';
 import 'package:art_eshop/mobil/pages/inscription.dart';
-import 'package:art_eshop/mobil/services/api_service.dart';
 import 'package:art_eshop/mobil/services/artisan_service.dart';
 import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreference.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -37,7 +36,7 @@ class _loginState extends State<login> {
   final TextEditingController _emailController = TextEditingController();
   // final TextEditingController _emailController2 = TextEditingController();
   final TextEditingController _passController = TextEditingController();
-  ServiceLoger service = ServiceLoger();
+  // ServiceLoger service = ServiceLoger();
   Popup popups = Popup();
   ArtisantService serviceartisan = ArtisantService();
   Artisan artisanClass = Artisan();
@@ -203,7 +202,7 @@ class _loginState extends State<login> {
                                         fontSize: 14),
                                   ),
                                   onPressed: () {
-                                    popups.dialog(context);
+                                    // popups.dialog(context);
                                   },
                                 )
                               ],
@@ -350,7 +349,7 @@ class _loginState extends State<login> {
                             const SizedBox(height: 15),
                             InkWell(
                               onTap: () {
-                                signInWithGoogle();
+                                // signInWithGoogle();
                               },
                               child: Container(
                                 height: 50,

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:art_eshop/desktop/model/admin_Entity.dart';
 import 'package:art_eshop/desktop/pages/admin_connexion.dart';
 import 'package:art_eshop/desktop/service/admin_service.dart';
+import 'package:art_eshop/key.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/desktop/pages/picker_image.dart';
 import 'package:art_eshop/mobil/services/image_picture.dart';
@@ -18,7 +19,8 @@ class AjoutArtisan extends StatefulWidget {
 }
 
 class _AjoutArtisanState extends State<AjoutArtisan> {
-  final _formkey = GlobalKey<FormState>();
+  // final _formkey = GlobalKey<FormState>();
+  final formkey = GlobalKeyManager.formkeyAdmin;
 
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nomController = TextEditingController();
@@ -187,7 +189,7 @@ class _AjoutArtisanState extends State<AjoutArtisan> {
               child: Column(
                 children: [
                   Form(
-                    key: _formkey,
+                    key: formkey,
                     child: Container(
                       margin: const EdgeInsets.all(10.0),
                       child: TextFormField(
@@ -319,7 +321,7 @@ class _AjoutArtisanState extends State<AjoutArtisan> {
                     highlightColor: Couleurs.gri,
                     borderRadius: BorderRadius.circular(10),
                     onTap: () async {
-                      if (_formkey.currentState!.validate()) {
+                      if (formkey.currentState!.validate()) {
                         Admin admin = Admin(
                             nom: _nomController.text,
                             prenom: _prenomController.text,

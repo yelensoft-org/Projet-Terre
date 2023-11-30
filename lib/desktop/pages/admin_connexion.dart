@@ -1,5 +1,6 @@
 import 'package:art_eshop/desktop/pages/ajout_admin.dart';
 import 'package:art_eshop/desktop/service/admin_service.dart';
+import 'package:art_eshop/key.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -12,7 +13,8 @@ class Connexion extends StatefulWidget {
 }
 
 class _ConnexionState extends State<Connexion> {
-  final _formkey = GlobalKey<FormState>();
+  // final _formkeyAdmin = GlobalKey<FormState>();
+  final formkey = GlobalKeyManager.formkeyAdminConnection;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -97,7 +99,7 @@ class _ConnexionState extends State<Connexion> {
                     // ::::::::::::::::::::::::::formulaire
 
                     child: Form(
-                      key: _formkey,
+                      key: formkey,
                       child: Column(
                           // mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -202,7 +204,7 @@ class _ConnexionState extends State<Connexion> {
                               highlightColor: Couleurs.gri,
                               borderRadius: BorderRadius.circular(10),
                               onTap: () async {
-                                if (_formkey.currentState!.validate()) {
+                                if (formkey.currentState!.validate()) {
                                   await service
                                       .verifyAdmin(_emailController.text,
                                           _passwordController.text)

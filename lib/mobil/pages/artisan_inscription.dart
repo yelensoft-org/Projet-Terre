@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:art_eshop/key.dart';
 import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/models/regions.dart';
@@ -17,7 +18,8 @@ class ArtisanInscription extends StatefulWidget {
 }
 
 class _ArtisanInscriptionState extends State<ArtisanInscription> {
-  final _formkeyArtisan = GlobalKey<FormState>();
+  // final _formkeyArtisan = GlobalKey<FormState>();
+  final formkey = GlobalKeyManager.formkeyArtisan;
 
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
@@ -31,7 +33,7 @@ class _ArtisanInscriptionState extends State<ArtisanInscription> {
 
   ArtisantService service = ArtisantService();
   String sexe = "Homme";
-   Region regionMali = Region();
+  Region regionMali = Region();
   String selectedRegion = "Bamako";
 
   File? selectedImage;
@@ -97,7 +99,7 @@ class _ArtisanInscriptionState extends State<ArtisanInscription> {
           Expanded(
               child: SingleChildScrollView(
             child: Form(
-              key: _formkeyArtisan,
+              key: formkey,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -313,7 +315,7 @@ class _ArtisanInscriptionState extends State<ArtisanInscription> {
                       highlightColor: Couleurs.gri,
                       borderRadius: BorderRadius.circular(10),
                       onTap: () async {
-                        if (_formkeyArtisan.currentState!.validate()) {
+                        if (formkey.currentState!.validate()) {
                           Artisan artisan = Artisan(
                               nom: _nomController.text,
                               prenom: _prenomController.text,
