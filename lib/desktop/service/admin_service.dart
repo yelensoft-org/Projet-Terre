@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:http_parser/http_parser.dart';
 
@@ -8,6 +9,53 @@ import 'package:http/http.dart' as http;
 
 class AdminService {
   late Admin currentAdmin;
+ Future<http.Response> enregistrerAmin(
+      Admin admin, File imageFile) async {
+    try {
+      final url = Uri.parse('http://localhost:8080/admin/add');
+
+      var request = http.MultipartRequest('POST', url);
+      request.fields["admin"] = jsonEncode({
+        'nom': admin.nom,
+        'photo': "",
+        'prenom': admin.prenom,
+        'email': admin.email,
+        'password': admin.password,
+        // 'region': admin.region,
+        'telephone': admin.telephone,
+        // 'entreprise': admin.entreprise,
+        'sexe': admin.sexe,
+        // 'description': admin.description,
+      });
+
+      var image = await http.MultipartFile.fromPath('photo', imageFile.path);
+      request.files.add(image);
+      debugPrint(imageFile.path);
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(
+          streamedResponse); // Convertit le flux en une réponse
+
+      if (response.statusCode == 200) {
+        // L'enregistrement a réussi
+        print('Artisan enregistré avec succès');
+      } else {
+        // Gérer les erreurs de réponse HTTP
+        print(
+            'Erreur lors de l\'enregistrement de l\'artisan. Statut de réponse : ${response.body}');
+        // artisantNonActive = Artisan.fromJson(jsonDecode(response.body));
+      }
+
+      return response;
+    } catch (e) {
+      // Gérer les exceptions
+      print('Erreur lors de l\'enregistrement de l\'artisan : $e');
+      // ignore: null_check_always_fails
+      return null!;
+    }
+  }
+
+  // ::::::::::::::::::::::::::
   Future<http.Response> ajouterAdmin(Admin admin, Uint8List imageFile,
       String imageFileName, String mimeType) async {
     try {
@@ -24,7 +72,7 @@ class AdminService {
         'sexe': admin.sexe,
       });
       // String? mimeType = lookupMimeType(imageFileName);
-      debugPrint(mimeType);
+      debugPrint('-----type --${mimeType}');
       // Utilisez 'mime' pour détecter le type de contenu
       var image = http.MultipartFile.fromBytes(
         'photo',
@@ -45,18 +93,18 @@ class AdminService {
         // final prefs = await SharedPreferences.getInstance();
         
         debugPrint(response.body);
-        currentAdmin = Admin.fromJson(jsonDecode(response.body));
+        currentAdmin = Admin.fromMap(jsonDecode(response.body));
         print('Artisan enregistré avec succès');
       } else {
         // Gérer les erreurs de réponse HTTP
         print(
-            'Erreur lors de l\'enregistrement de l\'artisan. Statut de réponse : ${response.body}');
+            'Erreur lors de l\'enregistrement de l\'admin. Statut de réponse : ${response.statusCode}');
       }
 
       return response;
     } catch (e) {
       // Gérer les exceptions
-      print('Erreur lors de l\'enregistrement de l\'artisan : $e');
+      print('Erreur lors de l\'enregistrement de admin : $e');
       // ignore: null_check_always_fails
       rethrow;
     }

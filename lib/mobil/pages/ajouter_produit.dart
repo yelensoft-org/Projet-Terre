@@ -23,6 +23,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:provider/provider.dart';
+
+import '../../desktop/controller/global_key_controller.dart';
 
 class AjouterProduit extends StatefulWidget {
   const AjouterProduit({super.key});
@@ -33,7 +36,7 @@ class AjouterProduit extends StatefulWidget {
 
 class _AjouterProduitState extends State<AjouterProduit> {
   // final _formkeyProduit = GlobalKey<FormState>();
-  final formkey = GlobalKeyManager.formkeyProduit;
+  // final formkey = GlobalKeyManager.formkeyProduit;
 
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prixController = TextEditingController();
@@ -86,6 +89,7 @@ class _AjouterProduitState extends State<AjouterProduit> {
   File? selectedImage;
   @override
   Widget build(BuildContext context) {
+    final globalkeyController = context.read<GlobalKeyController>();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -128,38 +132,41 @@ class _AjouterProduitState extends State<AjouterProduit> {
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Form(
-                key: formkey,
+                key: globalkeyController.formkeyProduit,
                 child: Column(
                   children: [
                     InkWell(
-                      onTap: () async {
-                        selectedImage = await ImageCapture.pickImage();
-                        setState(
-                            () {}); // Pour reconstruire le widget avec la nouvelle image
-                      },
-                      child: Container(
-                        margin:
-                            const EdgeInsets.only(top: 10, left: 40, right: 40),
-                        width: MediaQuery.of(context).size.width,
-                        height: 200,
-                        child: CircleAvatar(
-                          backgroundColor: Couleurs.blanc,
-                          backgroundImage: selectedImage != null
-                              ? FileImage(selectedImage!)
-                              : null,
-                          child: selectedImage == null
-                              ? Text(
-                                  "PHOTO",
-                                  style: TextStyle(
-                                    fontSize: 27,
-                                    fontWeight: FontWeight.bold,
-                                    color: Couleurs.gri,
-                                  ),
+                        onTap: () async {
+                          selectedImage = await ImageCapture.pickImage();
+                          setState(
+                              () {}); // Pour reconstruire le widget avec la nouvelle image
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(
+                              top: 10, left: 40, right: 40),
+                          width: MediaQuery.of(context).size.width,
+                          height: 200,
+                          decoration: BoxDecoration(
+                              border: Border.all(width: 1, color: Couleurs.gri),
+                              borderRadius: BorderRadius.circular(5)
+                              // Ajoutez ici vos décorations pour le conteneur
+                              ),
+                          child: selectedImage != null
+                              ? Image.file(
+                                  selectedImage!,
+                                  fit: BoxFit.cover,
                                 )
-                              : null,
-                        ),
-                      ),
-                    ),
+                              : Center(
+                                  child: Text(
+                                    "PHOTO",
+                                    style: TextStyle(
+                                      fontSize: 27,
+                                      fontWeight: FontWeight.bold,
+                                      color: Couleurs.gri,
+                                    ),
+                                  ),
+                                ),
+                        )),
 
                     // ::::::input:::::::::::
                     Container(
@@ -167,6 +174,7 @@ class _AjouterProduitState extends State<AjouterProduit> {
                           const EdgeInsets.only(top: 15, left: 40, right: 40),
                       child: TextFormField(
                         controller: _nomController,
+                        maxLength: 16,
                         decoration: const InputDecoration(
                           labelText: "Nom*",
                           hintText: "Entree le nom produit",
@@ -420,12 +428,12 @@ class _AjouterProduitState extends State<AjouterProduit> {
                                   BorderRadius.all(Radius.circular(9.0))),
                           contentPadding: EdgeInsets.all(8.0),
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Ce champs est Obligatoir";
-                          }
-                          return null;
-                        },
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return "Ce champs est Obligatoir";
+                        //   }
+                        //   return null;
+                        // },
                       ),
                     ),
 
@@ -434,7 +442,8 @@ class _AjouterProduitState extends State<AjouterProduit> {
                       highlightColor: Couleurs.gri,
                       borderRadius: BorderRadius.circular(10),
                       onTap: () async {
-                        if (formkey.currentState!.validate()) {
+                        if (globalkeyController.formkeyProduit.currentState!
+                            .validate()) {
                           List<CouleursProduit> couleursSelectionnees =
                               couleurmain();
                           print(

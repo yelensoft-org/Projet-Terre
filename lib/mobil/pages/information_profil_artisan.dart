@@ -7,6 +7,9 @@ import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreferen
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+
+import '../../desktop/controller/global_key_controller.dart';
 
 class InformationProfilArtisan extends StatefulWidget {
   const InformationProfilArtisan({super.key});
@@ -18,7 +21,7 @@ class InformationProfilArtisan extends StatefulWidget {
 
 class _InformationProfilArtisanState extends State<InformationProfilArtisan> {
   // final _formkey = GlobalKey<FormState>();
-  final formkey = GlobalKeyManager.keyProfilArtisan;
+  // final formkey = GlobalKeyManager.keyProfilArtisan;
 
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
@@ -56,6 +59,7 @@ class _InformationProfilArtisanState extends State<InformationProfilArtisan> {
 
   @override
   Widget build(BuildContext context) {
+    final globalkeyController = context.read<GlobalKeyController>();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -129,7 +133,7 @@ class _InformationProfilArtisanState extends State<InformationProfilArtisan> {
             Expanded(
               child: SingleChildScrollView(
                 child: Form(
-                  key: formkey,
+                  key: context.read<GlobalKeyController>().keyProfilArtisan,
                   child: Column(children: [
                     const SizedBox(
                       height: 10,
@@ -314,11 +318,12 @@ class _InformationProfilArtisanState extends State<InformationProfilArtisan> {
                                       .then((value) {
                                     print(value);
                                     if (value == "Success") {
-                                      Navigator.push(
+                                      Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const PageBienvenue()));
+                                                  const PageBienvenue()),
+                                          (route) => false);
                                     } else {
                                       return null;
                                     }

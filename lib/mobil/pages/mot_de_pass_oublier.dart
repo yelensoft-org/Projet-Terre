@@ -114,7 +114,9 @@ class _MotDePasseOublierState extends State<MotDePasseOublier> {
                   style: TextStyle(fontSize: 18),
                 ),
                 TextButton(
-                    onPressed: (() {}),
+                    onPressed: (() {
+                      Navigator.pop(context);
+                    }),
                     child: Text(
                       "Login",
                       style: TextStyle(color: Couleurs.orange, fontSize: 18),

@@ -1,4 +1,5 @@
 import 'package:art_eshop/desktop/controller/produit_controller.dart';
+import 'package:art_eshop/desktop/model/admin_dialog.dart';
 import 'package:art_eshop/mobil/models/Categories_Entity.dart';
 import 'package:art_eshop/mobil/models/Produit_Entity.dart';
 import 'package:art_eshop/mobil/models/Taille_Entity.dart';
@@ -25,7 +26,7 @@ class DetailProduit extends StatefulWidget {
 }
 
 class _DetailProduitState extends State<DetailProduit> {
-  late Future<List<Categories>> _categories;
+  // late Future<List<Categories>> _categories;
   Categories categories = Categories();
   ProduitProvider produitProvider = ProduitProvider();
 
@@ -34,7 +35,7 @@ class _DetailProduitState extends State<DetailProduit> {
 
   @override
   void initState() {
-    _categories = CategorieService().getAllCategoriesadmin();
+    // _categories = CategorieService().getAllCategoriesadmin();
     super.initState();
     // print("------------4444----${widget.tailleList}");
   }
@@ -44,6 +45,7 @@ class _DetailProduitState extends State<DetailProduit> {
     final produitController = context.watch<ProduitController>();
     return Scaffold(
       appBar: AppBar(
+        leading: Container(),
         backgroundColor: Couleurs.blanc,
         title: Container(
           width: MediaQuery.of(context).size.width,
@@ -95,10 +97,10 @@ class _DetailProduitState extends State<DetailProduit> {
                                 bottom: 0,
                                 child: Row(
                                   children: [
-                                    ElevatedButton(
-                                        // style: ButtonStyle(),
-                                        onPressed: () {},
-                                        child: const Text('Arriere-plan')),
+                                    // ElevatedButton(
+                                    //     // style: ButtonStyle(),
+                                    //     onPressed: () {},
+                                    //     child: const Text('Arriere-plan')),
                                     Container(
                                       padding: const EdgeInsets.only(left: 10),
                                       child: value.currentProduit.publier!
@@ -130,11 +132,17 @@ class _DetailProduitState extends State<DetailProduit> {
                           Container(
                             padding: const EdgeInsets.all(10),
                             height: 100,
+                            width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
                                 border:
                                     Border.all(width: 1, color: Couleurs.gri)),
-                            child: Text("${value.currentProduit.description}"),
+                            child: Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                "${value.currentProduit.description}",
+                              ),
+                            ),
                           ),
                           const SizedBox(
                             height: 10,
@@ -144,7 +152,7 @@ class _DetailProduitState extends State<DetailProduit> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Text(
-                                  "${value.currentProduit.prix} FCFA",
+                                  "Prix : ${value.currentProduit.prix} FCFA",
                                   style: TextStyle(color: Couleurs.orange),
                                 ),
                               ],
@@ -374,10 +382,10 @@ class _DetailProduitState extends State<DetailProduit> {
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(10),
                                   onTap: () {
-                                    produitProvider.rejeterProduit(
-                                        value.currentProduit.idProduit!).then((values) {
-                                          
-                                        });
+                                    produitProvider
+                                        .rejeterProduit(
+                                            value.currentProduit.idProduit!)
+                                        .then((values) {});
                                   },
                                   child: Container(
                                       padding: const EdgeInsets.only(
@@ -415,6 +423,13 @@ class _DetailProduitState extends State<DetailProduit> {
                                         value.currentProduit.publier =
                                             !value.currentProduit.publier!;
                                       });
+                                      if (value.currentProduit.publier!) {
+                                        PoppupAdmin()
+                                            .successArtisanActive(context);
+                                      } else {
+                                        PoppupAdmin()
+                                            .successArtisanDesactive(context);
+                                      }
                                     });
                                   },
                                   child: Container(
@@ -430,12 +445,21 @@ class _DetailProduitState extends State<DetailProduit> {
                                           borderRadius:
                                               BorderRadius.circular(10)),
                                       child: Center(
-                                        child: Text(
-                                          "Publier",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Couleurs.blanc),
-                                        ),
+                                        child: value.currentProduit.publier!
+                                            ? Text(
+                                                "Desactiver",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Couleurs.blanc,
+                                                    fontSize: 17),
+                                              )
+                                            : Text(
+                                                "Activer",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Couleurs.blanc,
+                                                    fontSize: 17),
+                                              ),
                                       )),
                                 ),
                               )

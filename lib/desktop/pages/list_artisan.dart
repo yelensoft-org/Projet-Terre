@@ -47,46 +47,7 @@ class _ListArtisanState extends State<ListArtisan> {
                           contentPadding: const EdgeInsets.all(0)),
                     ),
                   ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(8),
-                    onTap: () {
-                      // popup.dialogAjoutAdmin(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AjoutArtisan()));
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 40),
-                      height: 30,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Couleurs.orange,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.add,
-                            color: Couleurs.blanc,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            "Ajouter",
-                            style: TextStyle(
-                              color: Couleurs.blanc,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  
                 ],
               ),
             ),
@@ -219,6 +180,7 @@ class _ListArtisanState extends State<ListArtisan> {
 class _DataSource extends DataTableSource {
   _DataSource(List<Artisan> artisanList) {
     // List<Artisan> artisans = artisanList;
+
     _rows = artisanList;
   }
 
@@ -243,37 +205,13 @@ class _DataSource extends DataTableSource {
       },
       cells: [
         DataCell(
-          SizedBox(
-            height: 200,
-            width: 200,
-            child: CircleAvatar(
-              radius: 200,
-              backgroundColor: Couleurs.gri,
-              child: ClipOval(
-                child: Image.network(
-                  "http://127.0.0.1/${row.photo!}",
-                  fit: BoxFit.cover,
-                  height: 200,
-                  width: 200,
-                  // scale: 1, // Vous pouvez ajuster l'échelle selon vos besoins
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: Couleurs.orange,
-                        ),
-                      );
-                    }
-                  },
-                  errorBuilder: (BuildContext context, Object error,
-                      StackTrace? stackTrace) {
-                    return const Icon(Icons.error, color: Colors.red);
-                  },
-                ),
-              ),
+          CircleAvatar(
+            // height: 90,
+            // radius: 90,
+            backgroundImage: NetworkImage(
+              "http://127.0.0.1/${row.photo!}",
+              scale: 80
+         
             ),
           ),
         ),

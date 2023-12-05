@@ -1,5 +1,7 @@
+import 'package:art_eshop/desktop/model/category_avec_produit.dart';
 import 'package:art_eshop/desktop/pages/admin_list_produit.dart';
 import 'package:art_eshop/desktop/pages/detail_produit.dart';
+import 'package:art_eshop/mobil/models/Categories_Entity.dart';
 import 'package:art_eshop/mobil/models/Produit_Entity.dart';
 import 'package:art_eshop/mobil/models/Taille_Entity.dart';
 import 'package:art_eshop/mobil/models/commande_Entity.dart';
@@ -12,6 +14,7 @@ class ProduitController extends ChangeNotifier {
   int indicePage = 0;
 
   //////////////
+  double quantityChoisie = 0.0;
   double count = 0;
   double montantInit = 0;
   double montantTotal = 0;
@@ -26,10 +29,11 @@ class ProduitController extends ChangeNotifier {
 
   Produit currentProduit = Produit();
   Commande commande = Commande();
-  
+  Produit produitAsupprimmer = Produit();
 
   List<TailleProduit> currentTailleProduits = [];
   List<CouleursProduit> currentCouleursProduits = [];
+  Categories mesCategorie = Categories();
 
   // Future<Map<String, dynamic>> produitsComplet =
   //     ProduitProvider().fetchProduitInformation(idProduit);

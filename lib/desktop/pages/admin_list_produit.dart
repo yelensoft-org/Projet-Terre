@@ -15,6 +15,9 @@ class AdminListProduit extends StatefulWidget {
 }
 
 class _AdminListProduitState extends State<AdminListProduit> {
+  TextEditingController searchController = TextEditingController();
+
+  List<Produit> filteredProducts = [];
   ProduitProvider produitProvider = ProduitProvider();
   List<Produit> produits = [];
   Future<void> fetchProduit() async {
@@ -50,28 +53,53 @@ class _AdminListProduitState extends State<AdminListProduit> {
             color: Couleurs.blanc,
             width: MediaQuery.of(context).size.width,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 const Text(
                   "Liste de Produits",
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
-                Spacer(),
+                
+                Container(
+                  margin: const EdgeInsets.all(20),
+                  width: 500,
+                  // decoration:  BoxDecoration( border: Border),
+                  child: TextField(
+                    controller: searchController,
+                    onChanged: (value) {
+                      setState(() {
+                        filteredProducts = produits
+                            .where((produit) => produit.nom!
+                                .toLowerCase()
+                                .contains(searchController.text.toLowerCase()))
+                            .toList();
+                      });
+                    },
+                    decoration: InputDecoration(
+                        prefixIconColor: Couleurs.orange,
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: "Recherche",
+                        border: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        contentPadding: const EdgeInsets.all(0)),
+                  ),
+                ),
                 // const SizedBox(
                 //   width: 100,
                 // ),
-                Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: Couleurs.orange),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Row(
-                      children: [
-                        const Text('Catetegorie'),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.select_all))
-                      ],
-                    ))
+                // Container(
+                //     decoration: BoxDecoration(
+                //         border: Border.all(width: 1, color: Couleurs.orange),
+                //         borderRadius: BorderRadius.circular(5)),
+                //     child: Row(
+                //       children: [
+                //         const Text('Catetegorie'),
+                //         IconButton(
+                //             onPressed: () {},
+                //             icon: const Icon(Icons.select_all))
+                //       ],
+                //     ))
               ],
             ),
           ),
@@ -85,16 +113,23 @@ class _AdminListProduitState extends State<AdminListProduit> {
                 mainAxisSpacing: 20.0,
               ),
               shrinkWrap: true,
-              itemCount: produits.length,
+              itemCount: searchController.text.isNotEmpty ? filteredProducts.length : produits.length,
               itemBuilder: (context, index) {
-                final produit = produits[index];
+                final produit = searchController.text.isNotEmpty ? filteredProducts[index] : produits[index];
                 return InkWell(
                     borderRadius: BorderRadius.circular(10),
                     highlightColor: Couleurs.orange,
                     onTap: () {
                       produitProvider
-                          .fetchProduitInformation(produit.idProduit!,)
+                          .fetchProduitInformation(
+                        produit.idProduit!,
+                      )
                           .then((value) {
+                        print(
+                            '======================================================================');
+                        print(value['produits']);
+                        print(
+                            '======================================================================');
                         context.read<ProduitController>().currentProduit =
                             Produit.fromMap(value['produits']);
                         List<dynamic> list = value['tailles'];
@@ -147,15 +182,15 @@ class _AdminListProduitState extends State<AdminListProduit> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("${produit.nom}"),
+                                  Text("Nom : ${produit.nom}"),
                                   Text(
-                                    "${produit.prix}",
+                                    "Prix : ${produit.prix} FCFA",
                                     style: TextStyle(color: Couleurs.orange),
                                   ),
-                                  Text("${produit.quantite}"),
+                                  Text("Quantité${produit.quantite}"),
                                   Text(
-                                      "${produit.artisans!.nom}  ${produit.artisans!.prenom}"),
-                                  Text("${produit.categories!.nom}"),
+                                      "Artisan : ${produit.artisans!.nom}  ${produit.artisans!.prenom}"),
+                                  Text("Categories : ${produit.categories!.nom}"),
                                 ],
                               ),
                             ),

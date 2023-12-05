@@ -14,6 +14,7 @@ class Commande {
   int? idCommande;
   double? quantite;
   Produit? produits;
+  String? date;
   Panier? panier;
   TailleProduit? tailleProduit;
   CouleursProduit? couleursProduit;
@@ -22,17 +23,18 @@ class Commande {
     this.idCommande,
     this.quantite,
     this.produits,
+    this.date,
     this.panier,
     this.tailleProduit,
     this.couleursProduit,
     this.utilisateur,
   });
-  
 
   Commande copyWith({
     int? idCommande,
     double? quantite,
     Produit? produits,
+    String? date,
     Panier? panier,
     TailleProduit? tailleProduit,
     CouleursProduit? couleursProduit,
@@ -42,6 +44,7 @@ class Commande {
       idCommande: idCommande ?? this.idCommande,
       quantite: quantite ?? this.quantite,
       produits: produits ?? this.produits,
+      date: date ?? this.date,
       panier: panier ?? this.panier,
       tailleProduit: tailleProduit ?? this.tailleProduit,
       couleursProduit: couleursProduit ?? this.couleursProduit,
@@ -54,6 +57,7 @@ class Commande {
       'idCommande': idCommande,
       'quantite': quantite,
       'produits': produits?.toMap(),
+      'date': date,
       'panier': panier?.toMap(),
       'tailleProduit': tailleProduit?.toMap(),
       'couleursProduit': couleursProduit?.toMap(),
@@ -63,47 +67,50 @@ class Commande {
 
   factory Commande.fromMap(Map<String, dynamic> map) {
     return Commande(
-      idCommande: map['idCommande'] ,
+      idCommande: map['idCommande'],
       quantite: map['quantite'],
-      produits: map['produits'],
-      panier: map['panier'],
-      tailleProduit: map['tailleProduit'],
-      couleursProduit: map['couleursProduit'],
-      utilisateur: map['utilisateur'],
+      produits: Produit.fromMap(map['produits']),
+      date: map['date'],
+      panier: Panier.fromMap(map['panier']),
+      tailleProduit: TailleProduit.fromMap(map['tailleProduit']),
+      couleursProduit: CouleursProduit.fromMap(map['couleursProduit']),
+      utilisateur: Utilisateur.fromMap(map['utilisateur']),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Commande.fromJson(String source) => Commande.fromMap(json.decode(source));
+  factory Commande.fromJson(String source) =>
+      Commande.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'Commande(idCommande: $idCommande, quantite: $quantite, produits: $produits, panier: $panier, tailleProduit: $tailleProduit, couleursProduit: $couleursProduit, utilisateur: $utilisateur)';
+    return 'Commande(idCommande: $idCommande, quantite: $quantite, produits: $produits, date:$date panier: $panier, tailleProduit: $tailleProduit, couleursProduit: $couleursProduit, utilisateur: $utilisateur)';
   }
 
   @override
   bool operator ==(covariant Commande other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.idCommande == idCommande &&
-      other.quantite == quantite &&
-      other.produits == produits &&
-      other.panier == panier &&
-      other.tailleProduit == tailleProduit &&
-      other.couleursProduit == couleursProduit &&
-      other.utilisateur == utilisateur;
+
+    return other.idCommande == idCommande &&
+        other.quantite == quantite &&
+        other.produits == produits &&
+        other.date == date &&
+        other.panier == panier &&
+        other.tailleProduit == tailleProduit &&
+        other.couleursProduit == couleursProduit &&
+        other.utilisateur == utilisateur;
   }
 
   @override
   int get hashCode {
     return idCommande.hashCode ^
-      quantite.hashCode ^
-      produits.hashCode ^
-      panier.hashCode ^
-      tailleProduit.hashCode ^
-      couleursProduit.hashCode ^
-      utilisateur.hashCode;
+        quantite.hashCode ^
+        produits.hashCode ^
+        date.hashCode ^
+        panier.hashCode ^
+        tailleProduit.hashCode ^
+        couleursProduit.hashCode ^
+        utilisateur.hashCode;
   }
-  }
+}

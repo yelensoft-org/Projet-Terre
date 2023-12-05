@@ -1,17 +1,24 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:art_eshop/desktop/controller/produit_controller.dart';
 import 'package:art_eshop/desktop/pages/admin_connexion.dart';
 import 'package:art_eshop/desktop/pages/admin_list_categorie.dart';
+import 'package:art_eshop/key.dart';
 import 'package:art_eshop/mobil/models/Categories_Entity.dart';
+import 'package:art_eshop/mobil/models/Produit_Entity.dart';
 import 'package:art_eshop/mobil/models/Taille_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/pages/accueil.dart';
 import 'package:art_eshop/mobil/services/categorie_service.dart';
 import 'package:art_eshop/mobil/services/notification_service.dart';
+import 'package:art_eshop/mobil/services/produit_service.dart';
 import 'package:art_eshop/mobil/services/taille_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:provider/provider.dart';
+
+import '../../desktop/controller/global_key_controller.dart';
 
 class Popup {
   final TextEditingController _emailController2 = TextEditingController();
@@ -21,7 +28,6 @@ class Popup {
   final TextEditingController _dateController = TextEditingController();
 
   // ServiceLoger service = ServiceLoger();
-  final _formkey = GlobalKey<FormState>();
 
   // void dialog(BuildContext context) {
   //   showDialog(
@@ -116,7 +122,9 @@ class Popup {
   //       });
   // }
 
+  // final formkeyconfirm = GlobalKeyManager.formkeyConfirmeCodeAdmin;
   void dialogConfirmCode(BuildContext context, String code) {
+    final globalkeyController = context.read<GlobalKeyController>();
     showDialog(
         context: context,
         builder: (context) {
@@ -144,7 +152,7 @@ class Popup {
               height: 220,
               width: 200,
               child: Form(
-                key: _formkey,
+                key: globalkeyController.formkeyConfirmeCodeAdmin,
                 child: Column(
                   children: [
                     const Text(
@@ -187,7 +195,9 @@ class Popup {
                       width: double.infinity,
                       child: ElevatedButton(
                           onPressed: () async {
-                            if (_formkey.currentState!.validate()) {
+                            if (globalkeyController
+                                .formkeyConfirmeCodeAdmin.currentState!
+                                .validate()) {
                               if (_emailController3.text == code) {
                                 // ::::doit ce rediriger vers la page de modification de password
                               }
@@ -547,6 +557,106 @@ class Popup {
         });
   }
 
+// :::::::::::::::::;supprimer un produit
+  Produit produit = Produit();
+  ProduitProvider produitProvider = ProduitProvider();
+  void supprimerMobile(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          // Future.delayed(const Duration(seconds: 1), () {
+          //   Navigator.of(context).pop(true);
+          // });
+          return Dialog(
+            insetAnimationDuration: const Duration(seconds: 3),
+            child: Container(
+                // padding: const EdgeInsets.only(top: 20),
+                height: 190,
+                width: 250,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 40,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: const BoxDecoration(color: Colors.red),
+                      child: Center(
+                        child: Text(
+                          "Avertissement",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Couleurs.blanc),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      child: const Center(
+                        child: Text(
+                          "Voulez-vous vraiment supprimer ce produit de votre catalogue",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 35,
+                    ),
+                    Container(
+                      padding:
+                          const EdgeInsets.only(left: 10, right: 10, bottom: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              produit = Provider.of<ProduitController>(context,
+                                      listen: false)
+                                  .produitAsupprimmer;
+                              produitProvider.supprrimer(produit.idProduit!);
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              height: 35,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Center(
+                                child: Text(
+                                  "Supprimer",
+                                  style: TextStyle(
+                                    color: Couleurs.blanc,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 35,
+                            width: 100,
+                            decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Center(
+                              child: Text(
+                                "Annuler",
+                                style: TextStyle(color: Couleurs.blanc),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                )),
+          );
+        });
+  }
+
 // :::::::::::::::::;;poppup de succes mobil
   void successMobil(BuildContext context) {
     showDialog(
@@ -615,6 +725,7 @@ class Popup {
   final TextEditingController _categorieController = TextEditingController();
 
   CategorieService serviceCategorie = CategorieService();
+  // final formkey = GlobalKeyManager.formkeyCategory;
 
   void ajouterCategories(BuildContext context) {
     showDialog(
@@ -622,7 +733,7 @@ class Popup {
         builder: (context) {
           return Dialog(
             child: Form(
-              key: _formkey,
+              key: context.read<GlobalKeyController>().formkeyCategory,
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
@@ -656,7 +767,11 @@ class Popup {
                     ),
                     InkWell(
                       onTap: () async {
-                        if (_formkey.currentState!.validate()) {
+                        if (context
+                            .read<GlobalKeyController>()
+                            .formkeyCategory
+                            .currentState!
+                            .validate()) {
                           Categories categories = Categories(
                             nom: _categorieController.text,
                           );
@@ -676,6 +791,117 @@ class Popup {
                               );
 
                               FocusScope.of(context).requestFocus(FocusNode());
+                              context
+                                  .read<GlobalKeyController>()
+                                  .formkeyCategory
+                                  .currentState
+                                  ?.reset();
+                            } else {
+                              // Échec : Gérer l'erreur ici, par exemple afficher un toast/modal d'erreur
+                            }
+                          } catch (error) {
+                            // Gérer les erreurs générales ici, par exemple afficher un toast/modal d'erreur
+                          }
+                        }
+                        // popup.ajouterCategories(context);
+                      },
+                      child: Container(
+                          width: 300,
+                          height: 30,
+                          margin: const EdgeInsets.only(
+                              top: 15, left: 10, right: 10),
+                          decoration: BoxDecoration(
+                              color: Couleurs.orange,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Center(
+                              child: Text(
+                            "Engregistrer",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Couleurs.blanc),
+                          ))),
+                    ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  // 
+  void modifierProduit(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Form(
+              // key: context.read<GlobalKeyController>().formkeyCategory,
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Couleurs.blanc),
+                height: 200,
+                width: 300,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin:
+                          const EdgeInsets.only(top: 15, left: 10, right: 10),
+                      child: TextFormField(
+                        controller: _categorieController,
+                        decoration: InputDecoration(
+                          focusColor: Couleurs.orange,
+                          labelText: "Categorie *",
+                          hintText: "Entree le nom d'une Categorie",
+                          border: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(9.0))),
+                          contentPadding: const EdgeInsets.all(8.0),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Ce champs est Obligatoir";
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        if (context
+                            .read<GlobalKeyController>()
+                            .formkeyCategory
+                            .currentState!
+                            .validate()) {
+                          Categories categories = Categories(
+                            nom: _categorieController.text,
+                          );
+                          try {
+                            // Appel de la méthode saveUser et attendre la réponse
+                            final response =
+                                await serviceCategorie.add(categories);
+
+                            // Vérification du code de statut HTTP de la réponse
+                            if (response.statusCode == 200) {
+                              debugPrint("response: ");
+                              Navigator.pop(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ListCategories(),
+                                ),
+                              );
+
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              context
+                                  .read<GlobalKeyController>()
+                                  .formkeyCategory
+                                  .currentState
+                                  ?.reset();
                             } else {
                               // Échec : Gérer l'erreur ici, par exemple afficher un toast/modal d'erreur
                             }
@@ -716,6 +942,7 @@ class Popup {
   final TextEditingController _tailleController = TextEditingController();
 
   TailleService serviceTaille = TailleService();
+  // final formkeyTaille = GlobalKeyManager.formkeyTaille;
 
   void ajouterTaille(BuildContext context) {
     showDialog(
@@ -723,7 +950,7 @@ class Popup {
         builder: (context) {
           return Dialog(
             child: Form(
-              key: _formkey,
+              key: context.read<GlobalKeyController>().formkeyTaille,
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
@@ -757,7 +984,11 @@ class Popup {
                     ),
                     InkWell(
                       onTap: () async {
-                        if (_formkey.currentState!.validate()) {
+                        if (context
+                            .read<GlobalKeyController>()
+                            .formkeyTaille
+                            .currentState!
+                            .validate()) {
                           TailleProduit taille = TailleProduit(
                             libelle: _tailleController.text,
                           );
@@ -777,6 +1008,11 @@ class Popup {
                               );
 
                               FocusScope.of(context).requestFocus(FocusNode());
+                              context
+                                  .read<GlobalKeyController>()
+                                  .formkeyTaille
+                                  .currentState
+                                  ?.reset();
                             } else {
                               // Échec : Gérer l'erreur ici, par exemple afficher un toast/modal d'erreur
                             }

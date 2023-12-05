@@ -20,6 +20,7 @@ class Produit {
   String? photo;
   bool? publier;
   bool? acheter;
+  bool? effacerProduit;
   Artisan? artisans;
   Categories? categories;
   Produit({
@@ -34,10 +35,10 @@ class Produit {
     this.photo,
     this.publier,
     this.acheter,
+    this.effacerProduit,
     this.artisans,
     this.categories,
   });
-
 
   Produit copyWith({
     int? idProduit,
@@ -51,6 +52,7 @@ class Produit {
     String? photo,
     bool? publier,
     bool? acheter,
+    bool? effacerProduit,
     Artisan? artisans,
     Categories? categories,
   }) {
@@ -66,6 +68,7 @@ class Produit {
       photo: photo ?? this.photo,
       publier: publier ?? this.publier,
       acheter: acheter ?? this.acheter,
+      effacerProduit: effacerProduit ?? this.effacerProduit,
       artisans: artisans ?? this.artisans,
       categories: categories ?? this.categories,
     );
@@ -84,6 +87,7 @@ class Produit {
       'photo': photo,
       'publier': publier,
       'acheter': acheter,
+      'effacerProduit': effacerProduit,
       'artisans': artisans?.toMap(),
       'categories': categories?.toMap(),
     };
@@ -92,7 +96,7 @@ class Produit {
   factory Produit.fromMap(Map<String, dynamic> map) {
     return Produit(
       idProduit: map['idProduit'],
-      nom: map['nom'] ,
+      nom: map['nom'],
       idCategorie: map['idCategorie'],
       prix: map['prix'],
       quantite: map['quantite'],
@@ -100,16 +104,18 @@ class Produit {
       date: map['date'],
       culture: map['culture'],
       photo: map['photo'],
-      publier: map['publier'] ,
+      publier: map['publier'],
       acheter: map['acheter'],
-      artisans: Artisan.fromMap(map['artisans']) ,
+      effacerProduit: map['effacerProduit'],
+      artisans: Artisan.fromMap(map['artisans']),
       categories: Categories.fromMap(map['categories']),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Produit.fromJson(String source) => Produit.fromMap(json.decode(source) );
+  factory Produit.fromJson(String source) =>
+      Produit.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -119,38 +125,39 @@ class Produit {
   @override
   bool operator ==(covariant Produit other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.idProduit == idProduit &&
-      other.nom == nom &&
-      other.idCategorie == idCategorie &&
-      other.prix == prix &&
-      other.quantite == quantite &&
-      other.description == description &&
-      other.date == date &&
-      other.culture == culture &&
-      other.photo == photo &&
-      other.publier == publier &&
-      other.acheter == acheter &&
-      other.artisans == artisans &&
-      other.categories == categories;
+
+    return other.idProduit == idProduit &&
+        other.nom == nom &&
+        other.idCategorie == idCategorie &&
+        other.prix == prix &&
+        other.quantite == quantite &&
+        other.description == description &&
+        other.date == date &&
+        other.culture == culture &&
+        other.photo == photo &&
+        other.publier == publier &&
+        other.acheter == acheter &&
+        other.effacerProduit == effacerProduit &&
+        other.artisans == artisans &&
+        other.categories == categories;
   }
 
   @override
   int get hashCode {
     return idProduit.hashCode ^
-      nom.hashCode ^
-      idCategorie.hashCode ^
-      prix.hashCode ^
-      quantite.hashCode ^
-      description.hashCode ^
-      date.hashCode ^
-      culture.hashCode ^
-      photo.hashCode ^
-      publier.hashCode ^
-      acheter.hashCode ^
-      artisans.hashCode ^
-      categories.hashCode;
+        nom.hashCode ^
+        idCategorie.hashCode ^
+        prix.hashCode ^
+        quantite.hashCode ^
+        description.hashCode ^
+        date.hashCode ^
+        culture.hashCode ^
+        photo.hashCode ^
+        publier.hashCode ^
+        acheter.hashCode ^
+        effacerProduit.hashCode ^
+        artisans.hashCode ^
+        categories.hashCode;
   }
 }
 

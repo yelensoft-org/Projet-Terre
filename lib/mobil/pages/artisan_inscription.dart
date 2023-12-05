@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:art_eshop/desktop/controller/global_key_controller.dart';
 import 'package:art_eshop/key.dart';
 import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
@@ -9,6 +10,7 @@ import 'package:art_eshop/mobil/services/artisan_service.dart';
 import 'package:art_eshop/mobil/services/image_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class ArtisanInscription extends StatefulWidget {
   const ArtisanInscription({super.key});
@@ -19,7 +21,7 @@ class ArtisanInscription extends StatefulWidget {
 
 class _ArtisanInscriptionState extends State<ArtisanInscription> {
   // final _formkeyArtisan = GlobalKey<FormState>();
-  final formkey = GlobalKeyManager.formkeyArtisan;
+  // final formkey = GlobalKeyManager.formkeyArtisan;
 
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
@@ -39,6 +41,7 @@ class _ArtisanInscriptionState extends State<ArtisanInscription> {
   File? selectedImage;
   @override
   Widget build(BuildContext context) {
+    final globalkeyController = context.read<GlobalKeyController>();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -99,7 +102,7 @@ class _ArtisanInscriptionState extends State<ArtisanInscription> {
           Expanded(
               child: SingleChildScrollView(
             child: Form(
-              key: formkey,
+              key: globalkeyController.formkeyArtisan,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
@@ -315,7 +318,8 @@ class _ArtisanInscriptionState extends State<ArtisanInscription> {
                       highlightColor: Couleurs.gri,
                       borderRadius: BorderRadius.circular(10),
                       onTap: () async {
-                        if (formkey.currentState!.validate()) {
+                        if (globalkeyController.formkeyArtisan.currentState!
+                            .validate()) {
                           Artisan artisan = Artisan(
                               nom: _nomController.text,
                               prenom: _prenomController.text,
@@ -335,12 +339,15 @@ class _ArtisanInscriptionState extends State<ArtisanInscription> {
                             if (response.statusCode == 200) {
                               debugPrint("response: ");
                               // ignore: use_build_context_synchronously
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const login(),
-                                ),
-                              );
+                              Navigator.of(context).pop();
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => const login(
+                              //       artisantype: true,
+                              //     ),
+                              //   ),
+                              // );
 
                               // ignore: use_build_context_synchronously
                               FocusScope.of(context).requestFocus(FocusNode());

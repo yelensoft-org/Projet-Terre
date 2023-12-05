@@ -1,4 +1,8 @@
+import 'package:art_eshop/mobil/models/Utilisateur_Entity.dart';
+import 'package:art_eshop/mobil/models/commande_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/services/produit_service.dart';
+import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreference.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,13 +14,53 @@ class Panier extends StatefulWidget {
 }
 
 class _PanierState extends State<Panier> {
+  ProduitProvider produitProvider = ProduitProvider();
+  List<Commande> commades = [];
+  Utilisateur utilisateur = Utilisateur();
+  ArtisanSharedPreference artisanSharedPreference = ArtisanSharedPreference();
+
+  @override
+  void initState() {
+    fetchlistCommande();
+
+    super.initState();
+  }
+
+  Future<void> fetchlistCommande() async {
+    artisanSharedPreference.getUserFromSharedPreference().then((value) async {
+      if (value != null) {
+        utilisateur = value;
+        await produitProvider
+            .listCommandeUser(utilisateur.idUser!)
+            .then((value) {
+          // if (value != null) {}
+          print('-----list commande pour user--${value}');
+          setState(() {
+            commades = value;
+          });
+        }).catchError((err) {
+          print(
+              'Erreur lors de la récupération des commande pour panier : $err');
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Couleurs.blanc,
       appBar: AppBar(
+        title: Center(
+          child: Text(
+            "Mon Panier",
+            style:
+                TextStyle(fontWeight: FontWeight.bold, color: Couleurs.blanc),
+          ),
+        ),
+        // leading: ,
         elevation: 0,
-        backgroundColor: Couleurs.blanc,
+        backgroundColor: Couleurs.orange,
       ),
       body: Container(
           child: Column(
@@ -27,9 +71,10 @@ class _PanierState extends State<Panier> {
               child: Image.asset('assets/images/pan.png')),
           Expanded(
               child: ListView.builder(
-            itemCount: 5,
+            itemCount: commades.length,
             padding: const EdgeInsets.all(10),
             itemBuilder: (BuildContext context, index) {
+              final commande = commades[index];
               return InkWell(
                 highlightColor: Couleurs.orange.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(10),
@@ -52,16 +97,17 @@ class _PanierState extends State<Panier> {
                         child: Row(
                           children: [
                             Container(
-                              // margin: const EdgeInsets.all(8),
-                              // height: 90,
-                              decoration: BoxDecoration(
-                                border:
-                                    Border.all(width: 1, color: Couleurs.gri),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-
-                              child: Image.asset("assets/images/plover1.png"),
-                            ),
+                                // margin: const EdgeInsets.all(8),
+                                // height: 90,
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(width: 1, color: Couleurs.gri),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Image.network(
+                                    "http://10.0.2.2/${commande.produits!.photo}")
+                                // Image.asset("assets/images/plover1.png"),
+                                ),
                             const SizedBox(
                               width: 15,
                             ),
@@ -71,19 +117,19 @@ class _PanierState extends State<Panier> {
                                 // mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Container(
-                                    child: const Row(
+                                    child: Row(
                                       children: [
-                                        Text("Nom:",
+                                        const Text("Nom:",
                                             style: TextStyle(
                                                 fontSize: 17,
                                                 fontWeight: FontWeight.bold)),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 8,
                                         ),
                                         Text(
-                                          "Gran-Boubou",
-                                          style: TextStyle(
-                                              fontSize: 16,
+                                          "${commande.produits!.nom}",
+                                          style: const TextStyle(
+                                              fontSize: 15,
                                               fontWeight: FontWeight.w500),
                                         ),
                                       ],
@@ -97,14 +143,14 @@ class _PanierState extends State<Panier> {
                                     children: [
                                       const Text("Quantite:",
                                           style: TextStyle(
-                                            fontSize: 15,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                           )),
                                       Text(
-                                        " 5",
+                                        "${commande.produits!.quantite}",
                                         style: TextStyle(
                                           color: Couleurs.orange,
-                                          fontSize: 17,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -118,15 +164,15 @@ class _PanierState extends State<Panier> {
                                       children: [
                                         const Text("Prix:",
                                             style: TextStyle(
-                                              fontSize: 17,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                             )),
                                         const SizedBox(
                                           width: 10,
                                         ),
-                                        Text("7500 FCFA",
+                                        Text("${commande.produits!.prix} FCFA",
                                             style: TextStyle(
-                                                fontSize: 16,
+                                                fontSize: 15,
                                                 fontWeight: FontWeight.bold,
                                                 color: Couleurs.orange)),
                                       ],
@@ -144,7 +190,7 @@ class _PanierState extends State<Panier> {
                           children: [
                             Container(
                               width: MediaQuery.of(context).size.width,
-                              margin: const EdgeInsets.only(right: 8, top: 13),
+                              margin: const EdgeInsets.only(right: 8, top: 3),
                               child: IconButton(
                                   onPressed: () {},
                                   icon: const FaIcon(
@@ -153,9 +199,17 @@ class _PanierState extends State<Panier> {
                                   )),
                               // child: SvgPicture.asset('assets/icons/vect_droite.svg'),
                             ),
-                            const Text(
-                              "20/20/2023",
-                            )
+                            Text(
+                              "${commande.date}",
+                            ),
+                            GestureDetector(
+                                onTap: (() {}),
+                                child: const Text(
+                                  "Acheter",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red),
+                                ))
                           ],
                         ),
                       )

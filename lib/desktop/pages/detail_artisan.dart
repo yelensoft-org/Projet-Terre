@@ -1,9 +1,12 @@
 import 'package:art_eshop/desktop/controller/artisan_controller.dart';
+import 'package:art_eshop/desktop/model/admin_dialog.dart';
 import 'package:art_eshop/desktop/service/admin_service.dart';
 import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/services/artisan_service.dart';
+import 'package:art_eshop/mobil/services/produit_service.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class DetailArtisan extends StatefulWidget {
@@ -17,13 +20,16 @@ class DetailArtisan extends StatefulWidget {
 
 class _DetailArtisanState extends State<DetailArtisan> {
   ArtisanProvider service = ArtisanProvider();
+  ProduitProvider produitProvider = ProduitProvider();
   AdminService serviceAdmin = AdminService();
   ArtisantService artisantService = ArtisantService();
   @override
   Widget build(BuildContext context) {
+    final artisanController = context.watch<ArtisanController>();
     return Scaffold(
       backgroundColor: Couleurs.blanc,
       appBar: AppBar(
+          leading: Container(),
           backgroundColor: Couleurs.blanc,
           // toolbarHeight: 70,
           flexibleSpace: Container(
@@ -110,10 +116,23 @@ class _DetailArtisanState extends State<DetailArtisan> {
                                                     ),
                                                     IconButton(
                                                         onPressed: (() {
-                                                          context
-                                                              .read<
-                                                                  ArtisanController>()
-                                                              .gotoProduiList();
+                                                          produitProvider
+                                                              .artisanlistProduit(value
+                                                                  .currentArtisan
+                                                                  .idArtisans!)
+                                                              .then((value) {
+                                                            artisanController
+                                                                    .currentProduit =
+                                                                value;
+                                                            context
+                                                                .read<
+                                                                    ArtisanController>()
+                                                                .gotoProduiList();
+                                                          }).catchError(
+                                                                  (onError) {
+                                                            throw Exception(
+                                                                "error");
+                                                          });
                                                         }),
                                                         icon: Icon(
                                                           Icons.remove_red_eye,
@@ -322,7 +341,6 @@ class _DetailArtisanState extends State<DetailArtisan> {
                                       onTap: () async {
                                         Artisan artisan = value.currentArtisan;
                                         print('mooodia ${artisan}');
-                                        
 
                                         await artisantService
                                             .activeOuDesactive(
@@ -330,8 +348,20 @@ class _DetailArtisanState extends State<DetailArtisan> {
                                             .then((values) {
                                           setState(() {
                                             value.currentArtisan.active =
-                                            !value.currentArtisan.active!;
+                                                !value.currentArtisan.active!;
                                           });
+                                          // value.currentArtisan.active ? PoppupAdmin()
+                                          //       .successArtisanActive(context): PoppupAdmin()
+                                          //       .successArtisanActive(context);
+                                          if (value.currentArtisan.active!) {
+                                            PoppupAdmin()
+                                                .successArtisanActive(context);
+                                          } else {
+                                            PoppupAdmin()
+                                                .successArtisanDesactive(
+                                                    context);
+                                          }
+
                                           print('asdfghjkvbnm,');
                                         });
                                       },
@@ -365,33 +395,33 @@ class _DetailArtisanState extends State<DetailArtisan> {
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Container(
-                                    width: 408,
-                                    child: InkWell(
-                                      onTap: () {
-                                        context
-                                            .read<ArtisanController>()
-                                            .gotoListArtisan();
-                                      },
-                                      child: Container(
-                                        width: 100,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                            color: Couleurs.orange,
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        child: Center(
-                                          child: Text(
-                                            "Annuler",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Couleurs.blanc,
-                                                fontSize: 17),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
+                                  // Container(
+                                  //   width: 408,
+                                  //   child: InkWell(
+                                  //     onTap: () {
+                                  //       context
+                                  //           .read<ArtisanController>()
+                                  //           .gotoListArtisan();
+                                  //     },
+                                  //     child: Container(
+                                  //       width: 100,
+                                  //       height: 30,
+                                  //       decoration: BoxDecoration(
+                                  //           color: Couleurs.orange,
+                                  //           borderRadius:
+                                  //               BorderRadius.circular(8)),
+                                  //       child: Center(
+                                  //         child: Text(
+                                  //           "Annuler",
+                                  //           textAlign: TextAlign.center,
+                                  //           style: TextStyle(
+                                  //               color: Couleurs.blanc,
+                                  //               fontSize: 17),
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // )
                                 ],
                               ),
                             )
@@ -405,6 +435,20 @@ class _DetailArtisanState extends State<DetailArtisan> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Couleurs.orange,
+        elevation: 3,
+        tooltip: "Retour",
+        onPressed: () {
+          artisanController.gotoListArtisan();
+        },
+        child: Center(
+            child: FaIcon(
+          Icons.arrow_back,
+          color: Couleurs.blanc,
+          size: 18,
+        )),
       ),
     );
   }

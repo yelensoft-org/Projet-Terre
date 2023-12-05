@@ -1,5 +1,7 @@
 // import 'dart:ffi';
 
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:io';
 
 import 'package:art_eshop/key.dart';
@@ -10,6 +12,9 @@ import 'package:art_eshop/mobil/services/image_picture.dart';
 import 'package:art_eshop/mobil/services/utilisateur_service.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../desktop/controller/global_key_controller.dart';
 
 // :::::::::::::::::::::::::::::::::::::  statfulwidget class :::::::::
 class Inscription extends StatefulWidget {
@@ -20,13 +25,16 @@ class Inscription extends StatefulWidget {
 }
 
 class _InscriptionState extends State<Inscription> {
-  final formkey = GlobalKeyManager.formkeyInscription;
+  // final formkey = GlobalKeyManager.formkeyInscription;
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _paysController = TextEditingController();
+  final TextEditingController _adressController = TextEditingController();
+  String panier = "";
   UtilisateurService utilisateurService = UtilisateurService();
+  Utilisateur utilisateur = Utilisateur();
 
   // final _formkeyInscription = GlobalKey<FormState>();
 
@@ -42,6 +50,7 @@ class _InscriptionState extends State<Inscription> {
   @override
   Widget build(BuildContext context) {
     // return SingleChildScrollView(
+    final globalkeyController = context.read<GlobalKeyController>();
 
     return Scaffold(
       appBar: AppBar(
@@ -104,7 +113,7 @@ class _InscriptionState extends State<Inscription> {
               Expanded(
                   child: SingleChildScrollView(
                 child: Form(
-                  key: formkey,
+                  key: globalkeyController.formkeyInscription,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
@@ -209,34 +218,64 @@ class _InscriptionState extends State<Inscription> {
                             },
                           ),
                         ),
+                        Container(
+                          margin: const EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            controller: _adressController,
+                            decoration: const InputDecoration(
+                              labelText: "Adress *",
+                              hintText: "Entree votre adress d'habitation",
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(9.0))),
+                              contentPadding: EdgeInsets.all(8.0),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Ce champs est Obligatoir";
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
 
                         // :::::::::::::::submit:::::::::::::::
                         InkWell(
                           highlightColor: Couleurs.gri,
                           borderRadius: BorderRadius.circular(10),
                           onTap: () async {
-                            if (formkey.currentState!.validate()) {
+                            if (globalkeyController
+                                .formkeyInscription.currentState!
+                                .validate()) {
                               Utilisateur utilisateur = Utilisateur(
-                                  nom: _nomController.text,
-                                  prenom: _prenomController.text,
-                                  email: _emailController.text,
-                                  password: _passwordController.text,
-                                  pays: _paysController.text);
+                                nom: _nomController.text,
+                                prenom: _prenomController.text,
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                                pays: _paysController.text,
+                                adresse: _adressController.text,
+                              );
                               try {
                                 // Appel de la méthode saveUser et attendre la réponse
                                 await utilisateurService
                                     .saveUser(utilisateur)
                                     .then((value) {
-                                  if (value == utilisateur) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const login(),
-                                      ),
-                                    );
-                                  } else {
-                                    return;
-                                  }
+                                  //  globalkeyController.formkeyInscription .currentState?.reset();
+                                  // Navigator.of(context).pushAndRemoveUntil(
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => const login(
+                                  //               artisantype: true,
+                                  //             )),
+                                  //     (route) => false);
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => const login(
+                                  //       artisantype: true,
+                                  //     ),
+                                  //   ),
+                                  // );
+                                  Navigator.of(context).pop();
                                 });
                               } catch (error) {
                                 throw Exception("error, $error");

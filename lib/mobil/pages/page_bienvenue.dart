@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/pages/login.dart';
@@ -11,6 +13,45 @@ class PageBienvenue extends StatefulWidget {
 }
 
 class _PageBienvenueState extends State<PageBienvenue> {
+  String generateArtisanCode() {
+    const String word = 'artisan'; // Le mot à générer
+    final List<String> chars = word.split('');
+    final random = Random();
+    String code = '';
+
+    for (var i = 0; i < chars.length; i++) {
+      if (i.isEven) {
+        code += chars[i]
+            .toUpperCase(); // Les caractères en position paire sont en majuscules
+      } else {
+        code += chars[
+            i]; // Les caractères en position impaire restent en minuscules
+      }
+    }
+
+    return code;
+  }
+
+  String generateUserCode() {
+    const String word = 'utilisateur'; // Le mot à générer
+    final List<String> chars = word.split('');
+    final random = Random();
+    String code = '';
+
+    for (var i = 0; i < chars.length; i++) {
+      if (i.isEven) {
+        code += chars[i]
+            .toUpperCase(); // Les caractères en position paire sont en majuscules
+      } else {
+        code += chars[
+            i]; // Les caractères en position impaire restent en minuscules
+      }
+    }
+
+    return code;
+  }
+
+  bool getpageinscription = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,8 +90,12 @@ class _PageBienvenueState extends State<PageBienvenue> {
             InkWell(
               highlightColor: Couleurs.gri,
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const login()));
+                String artisanCode = generateArtisanCode();
+                print('Code artisan généré : $artisanCode');
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const login(artisantype: true)));
               },
               child: Container(
                 width: 300,
@@ -83,8 +128,13 @@ class _PageBienvenueState extends State<PageBienvenue> {
             ),
             InkWell(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const login()));
+                // String userCode =
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const login(
+                              artisantype: false,
+                            )));
               },
               child: Container(
                 width: 300,

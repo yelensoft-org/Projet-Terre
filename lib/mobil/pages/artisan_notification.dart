@@ -1,5 +1,9 @@
+import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/models/notification_Entity.dart';
 import 'package:art_eshop/mobil/pages/profil_artisan.dart';
+import 'package:art_eshop/mobil/services/notification_service.dart';
+import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreference.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,6 +17,40 @@ class ArtisanNotification extends StatefulWidget {
 }
 
 class _ArtisanNotificationState extends State<ArtisanNotification> {
+  NotificationService notificationService = NotificationService();
+  List<NotificationClass> notifications = [];
+  Artisan artisan = Artisan();
+  ArtisanSharedPreference artisanSharedPreference = ArtisanSharedPreference();
+
+  @override
+  void initState() {
+    fetchNotification();
+
+    super.initState();
+  }
+
+  Future<void> fetchNotification() async {
+    artisanSharedPreference
+        .getArtisanFromSharedPreference()
+        .then((value) async {
+      if (value != null) {
+        artisan = value;
+        await notificationService
+            .listNotificationArtisan(artisan.idArtisans!)
+            .then((value) {
+          // if (value != null) {}
+          print('-----list notification pour artisan--${value}');
+          setState(() {
+            notifications = value;
+          });
+        }).catchError((err) {
+          print(
+              'Erreur lors de la récupération des notification de l\'artisan : $err');
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,13 +86,14 @@ class _ArtisanNotificationState extends State<ArtisanNotification> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.all(20),
+        margin: EdgeInsets.all(10),
         child: Column(children: [
           Expanded(
               child: ListView.builder(
-            itemCount: 5,
+            itemCount: notifications.length,
             padding: const EdgeInsets.all(10),
             itemBuilder: (BuildContext context, index) {
+              final notification = notifications[index];
               return InkWell(
                   highlightColor: Couleurs.orange.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(5),
@@ -69,12 +108,12 @@ class _ArtisanNotificationState extends State<ArtisanNotification> {
                         // width: 200,
 
                         child: Text(
-                          "20/20/2033",
-                          style: TextStyle(),
+                          "${notification.date}",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       )),
                       Container(
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(15),
                         margin: const EdgeInsets.all(5),
                         // height: 20,
                         // width: 100,
@@ -85,16 +124,28 @@ class _ArtisanNotificationState extends State<ArtisanNotification> {
                         ),
                         child: Column(
                           children: [
-                            Text(
-                              "votre produit de tel categorie a etais achete ou commende",
-                            ),
+                            Text("${notification.description}"),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                Container(
+                                    margin: EdgeInsets.only(top: 10),
+                                    width: 50,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                        color: Color(int.parse(
+                                                notification.commandes!
+                                                    .couleursProduit!.libelle
+                                                    .substring(1, 7),
+                                                radix: 16) +
+                                            0x80000000),
+                                        // shape: BoxShape.circle,
+                                        border: Border.all(
+                                            width: 1, color: Couleurs.gri))),
                                 Container(
                                   padding: EdgeInsets.only(right: 10),
                                   child: Text(
-                                    "11h:20",
+                                    "${notification.commandes!.tailleProduit!.libelle}",
                                     style: TextStyle(color: Couleurs.orange),
                                   ),
                                 ),

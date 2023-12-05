@@ -1,4 +1,9 @@
+import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
+import 'package:art_eshop/mobil/models/Produit_Entity.dart';
+import 'package:art_eshop/mobil/models/commande_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/services/produit_service.dart';
+import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreference.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,6 +15,48 @@ class ArtisanVentes extends StatefulWidget {
 }
 
 class _ArtisanVentesState extends State<ArtisanVentes> {
+  Artisan artisan = Artisan();
+  ProduitProvider produitProvider = ProduitProvider();
+  List<Produit> produitsVendues = [];
+  List<Commande> commands = [];
+  ArtisanSharedPreference artisanSharedPreference = ArtisanSharedPreference();
+
+  @override
+  void initState() {
+    super.initState();
+    artisanSharedPreference.getArtisanFromSharedPreference().then((value) {
+      if (value != null) {
+        print(value);
+        artisan = value;
+        // isArtisan = true;
+      } else {
+        return null;
+      }
+      setState(() {});
+    });
+    fetchlistProduitArtisan();
+  }
+
+  Future<void> fetchlistProduitArtisan() async {
+    artisanSharedPreference
+        .getArtisanFromSharedPreference()
+        .then((value) async {
+      if (value != null) {
+        artisan = value;
+        await produitProvider.ventes(artisan.idArtisans!).then((value) {
+          // if (value != null) {}
+          print('-----list produit ventes--${value}');
+          setState(() {
+            commands = value;
+          });
+        }).catchError((err) {
+          print(
+              'Erreur lors de la récupération des produit  vendues de l\'artisan : $err');
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -17,9 +64,10 @@ class _ArtisanVentesState extends State<ArtisanVentes> {
         Container(
             child: Expanded(
                 child: ListView.builder(
-          itemCount: 5,
+          itemCount: commands.length,
           padding: const EdgeInsets.all(10),
           itemBuilder: (BuildContext context, index) {
+            final vente = commands[index];
             return InkWell(
               highlightColor: Couleurs.orange.withOpacity(0.5),
               borderRadius: BorderRadius.circular(10),
@@ -60,20 +108,22 @@ class _ArtisanVentesState extends State<ArtisanVentes> {
                               // mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
-                                  child: const Row(
+                                  child: Row(
                                     children: [
-                                      Text("Nom:",
+                                      const Text("Nom:",
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontWeight: FontWeight.bold)),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 8,
                                       ),
                                       Text(
-                                        "Gran-Boubou",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500),
+                                        "${vente.produits!.nom}",
+                                        style: const TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -90,7 +140,7 @@ class _ArtisanVentesState extends State<ArtisanVentes> {
                                           fontWeight: FontWeight.bold,
                                         )),
                                     Text(
-                                      " 5",
+                                      "${vente.quantite}",
                                       style: TextStyle(
                                         color: Couleurs.orange,
                                         fontSize: 17,
@@ -113,7 +163,7 @@ class _ArtisanVentesState extends State<ArtisanVentes> {
                                       const SizedBox(
                                         width: 10,
                                       ),
-                                      Text("7500 FCFA",
+                                      Text("${vente.produits!.prix} FCFA",
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
@@ -128,13 +178,28 @@ class _ArtisanVentesState extends State<ArtisanVentes> {
                       ),
                     ),
                     Flexible(
-                      flex: 3,
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 8, top: 60),
-                        child: const Column(
-                          children: [Text("20/20/2023")],
-                        ),
-                        // child: SvgPicture.asset('assets/icons/vect_droite.svg'),
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(right: 8, top: 20),
+                            child: GestureDetector(
+                                onTap: () {},
+                                child: const FaIcon(
+                                  FontAwesomeIcons.trashCan,
+                                  color: Colors.red,
+                                )),
+                            // child: SvgPicture.asset('assets/icons/vect_droite.svg'),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            child: Column(
+                              children: [Text("${vente.date}")],
+                            ),
+                            // child: SvgPicture.asset('assets/icons/vect_droite.svg'),
+                          ),
+                        ],
                       ),
                     ),
                   ],

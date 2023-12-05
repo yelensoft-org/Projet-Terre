@@ -2,42 +2,21 @@ import 'dart:io';
 
 import 'package:art_eshop/desktop/controller/artisan_controller.dart';
 import 'package:art_eshop/desktop/controller/culture_controller.dart';
+import 'package:art_eshop/desktop/controller/global_key_controller.dart';
 import 'package:art_eshop/desktop/controller/operation_controller.dart';
 import 'package:art_eshop/desktop/controller/produit_controller.dart';
 import 'package:art_eshop/desktop/controller/side_bar/side_bar_controller.dart';
-import 'package:art_eshop/desktop/controller/side_bar/side_bar_page.dart';
-import 'package:art_eshop/desktop/model/theme_fluent.dart';
-import 'package:art_eshop/desktop/pages/admin.dart';
-import 'package:art_eshop/desktop/pages/detail_artisan.dart';
-import 'package:art_eshop/mobil/models/controller_mobil/bottom_navigation_bar.dart';
+import 'package:art_eshop/desktop/pages/admin_connexion.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
-import 'package:art_eshop/mobil/models/formulaire_produit.dart';
-import 'package:art_eshop/mobil/models/spinner_page.dart';
-import 'package:art_eshop/mobil/pages/artisan_inscription.dart';
-import 'package:art_eshop/mobil/pages/artisan_modifier_produit.dart';
-import 'package:art_eshop/mobil/pages/artisan_notification.dart';
-import 'package:art_eshop/mobil/pages/inscription.dart';
-import 'package:art_eshop/mobil/pages/login.dart';
-import 'package:art_eshop/mobil/pages/mot_de_pass_oublier.dart';
-import 'package:art_eshop/mobil/pages/nouveau_mot_de_passe.dart';
+
 import 'package:art_eshop/mobil/pages/page_bienvenue.dart';
-import 'package:art_eshop/mobil/pages/panier.dart';
-import 'package:art_eshop/mobil/pages/produit_detail.dart';
-import 'package:art_eshop/mobil/pages/profil_artisan.dart';
-import 'package:art_eshop/mobil/pages/profil_utilisateur.dart';
-import 'package:art_eshop/mobil/pages/reunitialiser_mot_de_passe.dart';
-import 'package:art_eshop/mobil/pages/utilisateur_culture_detail.dart';
-import 'package:art_eshop/mobil/pages/utilisateur_mode_paiement.dart';
-import 'package:art_eshop/mobil/pages/utilisateur_payement.dart';
+
 import 'package:art_eshop/mobil/services/artisan_service.dart';
-import 'package:art_eshop/mobil/services/image_picture.dart';
+// import 'package:art_eshop/mobil/services/image_picture.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
-import 'mobil/pages/utilisateur_culture.dart';
 // import 'package:provider/provider.dart';
 
 // void main() {
@@ -45,22 +24,32 @@ import 'mobil/pages/utilisateur_culture.dart';
 // }
 
 void main() {
-  if (kIsWeb ||defaultTargetPlatform == TargetPlatform.windows) {
+  if (kIsWeb || defaultTargetPlatform == TargetPlatform.windows) {
     runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => ArtisantService(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => GlobalKeyController(),
         )
+        
       ],
       child: const MyAppDesktop(),
     ));
   } else {
-    runApp(MultiProvider(providers:  [
+    runApp(MultiProvider(
+      providers: [
         ChangeNotifierProvider(
           create: (context) => ProduitController(),
-        )],
-        child: const MyAppMobile(),
-        ));
+        
+        ),
+        ChangeNotifierProvider(
+          create: (context) => GlobalKeyController(),
+        )
+      ],
+      child: const MyAppMobile(),
+    ));
   }
 }
 
@@ -111,7 +100,7 @@ class MyAppDesktop extends StatelessWidget {
         theme: ThemeData(
           useMaterial3: true,
         ),
-        home: const SideBarPage(),
+        home: const Connexion(),
       ),
     );
   }

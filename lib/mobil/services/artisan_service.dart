@@ -160,9 +160,11 @@ class ArtisantService extends ChangeNotifier {
       // Vérifie le code de statut de la réponse
       if (response.statusCode == 200) {
         debugPrint("${response.statusCode}");
+        debugPrint("----body---${response.body}");
 
         // Succès : Utilisateur existe et informations correctes
         var object = jsonDecode(response.body);
+        print('----object --${object}');
         return object;
       } else {
         // Autres cas de code de statut (gestion d'erreur)
@@ -171,7 +173,7 @@ class ArtisantService extends ChangeNotifier {
       }
     } catch (error) {
       // Gestion des erreurs générales (par exemple, perte de connexion)
-      throw Exception('Une erreur s\'est produite : $error');
+      throw Exception('Une erreur s\'est produite : ${error.toString()}');
     }
   }
 }
@@ -194,6 +196,7 @@ class ArtisanProvider extends ChangeNotifier {
       artisans = result.map((json) => Artisan.fromMap(json)).toList();
 
       print(artisans.toString());
+      notifyListeners();
       return artisans;
     } else {
       // Si la requête n'a pas réussi, afficher le code d'erreur et le message

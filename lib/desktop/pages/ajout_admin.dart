@@ -10,6 +10,9 @@ import 'package:art_eshop/mobil/services/image_picture.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
+import '../controller/global_key_controller.dart';
 
 class AjoutArtisan extends StatefulWidget {
   const AjoutArtisan({super.key});
@@ -20,7 +23,7 @@ class AjoutArtisan extends StatefulWidget {
 
 class _AjoutArtisanState extends State<AjoutArtisan> {
   // final _formkey = GlobalKey<FormState>();
-  final formkey = GlobalKeyManager.formkeyAdmin;
+  // final formkey = GlobalKeyManager.formkeyAdmin;
 
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nomController = TextEditingController();
@@ -30,6 +33,7 @@ class _AjoutArtisanState extends State<AjoutArtisan> {
   final TextEditingController _emailController = TextEditingController();
   String imageFileName = "";
   String nimeType = "";
+  String sexe = "Homme";
 
   AdminService service = AdminService();
 
@@ -82,6 +86,7 @@ class _AjoutArtisanState extends State<AjoutArtisan> {
   // File? selectedImage;
   @override
   Widget build(BuildContext context) {
+    final globalkeyController = context.read<GlobalKeyController>();
     return Scaffold(
         body: Center(
       child: Container(
@@ -189,7 +194,7 @@ class _AjoutArtisanState extends State<AjoutArtisan> {
               child: Column(
                 children: [
                   Form(
-                    key: formkey,
+                    key: globalkeyController.formkeyAdmin,
                     child: Container(
                       margin: const EdgeInsets.all(10.0),
                       child: TextFormField(
@@ -297,40 +302,43 @@ class _AjoutArtisanState extends State<AjoutArtisan> {
                   ),
                   // ::::::::::::::::::::sexe
                   Container(
-                    margin: const EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      controller: _sexeController,
-                      decoration: const InputDecoration(
-                        labelText: "Sexe *",
-                        hintText: "Entree sexe",
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(9.0))),
-                        contentPadding: EdgeInsets.all(8.0),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Ce champs est Obligatoir";
-                        }
-                        return null;
-                      },
-                    ),
+                    height: 40,
+                    width: 170,
+                    // margin: const EdgeInsets.all(10.0),
+                    child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                            // style: TextStyle(color: Couleurs.orange),
+                            focusColor: Couleurs.orange,
+                            borderRadius: BorderRadius.circular(5),
+                            value: sexe,
+                            onChanged: (value) {
+                              sexe = value!;
+                              setState(() {});
+                            },
+                            items: ['Homme', 'Femme']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList())),
                   ),
                   // :::::::::::::::::::::::::::::::;submit::::::::::::::;;;;;
                   InkWell(
                     highlightColor: Couleurs.gri,
                     borderRadius: BorderRadius.circular(10),
                     onTap: () async {
-                      if (formkey.currentState!.validate()) {
+                      if (globalkeyController.formkeyAdmin.currentState!.validate()) {
                         Admin admin = Admin(
                             nom: _nomController.text,
                             prenom: _prenomController.text,
                             email: _emailController.text,
                             password: _passwordController.text,
                             telephone: _teleController.text,
-                            sexe: _sexeController.text);
-
-                        try {
+                            sexe: sexe);
+                        if (kIsWeb ){
+                          try {
+                          
                           // Appel de la méthode saveUser et attendre la réponse
                           final response = await service.ajouterAdmin(
                               admin, webImage, imageFileName, nimeType);
@@ -354,6 +362,11 @@ class _AjoutArtisanState extends State<AjoutArtisan> {
                         } catch (error) {
                           // Gérer les erreurs générales ici, par exemple afficher un toast/modal d'erreur
                         }
+                          }else{
+                            
+                          }
+
+                        
                       }
                     },
                     child: Container(

@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:art_eshop/desktop/controller/global_key_controller.dart';
 import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
 import 'package:art_eshop/mobil/models/Utilisateur_Entity.dart';
 import 'package:art_eshop/mobil/models/controller_mobil/bottom_navigation_bar.dart';
@@ -13,6 +14,7 @@ import 'package:art_eshop/mobil/pages/artisan_inscription.dart';
 import 'package:art_eshop/mobil/pages/information_profil_artisan.dart';
 import 'package:art_eshop/mobil/pages/information_profil_utilisateur.dart';
 import 'package:art_eshop/mobil/pages/inscription.dart';
+import 'package:art_eshop/mobil/pages/mot_de_pass_oublier.dart';
 import 'package:art_eshop/mobil/services/artisan_service.dart';
 import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreference.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,17 +22,18 @@ import 'package:flutter/material.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class login extends StatefulWidget {
-  const login({Key? key}) : super(key: key);
-
+  const login({Key? key, required this.artisantype}) : super(key: key);
+  final bool artisantype;
   @override
   _loginState createState() => _loginState();
 }
 
 //  final credential = GoogleAuthProvider.credential(idToken: idToken);
-final _formkeyLogin = GlobalKey<FormState>();
+// final _formkeyLogin = GlobalKey<FormState>();
 
 class _loginState extends State<login> {
   final TextEditingController _emailController = TextEditingController();
@@ -40,9 +43,9 @@ class _loginState extends State<login> {
   Popup popups = Popup();
   ArtisantService serviceartisan = ArtisantService();
   Artisan artisanClass = Artisan();
+  bool isShow = false;
   Utilisateur utilisateurClass = Utilisateur();
   ArtisanSharedPreference serviceShaders = ArtisanSharedPreference();
-
   @override
   void initState() {
     super.initState();
@@ -70,6 +73,8 @@ class _loginState extends State<login> {
 
   @override
   Widget build(BuildContext context) {
+    final globalkeyController = context.read<GlobalKeyController>();
+
     return Scaffold(
       // resizeToAvoidBottomInset: true,
 
@@ -106,10 +111,20 @@ class _loginState extends State<login> {
                     Container(
                       padding: const EdgeInsets.all(20),
                       child: Form(
-                        key: _formkeyLogin,
+                        key: globalkeyController.formkeyLogin,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            Visibility(
+                                visible: isShow,
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: Text(
+                                    "Address email ou mot de passe incorrect",
+                                    style: TextStyle(color: Colors.red),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )),
                             Container(
                               margin:
                                   const EdgeInsets.only(top: 10, bottom: 10),
@@ -195,13 +210,18 @@ class _loginState extends State<login> {
                                 // ::::::::::::::::::::::::::
                                 TextButton(
                                   child: Text(
-                                    "Mot de passe oublier",
+                                    "Mot de passe oublié",
                                     style: TextStyle(
                                         color: Couleurs.orange,
                                         fontFamily: "Dubai",
                                         fontSize: 14),
                                   ),
                                   onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const MotDePasseOublier()));
                                     // popups.dialog(context);
                                   },
                                 )
@@ -211,7 +231,8 @@ class _loginState extends State<login> {
                                 decoration: const BoxDecoration(),
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    if (_formkeyLogin.currentState!
+                                    if (globalkeyController
+                                        .formkeyLogin.currentState!
                                         .validate()) {
                                       String email = _emailController.text;
                                       String password = _passController.text;
@@ -241,6 +262,8 @@ class _loginState extends State<login> {
                                               .addUtilisateurToSharedPreference(
                                                   Utilisateur.fromMap(map))
                                               .then((value) {
+                                            print(
+                                                "---------------------------interierur");
                                             print(Utilisateur.fromMap(map));
                                             Navigator.push(
                                                 context,
@@ -255,6 +278,9 @@ class _loginState extends State<login> {
                                             'je suis type${value.runtimeType}');
                                       }).catchError((onError) {
                                         print(onError);
+                                        setState(() {
+                                          isShow = !isShow;
+                                        });
                                       });
                                     }
                                   },
@@ -290,12 +316,21 @@ class _loginState extends State<login> {
                                         fontFamily: "Poppins",
                                         fontSize: 14),
                                   ),
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ArtisanInscription()),
-                                    );
+                                  onPressed: () async {
+                                    if (widget.artisantype) {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const ArtisanInscription()),
+                                      );
+                                    } else {
+                                      await Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Inscription()),
+                                      );
+                                    }
+
                                     // Get.to(ForgetPassword());
                                   },
                                 )

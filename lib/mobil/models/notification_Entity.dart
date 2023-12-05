@@ -41,9 +41,9 @@ class NotificationClass {
       idNotification: map['idNotification'] ,
       description: map['description'] ,
       date: map['date'],
-      commandes: map['commandes'],
-      produits: map['produits'],
-      artisans: map['artisans'],
+      commandes: map['commandes'] != null ? Commande.fromMap(map['commandes']) : null,
+      produits: Produit.fromMap(map['produits']),
+      artisans: Artisan.fromMap(map['artisans']),
     );
   }
 

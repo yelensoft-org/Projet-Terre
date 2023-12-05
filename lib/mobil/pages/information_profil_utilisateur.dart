@@ -7,6 +7,9 @@ import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreferen
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+
+import '../../desktop/controller/global_key_controller.dart';
 
 class InformationProfilUtilisateur extends StatefulWidget {
   const InformationProfilUtilisateur({super.key});
@@ -20,7 +23,7 @@ class _InformationProfilUtilisateurState
     extends State<InformationProfilUtilisateur> {
   ArtisanSharedPreference artisanSharedPreference = ArtisanSharedPreference();
   // final _formkeyInformationUser = GlobalKey<FormState>();
-  final formkey = GlobalKeyManager.formkeyInformationUser;
+  // final formkey = GlobalKeyManager.formkeyInformationUser;
 
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
@@ -30,6 +33,7 @@ class _InformationProfilUtilisateurState
 
   @override
   Widget build(BuildContext context) {
+    final globalkeyController = context.read<GlobalKeyController>();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -104,7 +108,9 @@ class _InformationProfilUtilisateurState
             Expanded(
               child: SingleChildScrollView(
                 child: Form(
-                  key: formkey,
+                  key: context
+                      .read<GlobalKeyController>()
+                      .formkeyInformationUser,
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -213,11 +219,12 @@ class _InformationProfilUtilisateurState
                                           .then((value) {
                                         print(value);
                                         if (value == "succeeded") {
-                                          Navigator.push(
+                                          Navigator.pushAndRemoveUntil(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      const PageBienvenue()));
+                                                      const PageBienvenue()),
+                                              (route) => false);
                                         } else {
                                           return null;
                                         }

@@ -70,18 +70,6 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  // Future<void> fetchcommande() async {
-  //   await produitProvider.ajouterCommande().then((value) {
-  //     print(value);
-  //     setState(() {
-  //       commande = value;
-  //     });
-  //   }).catchError((err) {
-  //     print(
-  //         'Erreur lors de la récupération des nombre user : ${err.toString()}');
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,7 +152,7 @@ class _DashboardState extends State<Dashboard> {
                                           const SizedBox(
                                             height: 8,
                                           ),
-                                          Text("Nobre d'artisant",
+                                          Text("Nombre d'artisan",
                                               style: TextStyle(
                                                   color: Couleurs.orange))
                                         ],
@@ -228,7 +216,7 @@ class _DashboardState extends State<Dashboard> {
                                           const SizedBox(
                                             height: 10,
                                           ),
-                                          Text("Nobre d'utilsateur",
+                                          Text("Nombre d'utilsateur",
                                               style: TextStyle(
                                                   color: Couleurs.orange))
                                         ],
@@ -243,6 +231,7 @@ class _DashboardState extends State<Dashboard> {
                           Expanded(
                               flex: 4,
                               child: Container(
+                                padding: const EdgeInsets.all(8),
                                 // margin: const EdgeInsets.only(right: 30),
                                 decoration: BoxDecoration(
                                     color: Couleurs.blanc,
@@ -256,6 +245,7 @@ class _DashboardState extends State<Dashboard> {
                                           spreadRadius: 1)
                                     ],
                                     borderRadius: BorderRadius.circular(10)),
+                                child: Image.asset("images/statis.png"),
                               )),
                         ],
                       ),
@@ -274,6 +264,7 @@ class _DashboardState extends State<Dashboard> {
                           Expanded(
                             flex: 3,
                             child: Container(
+                              padding:const EdgeInsets.all(8),
                               // margin: const EdgeInsets.only(left: 40),
                               // height: 200,
                               decoration: BoxDecoration(
@@ -288,6 +279,7 @@ class _DashboardState extends State<Dashboard> {
                                   border: Border.all(
                                       width: 1, color: Couleurs.orange),
                                   borderRadius: BorderRadius.circular(10)),
+                              child: Image.asset("images/cate.png"),
                             ),
                           ),
                           const SizedBox(
@@ -349,7 +341,7 @@ class _DashboardState extends State<Dashboard> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Text("Nobre de Cultures",
+                                  Text("Nombre de Cultures",
                                       style: TextStyle(color: Couleurs.orange))
                                 ],
                               ),
@@ -399,82 +391,78 @@ class _DashboardState extends State<Dashboard> {
                               fontWeight: FontWeight.bold),
                         )),
                       ),
-                      isPresent == null
-                          ? Expanded(
-                              child: ListView.builder(
-                              itemCount: notifications.length,
-                              padding: const EdgeInsets.all(10),
-                              itemBuilder: (BuildContext context, index) {
-                                final notification = notifications[index];
+                      // isPresent == null
+                      Expanded(
+                          child: ListView.builder(
+                        itemCount: notifications.length,
+                        padding: const EdgeInsets.all(10),
+                        itemBuilder: (BuildContext context, index) {
+                          final notification = notifications[index];
 
-                                return InkWell(
-                                    highlightColor:
-                                        Couleurs.orange.withOpacity(0.5),
-                                    borderRadius: BorderRadius.circular(5),
+                          return InkWell(
+                              highlightColor: Couleurs.orange.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(5),
+                              child: Column(
+                                children: [
+                                  Center(
+                                      child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Text(
+                                      "${notification.date}",
+                                    ),
+                                  )),
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    margin: const EdgeInsets.all(5),
+                                    // height: 20,
+                                    // width: 100,
+                                    decoration: BoxDecoration(
+                                      color: Couleurs.blanc,
+                                      border: Border.all(
+                                          width: 1, color: Couleurs.gri),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                     child: Column(
                                       children: [
-                                        Center(
-                                            child: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          child: Text(
-                                            "${notification.date}",
-                                          ),
-                                        )),
-                                        Container(
-                                          padding: const EdgeInsets.all(8),
-                                          margin: const EdgeInsets.all(5),
-                                          // height: 20,
-                                          // width: 100,
-                                          decoration: BoxDecoration(
-                                            color: Couleurs.blanc,
-                                            border: Border.all(
-                                                width: 1, color: Couleurs.gri),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                "${notification.description}",
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  Container(
-                                                    padding: EdgeInsets.only(
-                                                        right: 10),
-                                                    child: Text(
-                                                      "11h:20",
-                                                      style: TextStyle(
-                                                          color:
-                                                              Couleurs.orange),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
+                                        Text(
+                                          "${notification.description}",
                                         ),
-                                        Container(
-                                          child: Row(
-                                            children: [],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
-                                        )
+                                        // Row(
+                                        //   mainAxisAlignment:
+                                        //       MainAxisAlignment.end,
+                                        //   children: [
+                                        //     Container(
+                                        //       padding:
+                                        //           EdgeInsets.only(right: 10),
+                                        //       // child: Text(
+                                        //       //   "11h:20",
+                                        //       //   style: TextStyle(
+                                        //       //       color: Couleurs.orange),
+                                        //       // ),
+                                        //     ),
+                                        //   ],
+                                        // )
                                       ],
-                                    ));
-                              },
-                            ))
-                          : Container(
-                              height: 500,
-                              child: const Center(
-                                  child: Text("Auccune Notification")),
-                            )
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      children: [],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  )
+                                ],
+                              ));
+                        },
+                      ))
+                      // : Container(
+                      //     height: 500,
+                      //     child: const Center(
+                      //         child: Text("Auccune Notification")),
+                      //   )
                     ]),
                   ),
                 )),

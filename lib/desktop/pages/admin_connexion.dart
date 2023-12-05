@@ -1,9 +1,14 @@
+import 'package:art_eshop/desktop/controller/global_key_controller.dart';
+import 'package:art_eshop/desktop/controller/operation_controller.dart';
+import 'package:art_eshop/desktop/controller/side_bar/side_bar_page.dart';
+import 'package:art_eshop/desktop/model/admin_Entity.dart';
 import 'package:art_eshop/desktop/pages/ajout_admin.dart';
 import 'package:art_eshop/desktop/service/admin_service.dart';
 import 'package:art_eshop/key.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:provider/provider.dart';
 
 class Connexion extends StatefulWidget {
   const Connexion({super.key});
@@ -14,7 +19,7 @@ class Connexion extends StatefulWidget {
 
 class _ConnexionState extends State<Connexion> {
   // final _formkeyAdmin = GlobalKey<FormState>();
-  final formkey = GlobalKeyManager.formkeyAdminConnection;
+  // final formkey = GlobalKeyManager.formkeyAdminConnection;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -30,6 +35,7 @@ class _ConnexionState extends State<Connexion> {
 
   @override
   Widget build(BuildContext context) {
+    final globalkeyController = context.read<GlobalKeyController>();
     return Scaffold(
       body: Center(
         child: Container(
@@ -99,7 +105,7 @@ class _ConnexionState extends State<Connexion> {
                     // ::::::::::::::::::::::::::formulaire
 
                     child: Form(
-                      key: formkey,
+                      key: globalkeyController.formkeyAdminConnection,
                       child: Column(
                           // mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -146,9 +152,7 @@ class _ConnexionState extends State<Connexion> {
                                   validator: MultiValidator([
                                     RequiredValidator(
                                         errorText: 'champ obligatoire'),
-                                    MinLengthValidator(8,
-                                        errorText:
-                                            'Password must be atlist 8 digit'),
+                                    MinLengthValidator(8, errorText: ''),
                                     PatternValidator(r'(?=.*?[#!@$%^&*-])',
                                         errorText:
                                             'mot de passe inferieur a 8 caracteres')
@@ -204,7 +208,9 @@ class _ConnexionState extends State<Connexion> {
                               highlightColor: Couleurs.gri,
                               borderRadius: BorderRadius.circular(10),
                               onTap: () async {
-                                if (formkey.currentState!.validate()) {
+                                if (globalkeyController
+                                    .formkeyAdminConnection.currentState!
+                                    .validate()) {
                                   await service
                                       .verifyAdmin(_emailController.text,
                                           _passwordController.text)
@@ -212,12 +218,14 @@ class _ConnexionState extends State<Connexion> {
                                     Map<String, dynamic> admin = value;
                                     if (admin["idAdmin"] != null &&
                                         admin.containsKey("idAdmin")) {
+                                      // Provider.of<OperationController>(context)
+                                      //     .currentAdmin = ;
                                       // ignore: use_build_context_synchronously
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (context) =>
-                                      //             const AdminListArtisan()));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const SideBarPage()));
                                     }
                                   }).catchError((onError) {
                                     setState(() {
@@ -248,24 +256,24 @@ class _ConnexionState extends State<Connexion> {
                                 ),
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const AjoutArtisan()));
-                                      },
-                                      child: const Text("Incrivez vous")),
-                                )
-                              ],
-                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.end,
+                            //   children: [
+                            //     Padding(
+                            //       padding: const EdgeInsets.symmetric(
+                            //           horizontal: 10),
+                            //       child: TextButton(
+                            //           onPressed: () {
+                            //             Navigator.push(
+                            //                 context,
+                            //                 MaterialPageRoute(
+                            //                     builder: (context) =>
+                            //                         const AjoutArtisan()));
+                            //           },
+                            //           child: const Text("Incrivez vous")),
+                            //     )
+                            //   ],
+                            // ),
                           ]),
                     ))
               ],

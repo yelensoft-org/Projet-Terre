@@ -8,16 +8,17 @@ import 'package:flutter/foundation.dart';
 import 'package:art_eshop/mobil/models/commande_Entity.dart';
 
 class Achat {
-  int idAchat;
-  List<Commande> commandes;
+  int? idAchat;
+  Commande? commandes;
   Achat({
-    required this.idAchat,
-    required this.commandes,
+    this.idAchat,
+    this.commandes,
   });
+  
 
   Achat copyWith({
     int? idAchat,
-    List<Commande>? commandes,
+    Commande? commandes,
   }) {
     return Achat(
       idAchat: idAchat ?? this.idAchat,
@@ -28,14 +29,14 @@ class Achat {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'idAchat': idAchat,
-      'commandes': commandes.map((x) => x.toMap()).toList(),
+      'commandes': commandes?.toMap(),
     };
   }
 
   factory Achat.fromMap(Map<String, dynamic> map) {
     return Achat(
-      idAchat: map['idAchat'] as int,
-      commandes: List<Commande>.from((map['commandes'] as List<int>).map<Commande>((x) => Commande.fromMap(x as Map<String,dynamic>),),),
+      idAchat: map['idAchat'] ,
+      commandes: Commande.fromMap(map['commandes']) ,
     );
   }
 
@@ -52,7 +53,7 @@ class Achat {
   
     return 
       other.idAchat == idAchat &&
-      listEquals(other.commandes, commandes);
+      other.commandes == commandes;
   }
 
   @override

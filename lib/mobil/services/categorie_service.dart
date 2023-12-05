@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:art_eshop/desktop/model/category_avec_produit.dart';
 import 'package:art_eshop/mobil/models/Categories_Entity.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -31,7 +33,6 @@ class CategorieService {
 
       // Vérifie le code de statut de la réponse
       if (response.statusCode == 200) {
-       
         return response;
       } else {
         // Échec : Gestion d'erreur en cas de code de statut non attendu
@@ -78,13 +79,23 @@ class CategorieService {
           'Une erreur s\'est produite lors de la récupération des catégories : $error');
     }
   }
-  Future<List<Categories>> getAllCategoriesadmin() async {
+
+  // ::::::::::::::::::::::;category:admi
+  Future<List<CategorieWithProduit>> getAllCategoriesadmin() async {
+    String url = "";
+    if (kIsWeb || defaultTargetPlatform == TargetPlatform.windows) {
+      url = "http://localhost:8080/categories/listCategorie";
+    } else {
+      url = "http://10.0.2.2:8080/categories/listCategorie";
+    }
     try {
       // Définition de l'URI pour la requête HTTP GET
-      var uri = Uri.parse("http://localhost:8080/categories/list");
+      // var uri = Uri.parse("http://localhost:8080/categories/listCategorie");
 
       // Envoi de la requête HTTP GET et attente de la réponse
-      var response = await http.get(uri);
+      final response = await http.get(Uri.parse(url)
+          // Ici, vous pouvez ajouter des en-têtes ou un corps de requête si nécessaire
+          );
 
       // Vérification du code de statut de la réponse
       if (response.statusCode == 200) {
@@ -93,8 +104,8 @@ class CategorieService {
         debugPrint(response.body);
 
         // On transforme les données JSON en une liste d'objets Categories
-        List<Categories> categories = categoriesJson
-            .map((categoryJson) => Categories.fromMap(categoryJson))
+        List<CategorieWithProduit> categories = categoriesJson
+            .map((categoryJson) => CategorieWithProduit.fromMap(categoryJson))
             .toList();
 
         // On renvoie la liste des catégories récupérées
@@ -109,6 +120,39 @@ class CategorieService {
       // Capture et gestion des erreurs potentielles, y compris les erreurs réseau
       throw Exception(
           'Une erreur s\'est produite lors de la récupération des catégories : $error');
+    }
+  }
+
+  // :::::::::::::;;supprimer un categories
+  Future<String> supprrimerCategorie(
+    int idCategories,
+  ) async {
+    String categorySupprimer = "";
+    final url = Uri.parse(
+        'http://localhost:8080/categories/supprimer/$idCategories'); // Remplacez par votre URL
+
+    try {
+      final response = await http.get(
+        url,
+        // Ici, vous pouvez ajouter des en-têtes ou un corps de requête si nécessaire
+      );
+
+      print("-------body ${response.body}");
+
+      if (response.statusCode == 200) {
+        print("-------complet ${response.body}");
+        // Si la requête est réussie, décoder la réponse JSON
+        // produit = Produit.fromMap(jsonDecode(response.body));
+        
+        return categorySupprimer;
+      } else {
+        // Si la requête a échoué, vous pouvez gérer l'erreur ici
+        throw Exception('Échec de la requête : ${response.body}');
+      }
+    } catch (e) {
+      // En cas d'erreur lors de la connexion, capturez l'exception ici
+      print(e);
+      throw Exception('Échec de la connexion : $e');
     }
   }
 }

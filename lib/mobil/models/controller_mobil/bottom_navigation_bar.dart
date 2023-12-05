@@ -10,6 +10,7 @@ import 'package:art_eshop/mobil/pages/utilisateur_culture.dart';
 import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BottomNavigationExample extends StatefulWidget {
   const BottomNavigationExample({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class BottomNavigationExample extends StatefulWidget {
 class _BottomNavigationExampleState extends State {
   ArtisanSharedPreference artisanSharedPreference = ArtisanSharedPreference();
   int _selectedTab = 0;
-  Artisan artisan = Artisan();
+  Artisan? artisan = Artisan();
   bool selected = false;
 //  final artisans = artisanSharedPreference.currentArtisan;
 
@@ -40,9 +41,9 @@ class _BottomNavigationExampleState extends State {
   }
 
   _changeTab(int index) async {
-    Artisan? retrievedArtisan =
+     artisan =
         await artisanSharedPreference.getArtisanFromSharedPreference();
-    if (retrievedArtisan != null) {
+    if (artisan != null) {
       selected == false;
     } else {
       selected = true;
@@ -60,7 +61,7 @@ class _BottomNavigationExampleState extends State {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedTab,
         onTap: (index) => _changeTab(index),
-        selectedItemColor: Colors.red,
+        selectedItemColor: Couleurs.orange,
         unselectedItemColor: Colors.grey,
         items: [
           const BottomNavigationBarItem(
@@ -72,9 +73,17 @@ class _BottomNavigationExampleState extends State {
               ),
               label: "Culture"),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.grid_3x3_outlined),
+            icon: artisan?.idArtisans != null
+                ? const FaIcon(
+                    FontAwesomeIcons.bell,
+                    // color: Colors.grey,
+                  )
+                : const FaIcon(
+                    FontAwesomeIcons.cartShopping,
+                    // color: Colors.grey,
+                  ),
             label: _selectedTab == 2
-                ? (artisan != null ? "Notification" : "Panier")
+                ? (artisan?.nom != null ? "Notification" : "Panier")
                 : "",
           ),
           const BottomNavigationBarItem(

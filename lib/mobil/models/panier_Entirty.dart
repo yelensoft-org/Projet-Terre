@@ -20,7 +20,7 @@ class Panier {
 
   Panier copyWith({
     int? idPanier,
-    Commande? commandes,
+    // Commande? commandes,
     String? date,
     // Utilisateur? user,
   }) {
@@ -52,8 +52,7 @@ class Panier {
 
   String toJson() => json.encode(toMap());
 
-  factory Panier.fromJson(String source) =>
-      Panier.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Panier.fromJson(String source) => Panier.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -72,7 +71,7 @@ class Panier {
 
   @override
   int get hashCode {
-    return idPanier.hashCode ^  date.hashCode;
+    return idPanier.hashCode ^ date.hashCode;
     // user.hashCode;
   }
 }

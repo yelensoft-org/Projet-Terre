@@ -84,37 +84,11 @@ class _ProduitDetailState extends State<ProduitDetail> {
             size: 30,
           ),
         ),
-        actions: [
-          Visibility(
-            visible: produitController.isActiveButton,
-            child: Container(
-              padding: const EdgeInsets.only(right: 20),
-              child: Row(
-                children: [
-                  Text(
-                    "Ajouter au Panier",
-                    style: TextStyle(
-                        color: Couleurs.blanc,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Switch(
-                    // This bool value toggles the switch.
-                    value: active,
-                    thumbIcon: thumbIcon,
-                    activeColor: Couleurs.blanc,
-                    onChanged: (bool value) {
-                      // This is called when the user toggles the switch.
-                      setState(() {
-                        active = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
+        title: Center(
+            child: Text(
+          "Details de L'article",
+          style: TextStyle(color: Couleurs.blanc),
+        )),
       ),
       backgroundColor: const Color.fromARGB(239, 245, 242, 242),
       body: SingleChildScrollView(
@@ -226,7 +200,7 @@ class _ProduitDetailState extends State<ProduitDetail> {
                                         "${produit.nom}",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 22),
+                                            fontSize: 18),
                                       ),
                                       Container(
                                         child: Text(
@@ -602,11 +576,22 @@ class _ProduitDetailState extends State<ProduitDetail> {
                                   // ::::::::::::::::::button acheter
                                   InkWell(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const UtilisateurModePaiement()));
+                                      print('-----idpro---${produit.idProduit}');
+                                      print('-----quantity---${quantityChoisie}');
+                                      produitProvider
+                                          .achatProduit(produit.idProduit!,
+                                              quantityChoisie)
+                                          .then((value) {
+                                        if (value.quantite != null) {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const UtilisateurModePaiement()));
+                                        }
+                                      }).catchError((onError) {
+                                        throw Exception("error:  + $onError");
+                                      });
                                     },
                                     child: Container(
                                       width: 120,
@@ -628,6 +613,7 @@ class _ProduitDetailState extends State<ProduitDetail> {
                                       ),
                                     ),
                                   ),
+
                                   InkWell(
                                     onTap: () {
                                       commande = produitController.commande;
@@ -641,15 +627,14 @@ class _ProduitDetailState extends State<ProduitDetail> {
                                       artisanSharedPreference
                                           .getUserFromSharedPreference()
                                           .then((value) {
-                                        commande.utilisateur!.idUser =
-                                            value!.idUser;
+                                        commande.utilisateur = value;
                                         print(
                                             '---useer-- ${commande.utilisateur}');
                                       });
                                       artisanSharedPreference
                                           .getUserFromSharedPreference()
                                           .then((value) {
-                                        commande.panier = value!.panier;
+                                        commande.panier = value!.panier!;
                                       });
                                       commande.quantite = quantityChoisie;
                                       // commande.panier= artisanSharedPreference.getUserFromSharedPreference()
@@ -661,22 +646,35 @@ class _ProduitDetailState extends State<ProduitDetail> {
                                       //         builder: (context) =>
                                       //             const UtilisateurModePaiement()));
                                     },
-                                    child: Container(
-                                      width: 120,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 1, color: Couleurs.gri),
-                                          color: Couleurs.orange,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Center(
-                                        child: Text(
-                                          "Panier",
-                                          style: TextStyle(
+                                    child: Visibility(
+                                      visible: produitController.isActiveButton,
+                                      child: Container(
+                                        margin: const EdgeInsets.only(top: 8),
+                                        width: 120,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                width: 1, color: Couleurs.gri),
+                                            color: Couleurs.orange,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Panier",
+                                              style: TextStyle(
+                                                  color: Couleurs.blanc,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            FaIcon(
+                                              FontAwesomeIcons.cartShopping,
                                               color: Couleurs.blanc,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
+                                              size: 15,
+                                            )
+                                          ],
                                         ),
                                       ),
                                     ),

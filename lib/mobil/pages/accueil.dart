@@ -23,10 +23,13 @@ class Accueil extends StatefulWidget {
 class _ProduitsState extends State<Accueil> {
   CategorieService service = CategorieService();
   ArtisanSharedPreference preference = ArtisanSharedPreference();
+  TextEditingController searchController = TextEditingController();
   Artisan artisan = Artisan();
   Utilisateur utilisateur = Utilisateur();
   bool? isArtisan;
   List<Categories> categories = [];
+  List<Produit> filteredProducts = [];
+  Categories? selectedCategory;
   ProduitProvider produitProvider = ProduitProvider();
   List<Produit> products = [];
 
@@ -87,207 +90,268 @@ class _ProduitsState extends State<Accueil> {
         backgroundColor: Couleurs.orange,
         toolbarHeight: 0,
       ),
-      body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Container(
-          child: Container(
-            height: 70,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                color: Couleurs.orange,
-                borderRadius:
-                    const BorderRadius.only(bottomLeft: Radius.circular(40))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                InkWell(
-                    onTap: () {
-                      // Popup().dialogLang(context);
-                    },
-                    child:
-                        SvgPicture.asset('assets/icons/google_translate.svg')),
-                Center(
-                  child: isArtisan == null
-                      ? CircularProgressIndicator(
-                          backgroundColor: Couleurs.orange,
-                        )
-                      : isArtisan!
-                          ? Text(
-                              "${artisan.nom}  ${artisan.prenom}",
-                              style: const TextStyle(
-                                  fontSize: 17,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Container(
+              child: Container(
+                height: 70,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    color: Couleurs.orange,
+                    borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(40))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          // Popup().dialogLang(context);
+                        },
+                        child: SvgPicture.asset(
+                            'assets/icons/google_translate.svg')),
+                    Center(
+                      child: isArtisan == null
+                          ? CircularProgressIndicator(
+                              backgroundColor: Couleurs.orange,
                             )
-                          : Text(
-                              "${utilisateur.nom}  ${utilisateur.prenom}",
-                              style: const TextStyle(
-                                  fontSize: 17,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                ),
-                const CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/profil.png"),
-                )
-              ],
-            ),
-          ),
-        ),
-        // :::::::::::::::::::::
-        Container(
-          margin: const EdgeInsets.all(20),
-          width: MediaQuery.of(context).size.width,
-          // decoration:  BoxDecoration( border: Border),
-          child: TextField(
-            decoration: InputDecoration(
-                prefixIconColor: Couleurs.orange,
-                prefixIcon: const Icon(Icons.search),
-                hintText: "Recherche",
-                border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                contentPadding: const EdgeInsets.all(0)),
-          ),
-        ),
-        Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //
-            children: [
-              Container(
-                margin: const EdgeInsets.only(left: 10.0, bottom: 10.0),
-                child: const Text(
-                  "Categories",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                          : isArtisan!
+                              ? Text(
+                                  "${artisan.nom}  ${artisan.prenom}",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : Text(
+                                  "${utilisateur.nom}  ${utilisateur.prenom}",
+                                  style: const TextStyle(
+                                      fontSize: 17,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                    ),
+                    CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Couleurs.blanc,
+                      // color: Couleurs.blanc,
+                      child: isArtisan == null
+                          ? Container()
+                          : isArtisan!
+                              ? Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 1, color: Couleurs.blanc),
+                                      shape: BoxShape.circle),
+                                  // backgroundColor: Couleurs.blanc,
+                                  child: Image.network(
+                                    fit: BoxFit.fill,
+                                    "http://10.0.2.2/${artisan.photo}",
+                                  ),
+                                )
+                              : CircleAvatar(
+                                  child: Text(
+                                      "${utilisateur.nom!.substring(01)} ${utilisateur.prenom!.substring(01)}")),
+                      // backgroundImage: AssetImage("assets/images/profil.png"),
+                    ),
+                  ],
                 ),
               ),
-            ]),
-        Expanded(
-          flex: 1,
-          child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              padding: const EdgeInsets.all(10),
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, index) {
-                final category = categories[index];
-                return InkWell(
-                    highlightColor: Couleurs.orange.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(10),
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      margin: const EdgeInsets.only(left: 10),
-                      width: 120,
-                      // height: 50,
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: Couleurs.orange),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Text(
-                        category.nom!,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            // :::::::::::::::::::::
+            Container(
+              margin: const EdgeInsets.all(20),
+              width: MediaQuery.of(context).size.width,
+              // decoration:  BoxDecoration( border: Border),
+              child: TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  setState(() {
+                    filteredProducts = products
+                        .where((produit) => produit.nom!
+                            .toLowerCase()
+                            .contains(searchController.text.toLowerCase()))
+                        .toList();
+                  });
+                },
+                decoration: InputDecoration(
+                    prefixIconColor: Couleurs.orange,
+                    prefixIcon: const Icon(Icons.search),
+                    hintText: "Recherche",
+                    border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    contentPadding: const EdgeInsets.all(0)),
+              ),
+            ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 10.0, bottom: 10.0),
+                    child: const Text(
+                      "Categories",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ));
-              }),
-        ),
-        // const SizedBox(
-        //   height: 20,
-        // ),
-        const Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: Text(
-            "Articles recement ajouter",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+                    ),
+                  ),
+                ]),
+            Expanded(
+              flex: 1,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: categories.length,
+                  padding: const EdgeInsets.all(10),
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, index) {
+                    final category = categories[index];
+                    return InkWell(
+                        highlightColor: Couleurs.orange.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(10),
+                        onTap: () {
+                          setState(() {
+                            selectedCategory = categories[
+                                index]; // Mettre à jour la catégorie sélectionnée
+                          });
+                        },
+                        child: Container(
+                          // padding: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.only(left: 10),
+                          width: 120,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              border:
+                                  Border.all(width: 1, color: Couleurs.orange),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Center(
+                            child: Text(
+                              category.nom!,
+                              textAlign: TextAlign.center,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ));
+                  }),
             ),
-          ),
-        ),
-        Expanded(
-          flex: 6,
-          child: GridView.builder(
-            padding: const EdgeInsets.all(8),
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200.0,
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 20.0,
+            // const SizedBox(
+            //   height: 20,
+            // ),
+            const Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                "Articles recement ajouter",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
             ),
-            shrinkWrap: true,
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              final produit = products[index];
-              return InkWell(
-                highlightColor: Couleurs.orange,
-                onTap: () {
-                  produitProvider
-                      .listProduitSimilaire(
-                          produit.categories!.idCategorie!, produit.nom!)
-                      .then((value) {
-                    produitController.mesProduisMobile = value;
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ListProduit(),
+            Expanded(
+              flex: 6,
+              child: GridView.builder(
+                padding: const EdgeInsets.all(8),
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 200.0,
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 20.0,
+                ),
+                shrinkWrap: true,
+                itemCount: products
+                    .where((produit) =>
+                        selectedCategory == null ||
+                        produit.categories == selectedCategory &&
+                            (searchController.text.isEmpty ||
+                                produit.nom!.toLowerCase().contains(
+                                    searchController.text.toLowerCase())))
+                    .length,
+                itemBuilder: (context, index) {
+                  final produit = products
+                      .where((produit) =>
+                          selectedCategory == null ||
+                          produit.categories == selectedCategory &&
+                              (searchController.text.isEmpty ||
+                                  produit.nom!.toLowerCase().contains(
+                                      searchController.text.toLowerCase())))
+                      .toList()[index];
+                  return InkWell(
+                    highlightColor: Couleurs.orange,
+                    onTap: () {
+                      produitProvider
+                          .listProduitSimilaire(
+                              produit.categories!.idCategorie!, produit.nom!)
+                          .then((value) {
+                        produitController.mesProduisMobile = value;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ListProduit(),
+                          ),
+                        );
+                      });
+                    },
+                    child: Card(
+                      // color: Couleurs.orange,
+                      elevation: 8,
+                      shadowColor: Colors.black,
+
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: Couleurs.orange, width: 1)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Image.network(
+                              "http://10.0.2.2/${produit.photo}",
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              padding: const EdgeInsets.only(left: 5, top: 5),
+                              decoration: BoxDecoration(
+                                  color: Couleurs.orange,
+                                  borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10))),
+                              child: Column(
+                                // mainAxisAlignment: MainAxisAlignment.,
+                                children: [
+                                  Text(
+                                    "Nom : ${produit.nom}",
+                                    style: TextStyle(
+                                        color: Couleurs.blanc,
+                                        overflow: TextOverflow.ellipsis),
+                                  ),
+                                  Text(
+                                    "Categorie : ${produit.categories!.nom}",
+                                    style: TextStyle(
+                                        color: Couleurs.blanc,
+                                        overflow: TextOverflow.ellipsis),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
-                  });
-                  
                 },
-                child: Card(
-                  // color: Couleurs.orange,
-                  elevation: 8,
-                  shadowColor: Colors.black,
-
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: BorderSide(color: Couleurs.orange, width: 1)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Image.network(
-                          "http://10.0.2.2/${produit.photo}",
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding: const EdgeInsets.only(left: 5, top: 5),
-                          decoration: BoxDecoration(
-                              color: Couleurs.orange,
-                              borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10))),
-                          child: Column(
-                            // mainAxisAlignment: MainAxisAlignment.,
-                            children: [
-                              Text(
-                                "Nom : ${produit.nom}",
-                                style: TextStyle(
-                                    color: Couleurs.blanc,
-                                    overflow: TextOverflow.ellipsis),
-                              ),
-                              Text(
-                                "Categorie : ${produit.categories!.nom}",
-                                style: TextStyle(
-                                    color: Couleurs.blanc,
-                                    overflow: TextOverflow.ellipsis),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        )
-      ]),
+              ),
+            )
+          ]),
+        ),
+      ),
     );
   }
 }

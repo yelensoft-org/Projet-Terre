@@ -1,4 +1,5 @@
 import 'package:art_eshop/desktop/controller/culture_controller.dart';
+import 'package:art_eshop/desktop/model/admin_dialog.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -32,7 +33,9 @@ class _CultureState extends State<Culture> {
           //   width: 100,
           // ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              PoppupAdmin().ajoutCulture(context);
+            },
             child: Container(
               height: 30,
               padding: const EdgeInsets.only(left: 15, right: 15),
@@ -64,6 +67,10 @@ class _CultureState extends State<Culture> {
               cultureController.gotoDetails();
             },
             child: Container(
+              margin: const EdgeInsets.only(
+                left: 30,
+                right: 30,
+              ),
               padding: const EdgeInsets.all(10),
               // margin: const EdgeInsets.all(5),
               height: 100,
@@ -73,10 +80,10 @@ class _CultureState extends State<Culture> {
                   border:
                       Border(top: BorderSide(width: 1, color: Couleurs.gri))),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Flexible(
-                    flex: 3,
+                  Container(
+                    // flex: 2,
                     child: Row(
                       // mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -92,23 +99,26 @@ class _CultureState extends State<Culture> {
                           ),
                         ),
                         const SizedBox(
-                          width: 100,
+                          width: 20,
                         ),
                       ],
                     ),
                   ),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Culture Dogons",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      Text("Region"),
-                      Text("Date:")
-                    ],
+                  const Flexible(
+                    flex: 6,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Culture Dogons",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Text("Region"),
+                        Text("Date:")
+                      ],
+                    ),
                   )
                 ],
               ),
