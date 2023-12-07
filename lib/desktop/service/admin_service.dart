@@ -132,7 +132,7 @@ class AdminService {
       } else if (response.statusCode == 401) {
         debugPrint(" existe et informations correctes");
         // Échec : Utilisateur existe, mais informations incorrectes
-        return Map();
+        throw Exception("error");
       } else {
         // Autres cas de code de statut (gestion d'erreur)
         throw Exception(

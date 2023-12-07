@@ -23,8 +23,8 @@ class _UtilisateurModePaiementState extends State<UtilisateurModePaiement> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ProduitDetail()));
+            Navigator.pop(context);
+                // MaterialPageRoute(builder: (context) => const ProduitDetail()));
           },
           icon: FaIcon(
             FontAwesomeIcons.angleLeft,

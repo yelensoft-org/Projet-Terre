@@ -218,8 +218,11 @@ class _ConnexionState extends State<Connexion> {
                                     Map<String, dynamic> admin = value;
                                     if (admin["idAdmin"] != null &&
                                         admin.containsKey("idAdmin")) {
+                                      // Admin adminpp = Admin.fromMap(admin);
+
                                       // Provider.of<OperationController>(context)
-                                      //     .currentAdmin = ;
+                                      //     .currentAdmin = adminpp;
+                                      // print(adminpp);
                                       // ignore: use_build_context_synchronously
                                       Navigator.push(
                                           context,

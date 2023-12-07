@@ -2,6 +2,7 @@ import 'package:art_eshop/desktop/controller/produit_controller.dart';
 import 'package:art_eshop/mobil/models/Produit_Entity.dart';
 import 'package:art_eshop/mobil/models/Taille_Entity.dart';
 import 'package:art_eshop/mobil/models/commande_Entity.dart';
+import 'package:art_eshop/mobil/models/controller_mobil/popup_succes/comande_reuissis.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/models/couleur_Entity.dart';
 import 'package:art_eshop/mobil/pages/listProduit.dart';
@@ -26,7 +27,7 @@ class _ProduitDetailState extends State<ProduitDetail> {
   List<TailleProduit> tailleProduit = [];
   Commande commande = Commande();
   // bool isShow = false;
-  double quantityChoisie = 0;
+  double quantityChoisie = 1;
   int checkBoxColor = 1;
   int shapeSelectedTaille = 1;
   ArtisanSharedPreference artisanSharedPreference = ArtisanSharedPreference();
@@ -548,7 +549,7 @@ class _ProduitDetailState extends State<ProduitDetail> {
                                             // print('-----show--${isShow}');
 
                                             return Text(
-                                              '${value.count}',
+                                              '${value.count.toInt()}',
                                               style:
                                                   const TextStyle(fontSize: 22),
                                             );
@@ -576,8 +577,10 @@ class _ProduitDetailState extends State<ProduitDetail> {
                                   // ::::::::::::::::::button acheter
                                   InkWell(
                                     onTap: () {
-                                      print('-----idpro---${produit.idProduit}');
-                                      print('-----quantity---${quantityChoisie}');
+                                      print(
+                                          '-----idpro---${produit.idProduit}');
+                                      print(
+                                          '-----quantity---${quantityChoisie}');
                                       produitProvider
                                           .achatProduit(produit.idProduit!,
                                               quantityChoisie)
@@ -615,7 +618,7 @@ class _ProduitDetailState extends State<ProduitDetail> {
                                   ),
 
                                   InkWell(
-                                    onTap: () {
+                                    onTap: () async {
                                       commande = produitController.commande;
                                       commande.produits = produit;
                                       commande.couleursProduit =
@@ -634,11 +637,24 @@ class _ProduitDetailState extends State<ProduitDetail> {
                                       artisanSharedPreference
                                           .getUserFromSharedPreference()
                                           .then((value) {
-                                        commande.panier = value!.panier!;
+                                        print(value);
+                                        if (value == null) {
+                                          CommandePoppup().error(context);
+                                        } else {
+                                          commande.panier = value.panier!;
+                                        }
                                       });
                                       commande.quantite = quantityChoisie;
                                       // commande.panier= artisanSharedPreference.getUserFromSharedPreference()
-                                      produitProvider.ajouterCommande(commande);
+                                      await produitProvider
+                                          .ajouterCommande(commande)
+                                          .then((value) {
+                                        CommandePoppup()
+                                            .errorAjoutCommande(context);
+                                      }).catchError((onError) {
+                                        // CommandePoppup()
+                                        //     .errorAjoutCommande(context);
+                                      });
 
                                       // Navigator.push(
                                       //     context,
@@ -721,7 +737,7 @@ class _ProduitDetailState extends State<ProduitDetail> {
                                       print(
                                           '-----${value.montantTotal * value.count}');
                                       return Text(
-                                        '${value.montantTotal * value.count} : FCFA',
+                                        '${value.montantTotal * value.count.toInt()} : FCFA',
                                         style:
                                             TextStyle(color: Couleurs.orange),
                                       );

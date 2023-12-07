@@ -59,7 +59,7 @@ class _AdminListProduitState extends State<AdminListProduit> {
                   "Liste de Produits",
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
-                
+
                 Container(
                   margin: const EdgeInsets.all(20),
                   width: 500,
@@ -113,9 +113,15 @@ class _AdminListProduitState extends State<AdminListProduit> {
                 mainAxisSpacing: 20.0,
               ),
               shrinkWrap: true,
-              itemCount: searchController.text.isNotEmpty ? filteredProducts.length : produits.length,
+              itemCount: searchController.text.isNotEmpty
+                  ? filteredProducts.length
+                  : produits.length,
               itemBuilder: (context, index) {
-                final produit = searchController.text.isNotEmpty ? filteredProducts[index] : produits[index];
+                final produit = searchController.text.isNotEmpty
+                    ? filteredProducts[index]
+                    : produits[index];
+                print('length p ${produits.length}');
+                print('length fp ${filteredProducts.length}');
                 return InkWell(
                     borderRadius: BorderRadius.circular(10),
                     highlightColor: Couleurs.orange,
@@ -190,7 +196,8 @@ class _AdminListProduitState extends State<AdminListProduit> {
                                   Text("Quantité${produit.quantite}"),
                                   Text(
                                       "Artisan : ${produit.artisans!.nom}  ${produit.artisans!.prenom}"),
-                                  Text("Categories : ${produit.categories!.nom}"),
+                                  Text(
+                                      "Categories : ${produit.categories!.nom}"),
                                 ],
                               ),
                             ),

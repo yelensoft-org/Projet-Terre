@@ -22,17 +22,16 @@ class _SpinnerPageState extends State<SpinnerPage> {
   void _delayedFunction() {
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        setState(() {
-          popup.successMobil(context);
-        });
+        setState(() {});
         _navigateToAccueil();
       }
     });
   }
 
   void _navigateToAccueil() {
+    popup.successMobil(context);
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const ListProduit()));
+        context, MaterialPageRoute(builder: (context) => const Accueil()));
   }
 
   Popup popup = Popup();

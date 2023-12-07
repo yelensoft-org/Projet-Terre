@@ -80,6 +80,7 @@ class _loginState extends State<login> {
 
       appBar: AppBar(
         elevation: 0,
+        leading: Container(),
         toolbarHeight: 20,
         backgroundColor: Couleurs.orange,
       ),

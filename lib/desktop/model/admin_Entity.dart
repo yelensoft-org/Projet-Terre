@@ -1,18 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-
 // ignore_for_file: file_names
 
 class Admin {
-  final int? idAdmin;
-  final String? photo;
-  final String? nom;
-  final String? prenom;
-  final String? email;
-  final String? password;
-  final String? sexe;
-  final String? telephone;
+  int? idAdmin;
+  String? photo;
+  String? nom;
+  String? prenom;
+  String? email;
+  String? password;
+  String? telephone;
+  String? sexe;
+
   Admin({
     this.idAdmin,
     this.photo,
@@ -20,12 +20,9 @@ class Admin {
     this.prenom,
     this.email,
     this.password,
-    this.sexe,
     this.telephone,
+    this.sexe,
   });
-
- 
- 
 
   Admin copyWith({
     int? idAdmin,
@@ -34,8 +31,8 @@ class Admin {
     String? prenom,
     String? email,
     String? password,
-    String? sexe,
     String? telephone,
+    String? sexe,
   }) {
     return Admin(
       idAdmin: idAdmin ?? this.idAdmin,
@@ -44,8 +41,8 @@ class Admin {
       prenom: prenom ?? this.prenom,
       email: email ?? this.email,
       password: password ?? this.password,
-      sexe: sexe ?? this.sexe,
       telephone: telephone ?? this.telephone,
+      sexe: sexe ?? this.sexe,
     );
   }
 
@@ -57,8 +54,8 @@ class Admin {
       'prenom': prenom,
       'email': email,
       'password': password,
-      'sexe': sexe,
       'telephone': telephone,
+      'sexe': sexe,
     };
   }
 
@@ -70,8 +67,8 @@ class Admin {
       prenom: map['prenom'],
       email: map['email'],
       password: map['password'],
-      sexe: map['sexe'],
       telephone: map['telephone'],
+      sexe: map['sexe'],
     );
   }
 
@@ -81,33 +78,32 @@ class Admin {
 
   @override
   String toString() {
-    return 'Admin(idAdmin: $idAdmin, photo: $photo, nom: $nom, prenom: $prenom, email: $email, password: $password, sexe: $sexe, telephone: $telephone)';
+    return 'Admin(idAdmin: $idAdmin, photo: $photo, nom: $nom, prenom: $prenom, email: $email, password: $password, telephone: $telephone, sexe: $sexe, )';
   }
 
   @override
   bool operator ==(covariant Admin other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.idAdmin == idAdmin &&
-      other.photo == photo &&
-      other.nom == nom &&
-      other.prenom == prenom &&
-      other.email == email &&
-      other.password == password &&
-      other.sexe == sexe &&
-      other.telephone == telephone;
+
+    return other.idAdmin == idAdmin &&
+        other.photo == photo &&
+        other.nom == nom &&
+        other.prenom == prenom &&
+        other.email == email &&
+        other.password == password &&
+        other.sexe == sexe &&
+        other.telephone == telephone;
   }
 
   @override
   int get hashCode {
     return idAdmin.hashCode ^
-      photo.hashCode ^
-      nom.hashCode ^
-      prenom.hashCode ^
-      email.hashCode ^
-      password.hashCode ^
-      sexe.hashCode ^
-      telephone.hashCode;
+        photo.hashCode ^
+        nom.hashCode ^
+        prenom.hashCode ^
+        email.hashCode ^
+        password.hashCode ^
+        sexe.hashCode ^
+        telephone.hashCode;
   }
 }

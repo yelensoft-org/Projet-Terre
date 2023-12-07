@@ -28,14 +28,16 @@ class _UtilisateurProfilState extends State<UtilisateurProfil> {
     super.initState();
     artisanSharedPreference.getUserFromSharedPreference().then((value) {
       if (value != null) {
+        print("--------------------objet");
         print(value);
         utilisateur = value;
+
         // isArtisan = true;
       } else {
         return null;
       }
       setState(() {});
-    }).catchError((onError){
+    }).catchError((onError) {
       print(onError);
     });
   }
@@ -80,12 +82,23 @@ class _UtilisateurProfilState extends State<UtilisateurProfil> {
                 height: 70,
                 width: 70,
                 decoration: BoxDecoration(
-                    color: Couleurs.blanc,
-                    shape: BoxShape.circle,
-                    border: Border.all(width: 1, color: Couleurs.blanc),
-                    image: const DecorationImage(
-                        image: AssetImage('assets/images/profil.png'),
-                        fit: BoxFit.cover)),
+                  color: Couleurs.blanc,
+                  shape: BoxShape.circle,
+                  border: Border.all(width: 1, color: Couleurs.blanc),
+
+                  // image: const DecorationImage(
+                  //     // image: AssetImage('assets/images/profil.png'),
+                  //     // fit: BoxFit.cover)
+                ),
+                child: Center(
+                  child: Text(
+                    "${utilisateur.nom?.substring(0, 1)} ${utilisateur.prenom?.substring(0, 1)}",
+                    style: TextStyle(
+                        color: Couleurs.orange,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17),
+                  ),
+                ),
               ),
               Container(
                 padding: const EdgeInsets.all(8.0),

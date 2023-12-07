@@ -7,6 +7,7 @@ import 'package:art_eshop/key.dart';
 import 'package:art_eshop/mobil/models/Categories_Entity.dart';
 import 'package:art_eshop/mobil/models/Produit_Entity.dart';
 import 'package:art_eshop/mobil/models/Taille_Entity.dart';
+import 'package:art_eshop/mobil/models/controller_mobil/bottom_navigation_bar.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/pages/accueil.dart';
 import 'package:art_eshop/mobil/services/categorie_service.dart';
@@ -662,20 +663,17 @@ class Popup {
     showDialog(
         context: context,
         builder: (context) {
-          Future.delayed(const Duration(seconds: 1), () {
-            Navigator.of(context).pop(false);
-          });
           return Dialog(
             insetAnimationDuration: const Duration(seconds: 3),
             child: Container(
                 padding: const EdgeInsets.only(top: 20),
-                height: 220,
+                height: 200,
                 width: 250,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
-                      "Activer avec Success",
+                      "Acheter avec Succés",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
@@ -691,10 +689,13 @@ class Popup {
                       children: [
                         InkWell(
                           onTap: () {
-                            Navigator.push(
+                            Navigator.of(context).pop(false);
+                            Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const Accueil()));
+                                    builder: (context) =>
+                                        const BottomNavigationExample()),
+                                (route) => false);
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 10),
@@ -832,7 +833,7 @@ class Popup {
         });
   }
 
-  // 
+  //
   void modifierProduit(BuildContext context) {
     showDialog(
         context: context,

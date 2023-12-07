@@ -2,10 +2,13 @@ import 'package:art_eshop/desktop/controller/produit_controller.dart';
 import 'package:art_eshop/mobil/models/Artisan_Entity.dart';
 import 'package:art_eshop/mobil/models/Categories_Entity.dart';
 import 'package:art_eshop/mobil/models/Produit_Entity.dart';
+import 'package:art_eshop/mobil/models/Taille_Entity.dart';
 import 'package:art_eshop/mobil/models/Utilisateur_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/models/couleur_Entity.dart';
 import 'package:art_eshop/mobil/models/dalog.dart';
 import 'package:art_eshop/mobil/pages/listProduit.dart';
+import 'package:art_eshop/mobil/pages/produit_detail.dart';
 import 'package:art_eshop/mobil/services/categorie_service.dart';
 import 'package:art_eshop/mobil/services/produit_service.dart';
 import 'package:art_eshop/mobil/services/sharedPreference/artisan_sharedPreference.dart';
@@ -155,8 +158,16 @@ class _ProduitsState extends State<Accueil> {
                                   ),
                                 )
                               : CircleAvatar(
+                                  backgroundColor: Couleurs.blanc,
                                   child: Text(
-                                      "${utilisateur.nom!.substring(01)} ${utilisateur.prenom!.substring(01)}")),
+                                    "${utilisateur.nom!.substring(0, 1)} ${utilisateur.prenom!.substring(0, 1)}",
+                                    style: TextStyle(
+                                        color: Couleurs.orange,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17),
+                                  ),
+                                ),
+
                       // backgroundImage: AssetImage("assets/images/profil.png"),
                     ),
                   ],
@@ -285,16 +296,32 @@ class _ProduitsState extends State<Accueil> {
                     highlightColor: Couleurs.orange,
                     onTap: () {
                       produitProvider
-                          .listProduitSimilaire(
-                              produit.categories!.idCategorie!, produit.nom!)
+                          .fetchProduitInformation(
+                        produit.idProduit!,
+                      )
                           .then((value) {
-                        produitController.mesProduisMobile = value;
+                        context.read<ProduitController>().currentProduit =
+                            Produit.fromMap(value['produits']);
+                        List<dynamic> list = value['tailles'];
+                        List<TailleProduit> tailleProdu =
+                            list.map((e) => TailleProduit.fromMap(e)).toList();
+                        context
+                            .read<ProduitController>()
+                            .currentTailleProduits = tailleProdu;
+                        print(tailleProdu);
+                        List<dynamic> listcoul = value['produitsCouleur'];
+                        print('------list-couleurMobil---${listcoul}');
+                        List<CouleursProduit> listcouleurs = listcoul
+                            .map((e) => CouleursProduit.fromMap(e))
+                            .toList();
+                        context
+                            .read<ProduitController>()
+                            .currentCouleursProduits = listcouleurs;
+                        print('--------la list fro;Map----${listcouleurs}');
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ListProduit(),
-                          ),
-                        );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ProduitDetail()));
                       });
                     },
                     child: Card(

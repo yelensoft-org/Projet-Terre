@@ -74,7 +74,7 @@ class _ArtisanVentesState extends State<ArtisanVentes> {
               onTap: () {},
               child: Container(
                 padding: const EdgeInsets.all(8),
-                height: 100,
+                height: 110,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     color: Couleurs.blanc,
@@ -86,21 +86,21 @@ class _ArtisanVentesState extends State<ArtisanVentes> {
                   // mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Flexible(
-                      flex: 7,
+                      flex: 6,
                       child: Row(
                         children: [
                           Container(
-                            // margin: const EdgeInsets.all(8),
-                            // height: 90,
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: Couleurs.gri),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-
-                            child: Image.asset("assets/images/plover1.png"),
-                          ),
+                              // margin: const EdgeInsets.all(8),
+                              // height: 90,
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(width: 1, color: Couleurs.gri),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Image.network(
+                                  "http://10.0.2.2/${vente.produits!.photo}")),
                           const SizedBox(
-                            width: 15,
+                            width: 8,
                           ),
                           Container(
                             child: Column(
@@ -114,9 +114,9 @@ class _ArtisanVentesState extends State<ArtisanVentes> {
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontWeight: FontWeight.bold)),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
+                                      // const SizedBox(
+                                      //   width: 8,
+                                      // ),
                                       Text(
                                         "${vente.produits!.nom}",
                                         style: const TextStyle(
@@ -163,7 +163,8 @@ class _ArtisanVentesState extends State<ArtisanVentes> {
                                       const SizedBox(
                                         width: 10,
                                       ),
-                                      Text("${vente.produits!.prix} FCFA",
+                                      Text(
+                                          "${vente.produits!.prix?.toInt()} FCFA",
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
@@ -183,7 +184,7 @@ class _ArtisanVentesState extends State<ArtisanVentes> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            margin: const EdgeInsets.only(right: 8, top: 20),
+                            margin: const EdgeInsets.only(right: 4, top: 20),
                             child: GestureDetector(
                                 onTap: () {},
                                 child: const FaIcon(
@@ -193,7 +194,7 @@ class _ArtisanVentesState extends State<ArtisanVentes> {
                             // child: SvgPicture.asset('assets/icons/vect_droite.svg'),
                           ),
                           Container(
-                            margin: const EdgeInsets.only(top: 20),
+                            margin: const EdgeInsets.only(top: 10),
                             child: Column(
                               children: [Text("${vente.date}")],
                             ),

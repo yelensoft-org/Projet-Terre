@@ -81,7 +81,7 @@ class _PanierState extends State<Panier> {
                 onTap: () {},
                 child: Container(
                   padding: const EdgeInsets.all(8),
-                  height: 100,
+                  height: 120,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                       color: Couleurs.blanc,
@@ -150,7 +150,7 @@ class _PanierState extends State<Panier> {
                                         "${commande.produits!.quantite}",
                                         style: TextStyle(
                                           color: Couleurs.orange,
-                                          fontSize: 15,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -164,15 +164,16 @@ class _PanierState extends State<Panier> {
                                       children: [
                                         const Text("Prix:",
                                             style: TextStyle(
-                                              fontSize: 16,
+                                              fontSize: 15,
                                               fontWeight: FontWeight.bold,
                                             )),
                                         const SizedBox(
                                           width: 10,
                                         ),
-                                        Text("${commande.produits!.prix} FCFA",
+                                        Text(
+                                            "${commande.produits!.prix!.toInt()} FCFA",
                                             style: TextStyle(
-                                                fontSize: 15,
+                                                fontSize: 14,
                                                 fontWeight: FontWeight.bold,
                                                 color: Couleurs.orange)),
                                       ],

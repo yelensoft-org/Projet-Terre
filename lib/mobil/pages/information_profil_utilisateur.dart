@@ -1,4 +1,5 @@
 import 'package:art_eshop/key.dart';
+import 'package:art_eshop/mobil/models/Utilisateur_Entity.dart';
 import 'package:art_eshop/mobil/models/couleur.dart';
 import 'package:art_eshop/mobil/pages/page_bienvenue.dart';
 import 'package:art_eshop/mobil/pages/profil_artisan.dart';
@@ -24,10 +25,31 @@ class _InformationProfilUtilisateurState
   ArtisanSharedPreference artisanSharedPreference = ArtisanSharedPreference();
   // final _formkeyInformationUser = GlobalKey<FormState>();
   // final formkey = GlobalKeyManager.formkeyInformationUser;
+  Utilisateur utilisateur = Utilisateur();
 
   final TextEditingController _nomController = TextEditingController();
   final TextEditingController _prenomController = TextEditingController();
   final TextEditingController _paysController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    artisanSharedPreference.getUserFromSharedPreference().then((value) {
+      if (value == utilisateur) {
+        print("maudis utilisateur");
+        utilisateur = value!;
+        // } else {
+        //   artisanSharedPreference
+        //       .supprimerArtisanToSharedPreference()
+        //       .then((value) {
+        //     if (value == "Success") {}
+        //   });
+        //   print("object is not found");
+      }
+    }).catchError((onError) {
+      print("maudis");
+    });
+  }
 
   bool isTextEditing = true;
 
@@ -37,19 +59,21 @@ class _InformationProfilUtilisateurState
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const UtilisateurProfil()));
-          },
-          icon: FaIcon(
-            FontAwesomeIcons.angleLeft,
-            color: Couleurs.blanc,
-            size: 30,
-          ),
-        ),
+        leading: Container(),
+
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Navigator.pop(
+        //         context,
+        //         MaterialPageRoute(
+        //             builder: (context) => const UtilisateurProfil()));
+        //   },
+        //   icon: FaIcon(
+        //     FontAwesomeIcons.angleLeft,
+        //     color: Couleurs.blanc,
+        //     size: 30,
+        //   ),
+        // ),
       ),
       body: Container(
         child: Column(

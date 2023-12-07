@@ -86,7 +86,7 @@ class _ArtisanNotificationState extends State<ArtisanNotification> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
         child: Column(children: [
           Expanded(
               child: ListView.builder(
@@ -94,6 +94,8 @@ class _ArtisanNotificationState extends State<ArtisanNotification> {
             padding: const EdgeInsets.all(10),
             itemBuilder: (BuildContext context, index) {
               final notification = notifications[index];
+              print(
+                  '-----------------not----${notification.commandes?.couleursProduit}');
               return InkWell(
                   highlightColor: Couleurs.orange.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(5),
@@ -129,13 +131,12 @@ class _ArtisanNotificationState extends State<ArtisanNotification> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                    margin: EdgeInsets.only(top: 10),
+                                    margin: const EdgeInsets.only(top: 10),
                                     width: 50,
                                     height: 30,
                                     decoration: BoxDecoration(
                                         color: Color(int.parse(
-                                                notification.commandes!
-                                                    .couleursProduit!.libelle
+                                                notification.commandes!.couleursProduit!.libelle
                                                     .substring(1, 7),
                                                 radix: 16) +
                                             0x80000000),
@@ -143,7 +144,7 @@ class _ArtisanNotificationState extends State<ArtisanNotification> {
                                         border: Border.all(
                                             width: 1, color: Couleurs.gri))),
                                 Container(
-                                  padding: EdgeInsets.only(right: 10),
+                                  padding: const EdgeInsets.only(right: 10),
                                   child: Text(
                                     "${notification.commandes!.tailleProduit!.libelle}",
                                     style: TextStyle(color: Couleurs.orange),
@@ -154,11 +155,11 @@ class _ArtisanNotificationState extends State<ArtisanNotification> {
                           ],
                         ),
                       ),
-                      Container(
-                        child: Row(
-                          children: [],
-                        ),
-                      ),
+                      // Container(
+                      //   child: Row(
+                      //     children: [],
+                      //   ),
+                      // ),
                       const SizedBox(
                         height: 20,
                       )

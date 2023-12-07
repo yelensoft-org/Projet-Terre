@@ -179,9 +179,7 @@ class _DetailArtisanState extends State<DetailArtisan> {
                                               top: BorderSide(
                                                   width: 1,
                                                   color: Couleurs.gri))),
-                                      child: const Text(
-                                          "ArtEshop une entreprise de prestation de service qui evolue dans le dommaine de l'e-commerce"),
-                                    ),
+                                      child:  Text("${value.currentArtisan.description}")),
                                   ],
                                 )),
                               ],

@@ -1,4 +1,5 @@
 import 'package:art_eshop/mobil/models/couleur.dart';
+import 'package:art_eshop/mobil/models/dalog.dart';
 import 'package:art_eshop/mobil/models/spinner_page.dart';
 import 'package:art_eshop/mobil/pages/utilisateur_mode_paiement.dart';
 import 'package:flutter/foundation.dart';
@@ -22,10 +23,9 @@ class _UtilisateurPaiementState extends State<UtilisateurPaiement> {
         backgroundColor: Couleurs.orange,
         leading: IconButton(
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const UtilisateurModePaiement()));
+            Navigator.pop(context);
+            // MaterialPageRoute(
+            //     builder: (context) => const UtilisateurModePaiement()));
           },
           icon: FaIcon(
             FontAwesomeIcons.angleLeft,
@@ -159,10 +159,21 @@ class _UtilisateurPaiementState extends State<UtilisateurPaiement> {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SpinnerPage()));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const SpinnerPage()));
+                    showDialog(
+                      context: context,
+                      builder: (context) => Dialog.fullscreen(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    );
+                    Future.delayed(Duration(seconds: 3), () {
+                      Popup().successMobil(context);
+                    });
                   },
                   child: Container(
                     margin: const EdgeInsets.only(left: 40),
@@ -184,11 +195,10 @@ class _UtilisateurPaiementState extends State<UtilisateurPaiement> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const UtilisateurModePaiement()));
+                    Navigator.pop(context);
+                    // MaterialPageRoute(
+                    //     builder: (context) =>
+                    //         const UtilisateurModePaiement()));
                   },
                   child: Container(
                     margin: const EdgeInsets.only(left: 40),
