@@ -101,6 +101,7 @@ For more information on the importance of a professional README for your reposit
 ### Key Features <a name="key-features"></a>
 
 > Describe between 1-3 key features of the application.
+> chqaue artisan doit avoir ses propres  produit dans sa propre boutique
 
 - **[key_feature_1]**
 - **[key_feature_2]**
