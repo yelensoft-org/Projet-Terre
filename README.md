@@ -75,8 +75,11 @@ For more information on the importance of a professional README for your reposit
 
 >Cette application a etait construite avec des technologie comme :
 ><p>Le Framework Flutter.</p>
+<p>Le Framework Flutter est utilisé pour le developement des differents interfaces (coté utilisateur et coté administrateur)</p>
 ><p>Le Framework Spring Boot.</p>
+<p>Spring Boot est utilisé pour la creation des differents APIs qui permet d'etablire la communication  entre l'interface utilisateur et la base de données</p>
 ><p>L'angage de Programmation Dart.</p>
+
 ><p>L'angage de Programmation Java.</p>
 ><p>L'angage de Programmation SQL.</p>
 
