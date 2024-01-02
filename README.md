@@ -69,11 +69,16 @@ For more information on the importance of a professional README for your reposit
 
 **[your_project__name]** is a...
 
-## 🛠 Built With <a name="built-with"></a>
+## 🛠 À propos du projet<a name="built-with"></a>
 
-### Tech Stack <a name="tech-stack"></a>
+### Construit avec <a name="tech-stack"></a>
 
-> Describe the tech stack and include only the relevant sections that apply to your project.
+>Cette application a etait construite avec des technologie comme :
+><p>Le Framework Flutter</p>.
+>Le Framework Spring Boot.
+>L'angage de Programmation Dart.
+>L'angage de Programmation Java.
+>L'angage de Programmation SQL.
 
 <details>
   <summary>Client</summary>
