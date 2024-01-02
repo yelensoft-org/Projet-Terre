@@ -74,11 +74,11 @@ For more information on the importance of a professional README for your reposit
 ### Construit avec <a name="tech-stack"></a>
 
 >Cette application a etait construite avec des technologie comme :
-><p>Le Framework Flutter</p>.
->Le Framework Spring Boot.
->L'angage de Programmation Dart.
->L'angage de Programmation Java.
->L'angage de Programmation SQL.
+><p>Le Framework Flutter.</p>
+><p>Le Framework Spring Boot.</p>
+><p>L'angage de Programmation Dart.</p>
+><p>L'angage de Programmation Java.</p>
+><p>L'angage de Programmation SQL.</p>
 
 <details>
   <summary>Client</summary>
