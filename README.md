@@ -75,41 +75,41 @@ For more information on the importance of a professional README for your reposit
 
 >Cette application a etait construite avec des technologie comme :
 ##### Le Framework Flutter :
-><p>Le Framework Flutter est utilisé pour le developement des differents interfaces (coté utilisateur et coté administrateur)</p><br></br>
-### Le Framework Spring Boot :
-><p>Spring Boot est utilisé pour la creation des differents APIs qui permet d'etablire la communication  entre l'interface utilisateur et la base de données</p><br></br>
-### L'angage de Programmation Dart :
-
-### L'angage de Programmation Java :
-### L'angage de Programmation SQL :
-
+><p>Le Framework Flutter est utilisé pour le developement des differents interfaces (coté utilisateur et coté administrateur)</p>
+##### Le Framework Spring Boot :
+><p>Spring Boot est utilisé pour la creation des differents endpoints de l'API RESTful qui permet d'etablire la communication  entre l'interface utilisateur et la base de données.</p>
+##### L'angage de Programmation Dart :
+><p>Dart est utilisé pour gerer la logique de traitement </p>
+##### L'angage de Programmation Java :
+><p>Dans le contexte de cette application, Java est utilisé principalement avec Spring Boot pour créer des API RESTful et pour gérer la logique métier plus complexe. Il permet de structurer l'application en définissant des classes, des méthodes, et des modèles de données nécessaires à l'interaction avec la base de données.</p>
+##### L'angage de Programmation SQL :
+>Langage SQL nous servent des programmes pour écrire des requêtes qui permettent de manipuler et d'interroger la base de données
 <details>
   <summary>Client</summary>
   <ul>
-    <li><a href="https://reactjs.org/">React.js</a></li>
+    <li><a href="https://flutter.dev/">Flutter.dev</a></li>
   </ul>
 </details>
 
 <details>
   <summary>Server</summary>
   <ul>
-    <li><a href="https://expressjs.com/">Express.js</a></li>
+    <li><a href="https://spring.io/projects/spring-data/">Spring Boot</a></li>
   </ul>
 </details>
 
 <details>
 <summary>Database</summary>
   <ul>
-    <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
+    <li><a href="https://sql.sh/sgbd">SQL</a></li>
   </ul>
 </details>
 
 <!-- Features -->
 
-### Key Features <a name="key-features"></a>
-
-> Describe between 1-3 key features of the application.
+### Fonction Futures <a name="key-features"></a>
 > chqaue artisan doit avoir ses propres  produit dans sa propre boutique
+> 
 
 - **[key_feature_1]**
 - **[key_feature_2]**
