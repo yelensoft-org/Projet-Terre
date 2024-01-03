@@ -1,4 +1,5 @@
-<a name="readme-top"></a>
+
+,<a name="readme-top"></a>
 
 <!--
 !!! IMPORTANT !!!
@@ -182,6 +183,7 @@ Example commands:
 --->
 
 ### Installation
+>Télécharger est installer l'API contenant les endpoints <a href="https://github.com/yelensoft-org/SpringBoot_artEshop"></a>
 >Installer les dependences avec la commsnde suivante dans un terminal "flutter pub get"
 >Apres l'installation de dependences vous exécuter la commande  suivante "flutter run" pour demarer l'application
 >
@@ -252,7 +254,7 @@ Example:
 
 ## 👥 Les Auteurs <a name="authors"></a>
 
-> Mention all of the collaborators of this project.
+>Les acteurs du developpement.
 
 👤 **Auteur1**
 
