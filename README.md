@@ -108,10 +108,15 @@ For more information on the importance of a professional README for your reposit
 <!-- Features -->
 
 ### Fonction Futures <a name="key-features"></a>
-> 
+> chacun de ces fonctionnalité dois etre implementé pour complete cette application 
 
+- **[un utilisateur quelconque dois avoir la possibilite de consulter l'application sans se connecter]**
+- **[les statistique de vente  au niveau de l'admin doit automatique]**
 - **[chqaue artisan doit avoir ses propres  produit dans sa propre boutique]**
-- **[ Implementation Mode de paiement par Orange Money, Carte Visa, tap-tap send]**
+- **[la boutique dois etre disparaitre apres avoir desactiver un artisan]**
+- **[Implementation Mode de paiement par Orange Money, Carte Visa, tap-tap send]**
+  >L'intégration de modes de paiement diversifiés comme Orange Money, Carte Visa et tap-tap send permettra aux utilisateurs d'effectuer des transactions en utilisant différentes méthodes de paiement. Cela élargira la portée de l'application en répondant à une variété de préférences et de besoins des utilisateurs en matière de paiement
+- **[l'application de etre traduit en Francais ou Anglais]**
 - **[Implementation de chat]**
 - **[Implementation Foire virtuel]**
 
