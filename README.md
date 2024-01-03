@@ -41,47 +41,47 @@ For more information on the importance of a professional README for your reposit
 
 # 📗 Table of Contents
 
-- [📖 About the Project](#about-project)
-  - [🛠 Built With](#built-with)
-    - [Tech Stack](#tech-stack)
-    - [Key Features](#key-features)
-  - [🚀 Live Demo](#live-demo)
-- [💻 Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Setup](#setup)
-  - [Install](#install)
-  - [Usage](#usage)
-  - [Run tests](#run-tests)
+- [📖À propos du Projet](#about-project)
+  - [🛠 Construit avec](#built-with)
+    - [Technologies Utilisées](#tech-stack)
+    - [Fonctionnalités Clés](#key-features)
+  - [🚀Démo en Direct](#live-demo)
+- [💻 Démarrage](#getting-started)
+  - [Prérequis](#prerequisites)
+  - [Configuration](#setup)
+  - [Installation](#install)
+  - [Utilisation](#usage)
+  - [Exécution des Tests](#run-tests)
   - [Deployment](#deployment)
-- [👥 Authors](#authors)
-- [🔭 Future Features](#future-features)
-- [🤝 Contributing](#contributing)
-- [⭐️ Show your support](#support)
-- [🙏 Acknowledgements](#acknowledgements)
+- [👥 Les Auteurs](#authors)
+- [🔭 Fonctionnalités Futures](#future-features)
+- [🤝 Contribution](#contributing)
+- [⭐️ Support](#support)
+- [🙏  Remerciements](#acknowledgements)
 - [❓ FAQ (OPTIONAL)](#faq)
 - [📝 License](#license)
 
 <!-- PROJECT DESCRIPTION -->
 
-# 📖 ArtEshop <a name="about-project"></a>
+# 📖 À propos du Projet <a name="about-project"></a>
 
-> Describe your project in 1 or 2 sentences.
+> ArtEshop est une plateforme dédiée à la vente de produits artisanaux locaux, offrant une vitrine aux artisans pour promouvoir et commercialiser leurs créations. Cette application vise à mettre en avant la richesse et la diversité des produits artisanaux, offrant aux artisans une opportunité de gagner en visibilité et de toucher un public plus large.
 
 **ArtEshop** Une application de commerce électronique
 
-## 🛠 À propos du projet<a name="built-with"></a>
+## 🛠 Construit avec<a name="built-with"></a>
 
-### Construit avec <a name="tech-stack"></a>
+### Technologies Utilisées <a name="tech-stack"></a>
 
 >Cette application a etait construite avec des technologie comme :
 ##### Le Framework Flutter :
-><p>Le Framework Flutter est utilisé pour le developement des differents interfaces (coté utilisateur et coté administrateur)</p>
+>Le Framework Flutter est utilisé pour le developement des differents interfaces (coté utilisateur et coté administrateur).
 ##### Le Framework Spring Boot :
-><p>Spring Boot est utilisé pour la creation des differents endpoints de l'API RESTful qui permet d'etablire la communication  entre l'interface utilisateur et la base de données.</p>
+>Spring Boot est utilisé pour la creation des differents endpoints de l'API RESTful qui permet d'etablire la communication  entre l'interface utilisateur et la base de données.
 ##### L'angage de Programmation Dart :
-><p>Dart est utilisé pour gerer la logique de traitement </p>
+>Dart est utilisé pour gerer la logique de traitement a fin de communiquer les endpoints a l'interface.
 ##### L'angage de Programmation Java :
-><p>Dans le contexte de cette application, Java est utilisé principalement avec Spring Boot pour créer des API RESTful et pour gérer la logique métier plus complexe. Il permet de structurer l'application en définissant des classes, des méthodes, et des modèles de données nécessaires à l'interaction avec la base de données.</p>
+>Dans le contexte de cette application, Java est utilisé principalement avec Spring Boot pour créer des API RESTful et pour gérer la logique métier plus complexe. Il permet de structurer l'application en définissant des classes, des méthodes, et des modèles de données nécessaires à l'interaction avec la base de données.
 ##### L'angage de Programmation SQL :
 >Langage SQL nous servent des programmes pour écrire des requêtes qui permettent de manipuler et d'interroger la base de données
 <details>
@@ -107,31 +107,13 @@ For more information on the importance of a professional README for your reposit
 
 <!-- Features -->
 
-### Fonction Futures <a name="key-features"></a>
-> chacun de ces fonctionnalité dois etre implementé pour complete cette application 
-
-- **[un utilisateur quelconque dois avoir la possibilite de consulter l'application sans se connecter]**
-  >Cela signifie que les visiteurs auront la capacité de naviguer dans l'application, parcourir les produits ou services disponibles, accéder aux informations sur les vendeurs ou artisans sans avoir à s'authentifier. Cela peut susciter l'intérêt des utilisateurs potentiels en leur permettant d'explorer l'offre avant de prendre la décision de s'inscrire ou de se connecter.
-- **[les statistique de vente  au niveau de l'admin doit automatique]**
-  >cette fonctionnalite vas permettre a l'administrateur de voir le nombre des utilisateurs ainsi que celles des artisan sans oublier la capacité de l'application a promouvre une vente croissante
-- **[chqaue artisan doit avoir ses propres  produit dans sa propre boutique]**
-  >Chaque artisan aura son propre espace où il pourra ajouter, modifier ou supprimer des produits à vendre. Cela offrira une expérience personnalisée aux utilisateurs, leur permettant de parcourir et d'acheter des produits spécifiques à chaque vendeur.
-- **[la boutique dois etre disparaitre apres avoir desactiver un artisan]**
-  >Lorsqu'un artisan est désactivé pour une raison quelconque (par exemple, s'il décide de ne plus vendre sur la plateforme), il est essentiel que sa boutique et ses produits disparaissent de manière cohérente et immédiate de l'application.
-- **[Implementation Mode de paiement par Orange Money, Carte Visa, tap-tap send]**
-  >L'intégration de modes de paiement diversifiés comme Orange Money, Carte Visa et tap-tap send permettra aux utilisateurs d'effectuer des transactions en utilisant différentes méthodes de paiement. Cela élargira la portée de l'application en répondant à une variété de préférences et de besoins des utilisateurs en matière de paiement
-- **[l'application de etre traduit en Francais ou Anglais]**
-  >En permettant à l'application d'être traduite dans différentes langues telles que le français et l'anglais, offrez une accessibilité accrue à un plus grand nombre d'utilisateurs. Cela permet aux utilisateurs de sélectionner la langue qui leur convient le mieux, ce qui améliore considérablement leur expérience utilisateur.
-- **[Implementation de chat]**
-  >Cela favorisera les échanges directs entre vendeurs et acheteurs, offrant la possibilité de poser des questions sur les produits, de négocier, ou de demander des détails supplémentaires avant un achat. Le chat facilitera également la gestion des transactions et renforcera l'engagement des utilisateurs.
-- **[Implementation Foire virtuel]**
-  >Cela permettra aux vendeurs et aux artisans de présenter leurs produits dans un cadre plus large et potentiellement lors d'événements spéciaux organisés au sein de l'application. Les utilisateurs pourront parcourir et acheter des produits spéciaux disponibles uniquement pendant ces foires virtuelles, créant ainsi un sentiment d'exclusivité
+### Fonctionnalités Clés <a name="key-features"></a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LIVE DEMO -->
 
-## 🚀 Live Demo <a name="live-demo"></a>
+## 🚀 Démo en Direct <a name="live-demo"></a>
 
 > Add a link to your deployed project.
 
@@ -141,13 +123,13 @@ For more information on the importance of a professional README for your reposit
 
 <!-- GETTING STARTED -->
 
-## 💻 Getting Started <a name="getting-started"></a>
+## 💻 Démarrage <a name="getting-started"></a>
 
 > Describe how a new developer could make use of your project.
 
 To get a local copy up and running, follow these steps.
 
-### Prerequisites
+### Prérequis
 
 In order to run this project you need:
 
@@ -159,7 +141,7 @@ Example command:
 ```
  -->
 
-### Setup
+### Configuration
 
 Clone this repository to your desired folder:
 
@@ -172,7 +154,7 @@ Example commands:
 ```
 --->
 
-### Install
+### Installation
 
 Install this project with:
 
@@ -185,7 +167,7 @@ Example command:
 ```
 --->
 
-### Usage
+### Utilisation
 
 To run the project, execute the following command:
 
@@ -197,7 +179,7 @@ Example command:
 ```
 --->
 
-### Run tests
+### Exécution des Tests
 
 To run tests, run the following command:
 
@@ -225,17 +207,17 @@ Example:
 
 <!-- AUTHORS -->
 
-## 👥 Authors <a name="authors"></a>
+## 👥 Les Auteurs <a name="authors"></a>
 
 > Mention all of the collaborators of this project.
 
-👤 **Author1**
+👤 **Auteur1**
 
 - GitHub: [@githubhandle](https://github.com/githubhandle)
 - Twitter: [@twitterhandle](https://twitter.com/twitterhandle)
 - LinkedIn: [LinkedIn](https://linkedin.com/in/linkedinhandle)
 
-👤 **Author2**
+👤 **Auteur2**
 
 - GitHub: [@githubhandle](https://github.com/githubhandle)
 - Twitter: [@twitterhandle](https://twitter.com/twitterhandle)
@@ -245,19 +227,32 @@ Example:
 
 <!-- FUTURE FEATURES -->
 
-## 🔭 Future Features <a name="future-features"></a>
+## 🔭 Fonctionnalités Futures<a name="future-features"></a>
+> chacun de ces fonctionnalité dois etre implementé pour complete cette application 
 
-> Describe 1 - 3 features you will add to the project.
+- **[un utilisateur quelconque dois avoir la possibilite de consulter l'application sans se connecter]**
+  >Cela signifie que les visiteurs auront la capacité de naviguer dans l'application, parcourir les produits ou services disponibles, accéder aux informations sur les vendeurs ou artisans sans avoir à s'authentifier. Cela peut susciter l'intérêt des utilisateurs potentiels en leur permettant d'explorer l'offre avant de prendre la décision de s'inscrire ou de se connecter.
+- **[les statistique de vente  au niveau de l'admin doit automatique]**
+  >cette fonctionnalite vas permettre a l'administrateur de voir le nombre des utilisateurs ainsi que celles des artisan sans oublier la capacité de l'application a promouvre une vente croissante
+- **[chqaue artisan doit avoir ses propres  produit dans sa propre boutique]**
+  >Chaque artisan aura son propre espace où il pourra ajouter, modifier ou supprimer des produits à vendre. Cela offrira une expérience personnalisée aux utilisateurs, leur permettant de parcourir et d'acheter des produits spécifiques à chaque vendeur.
+- **[la boutique dois etre disparaitre apres avoir desactiver un artisan]**
+  >Lorsqu'un artisan est désactivé pour une raison quelconque (par exemple, s'il décide de ne plus vendre sur la plateforme), il est essentiel que sa boutique et ses produits disparaissent de manière cohérente et immédiate de l'application.
+- **[Implementation Mode de paiement par Orange Money, Carte Visa, tap-tap send]**
+  >L'intégration de modes de paiement diversifiés comme Orange Money, Carte Visa et tap-tap send permettra aux utilisateurs d'effectuer des transactions en utilisant différentes méthodes de paiement. Cela élargira la portée de l'application en répondant à une variété de préférences et de besoins des utilisateurs en matière de paiement
+- **[l'application de etre traduit en Francais ou Anglais]**
+  >En permettant à l'application d'être traduite dans différentes langues telles que le français et l'anglais, offrez une accessibilité accrue à un plus grand nombre d'utilisateurs. Cela permet aux utilisateurs de sélectionner la langue qui leur convient le mieux, ce qui améliore considérablement leur expérience utilisateur.
+- **[Implementation de chat]**
+  >Cela favorisera les échanges directs entre vendeurs et acheteurs, offrant la possibilité de poser des questions sur les produits, de négocier, ou de demander des détails supplémentaires avant un achat. Le chat facilitera également la gestion des transactions et renforcera l'engagement des utilisateurs.
+- **[Implementation Foire virtuel]**
+  >Cela permettra aux vendeurs et aux artisans de présenter leurs produits dans un cadre plus large et potentiellement lors d'événements spéciaux organisés au sein de l'application. Les utilisateurs pourront parcourir et acheter des produits spéciaux disponibles uniquement pendant ces foires virtuelles, créant ainsi un sentiment d'exclusivité
 
-- [ ] **[new_feature_1]**
-- [ ] **[new_feature_2]**
-- [ ] **[new_feature_3]**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 
-## 🤝 Contributing <a name="contributing"></a>
+## 🤝 Contribution<a name="contributing"></a>
 
 Contributions, issues, and feature requests are welcome!
 
@@ -267,7 +262,7 @@ Feel free to check the [issues page](../../issues/).
 
 <!-- SUPPORT -->
 
-## ⭐️ Show your support <a name="support"></a>
+## ⭐️ Support <a name="support"></a>
 
 > Write a message to encourage readers to support your project
 
@@ -277,7 +272,7 @@ If you like this project...
 
 <!-- ACKNOWLEDGEMENTS -->
 
-## 🙏 Acknowledgments <a name="acknowledgements"></a>
+## 🙏 Remerciements <a name="acknowledgements"></a>
 
 > Give credit to everyone who inspired your codebase.
 
