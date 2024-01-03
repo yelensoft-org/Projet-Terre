@@ -111,14 +111,21 @@ For more information on the importance of a professional README for your reposit
 > chacun de ces fonctionnalité dois etre implementé pour complete cette application 
 
 - **[un utilisateur quelconque dois avoir la possibilite de consulter l'application sans se connecter]**
+  >Cela signifie que les visiteurs auront la capacité de naviguer dans l'application, parcourir les produits ou services disponibles, accéder aux informations sur les vendeurs ou artisans sans avoir à s'authentifier. Cela peut susciter l'intérêt des utilisateurs potentiels en leur permettant d'explorer l'offre avant de prendre la décision de s'inscrire ou de se connecter.
 - **[les statistique de vente  au niveau de l'admin doit automatique]**
+  >cette fonctionnalite vas permettre a l'administrateur de voir le nombre des utilisateurs ainsi que celles des artisan sans oublier la capacité de l'application a promouvre une vente croissante
 - **[chqaue artisan doit avoir ses propres  produit dans sa propre boutique]**
+  >Chaque artisan aura son propre espace où il pourra ajouter, modifier ou supprimer des produits à vendre. Cela offrira une expérience personnalisée aux utilisateurs, leur permettant de parcourir et d'acheter des produits spécifiques à chaque vendeur.
 - **[la boutique dois etre disparaitre apres avoir desactiver un artisan]**
+  >Lorsqu'un artisan est désactivé pour une raison quelconque (par exemple, s'il décide de ne plus vendre sur la plateforme), il est essentiel que sa boutique et ses produits disparaissent de manière cohérente et immédiate de l'application.
 - **[Implementation Mode de paiement par Orange Money, Carte Visa, tap-tap send]**
   >L'intégration de modes de paiement diversifiés comme Orange Money, Carte Visa et tap-tap send permettra aux utilisateurs d'effectuer des transactions en utilisant différentes méthodes de paiement. Cela élargira la portée de l'application en répondant à une variété de préférences et de besoins des utilisateurs en matière de paiement
 - **[l'application de etre traduit en Francais ou Anglais]**
+  >En permettant à l'application d'être traduite dans différentes langues telles que le français et l'anglais, offrez une accessibilité accrue à un plus grand nombre d'utilisateurs. Cela permet aux utilisateurs de sélectionner la langue qui leur convient le mieux, ce qui améliore considérablement leur expérience utilisateur.
 - **[Implementation de chat]**
+  >Cela favorisera les échanges directs entre vendeurs et acheteurs, offrant la possibilité de poser des questions sur les produits, de négocier, ou de demander des détails supplémentaires avant un achat. Le chat facilitera également la gestion des transactions et renforcera l'engagement des utilisateurs.
 - **[Implementation Foire virtuel]**
+  >Cela permettra aux vendeurs et aux artisans de présenter leurs produits dans un cadre plus large et potentiellement lors d'événements spéciaux organisés au sein de l'application. Les utilisateurs pourront parcourir et acheter des produits spéciaux disponibles uniquement pendant ces foires virtuelles, créant ainsi un sentiment d'exclusivité
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
