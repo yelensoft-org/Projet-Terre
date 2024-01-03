@@ -85,7 +85,11 @@ For more information on the importance of a professional README for your reposit
 ##### L'angage de Programmation SQL :
 >Langage SQL nous servent des programmes pour écrire des requêtes qui permettent de manipuler et d'interroger la base de données
 ##### Outil de gestion de projet (Trello)
-
+>Trello est utilisé pour la gestion du projet le suivis et l'avancement des differentes fonctionnalités 
+##### Figma
+>Figma est utiliser pour faire la maquette et le prothotipage de l'application avant le developpement
+##### Drawio
+>Outil utilisé pour faire une analyse glabale et une vue d'ensemble du systeme
 <details>
   <summary>Client</summary>
   <ul>
@@ -129,9 +133,9 @@ L'administrateur dois se connecter pour suivre l'evolution de la plateforme mais
 
 ## 🚀 Démo en Direct <a name="live-demo"></a>
 
-> Add a link to your deployed project.
+> lien du demo.
 
-- [Live Demo Link](https://google.com)
+- [Live Demo ](https://google.com)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -140,14 +144,21 @@ L'administrateur dois se connecter pour suivre l'evolution de la plateforme mais
 ## 💻 Démarrage <a name="getting-started"></a>
 
 > Describe how a new developer could make use of your project.
-
-To get a local copy up and running, follow these steps.
+> Ce projet est composer de deux grandes parties avec deux regroupé dans meme dossier
+> un dossier pour la partie mobil et un autre pour la partie web(dashbord)
+>La structure est composer de dossier Model, service, et page
+> Pour demarrer avec ce projet veillez suivre les etapes suivantes
 
 ### Prérequis
-Liste les logiciels ou les configurations nécessaires pour exécuter le projet:
+Liste des logiciels ou les configurations nécessaires pour exécuter le projet:
 ###### Logiciels/outils
-
-In order to run this project you need:
+1. Android Studio/Vscode comme éditeur de texte
+2. Flutter SDK version 3.1.3 ou supperieur
+3. Emulateur Android ou IOS
+4. Ordinateur Portable (8Go RAM)
+5. Un compte github
+6. JDK 20
+7. Servere XAMP ou WAMP
 
 <!--
 Example command:
@@ -158,8 +169,8 @@ Example command:
  -->
 
 ### Configuration
-
-Clone this repository to your desired folder:
+>Cloner le projet depuis le repository https://github.com/yelensoft-org/artEshop_flutter dans un dossier en local
+>Ouvrir le dossier par l'un des editeur cité ci-dessus
 
 <!--
 Example commands:
@@ -171,8 +182,11 @@ Example commands:
 --->
 
 ### Installation
+>Installer les dependences avec la commsnde suivante dans un terminal "flutter pub get"
+>Apres l'installation de dependences vous exécuter la commande  suivante "flutter run" pour demarer l'application
+>
 
-Install this project with:
+
 
 <!--
 Example command:
@@ -184,7 +198,20 @@ Example command:
 --->
 
 ### Utilisation
-
+>L'application propose deux interfaces differentes : la partie dasbord s'execute automatiquement sur web quand l'application est executer sur ordinateur et la partie mobile lors de l'execution sur mobile
+>Pour Utilisé la partie web il faut au prealable un compte Administrateur puis s'identifier
+>Les differentes interface de la parrie web :
+>Dashboard
+>Produits
+>Artisan
+>Categorie
+>Taille/pointure-Produit
+>La partie mobile propose une interface avec deux utilisateur differents (vendeur et acheteur)
+>Les differentes interface de la parrie mobile :
+>Accueil
+>Notification/Panier
+>Profil
+>Le vendeur(Artisan) doit d'abord s'inscrire a son pemiere usage 
 To run the project, execute the following command:
 
 <!--
