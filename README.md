@@ -99,7 +99,7 @@ For more information on the importance of a professional README for your reposit
 </details>
 
 <details>
-<summary>Database</summary>
+<summary>Base de Données</summary>
   <ul>
     <li><a href="https://sql.sh/sgbd">SQL</a></li>
   </ul>
@@ -108,12 +108,12 @@ For more information on the importance of a professional README for your reposit
 <!-- Features -->
 
 ### Fonction Futures <a name="key-features"></a>
-> chqaue artisan doit avoir ses propres  produit dans sa propre boutique
 > 
 
-- **[key_feature_1]**
-- **[key_feature_2]**
-- **[key_feature_3]**
+- **[chqaue artisan doit avoir ses propres  produit dans sa propre boutique]**
+- **[ Implementation Mode de paiement par Orange Money, Carte Visa, tap-tap send]**
+- **[Implementation de chat]**
+- **[Implementation Foire virtuel]**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
