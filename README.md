@@ -84,6 +84,8 @@ For more information on the importance of a professional README for your reposit
 >Dans le contexte de cette application, Java est utilisé principalement avec Spring Boot pour créer des API RESTful et pour gérer la logique métier plus complexe. Il permet de structurer l'application en définissant des classes, des méthodes, et des modèles de données nécessaires à l'interaction avec la base de données.
 ##### L'angage de Programmation SQL :
 >Langage SQL nous servent des programmes pour écrire des requêtes qui permettent de manipuler et d'interroger la base de données
+##### Outil de gestion de projet (Trello)
+
 <details>
   <summary>Client</summary>
   <ul>
@@ -108,6 +110,18 @@ For more information on the importance of a professional README for your reposit
 <!-- Features -->
 
 ### Fonctionnalités Clés <a name="key-features"></a>
+##### Inscription de l'artisan
+chaque artisan doit s'inscrire sur la plateforme en fournissant ses informations complet tel que: Nom, Prenom, Region, Telephone etc...., qui doivent etre validée par un administrateur avan de se connecter.
+##### Identification (artisan)
+L'artisan pourra s'identifier apres verification et confirmation de ses information personnels
+##### Ajout de produit(article)
+Apres inscription et validation l'artisan pourra se connecter afin d'ajouter des articles par categorie dans sa boutique qui doivent etre validée par un administrateur avant d'etre apparaitre dans l'interface utilisateur 
+##### Modifier les information du produit(article)
+L'artisan pourra modifier les informations tel que le prix, les couleurs
+##### Supprimer un produit(article)
+L'artisan pourra supprimer un produit de sa boutique 
+##### Identification (administrateur)
+L'administrateur dois se connecter pour suivre l'evolution de la plateforme mais aussi accepter les demandes d'adhesion sur la plateforme et validée les articles publier etc....
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -130,6 +144,8 @@ For more information on the importance of a professional README for your reposit
 To get a local copy up and running, follow these steps.
 
 ### Prérequis
+Liste les logiciels ou les configurations nécessaires pour exécuter le projet:
+###### Logiciels/outils
 
 In order to run this project you need:
 
