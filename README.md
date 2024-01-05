@@ -142,11 +142,10 @@ L'administrateur dois se connecter pour suivre l'evolution de la plateforme mais
 <!-- GETTING STARTED -->
 
 ## 💻 Démarrage <a name="getting-started"></a>
-
-> Describe how a new developer could make use of your project.
-> Ce projet est composer de deux grandes parties avec deux regroupé dans meme dossier
-> un dossier pour la partie mobil et un autre pour la partie web(dashbord)
->La structure est composer de dossier Model, service, et page
+ 
+> Ce projet est composer de deux grandes parties avec deux dossier differents regroupé dans meme dossier<br>
+> un dossier pour la partie mobil(mobile) et un autre pour la partie web(desktop)
+>La structure est composer de dossier Model, dossier service, et dossier page
 > Pour demarrer avec ce projet veillez suivre les etapes suivantes
 
 ### Prérequis
